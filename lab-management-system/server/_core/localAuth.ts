@@ -42,7 +42,7 @@ export function registerLocalAuthRoutes(app: Express) {
       // Create session token using the same mechanism as Manus OAuth
       const sessionToken = await sdk.createSessionToken(user.openId, {
         expiresInMs: ONE_YEAR_MS,
-        name: user.name ?? username,
+        name: user.name?.trim() || username.trim(),
       });
 
       // Set session cookie

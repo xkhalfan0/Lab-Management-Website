@@ -186,11 +186,12 @@ class SDKServer {
     const expiresInMs = options.expiresInMs ?? ONE_YEAR_MS;
     const expirationSeconds = Math.floor((issuedAt + expiresInMs) / 1000);
     const secretKey = this.getSessionSecret();
+    const name = payload.name?.trim() || payload.openId;
 
     return new SignJWT({
       openId: payload.openId,
       appId: payload.appId,
-      name: payload.name,
+      name,
     })
       .setProtectedHeader({ alg: "HS256", typ: "JWT" })
       .setExpirationTime(expirationSeconds)

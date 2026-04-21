@@ -1,0 +1,1 @@
+ALTER TABLE `concrete_cubes` ADD `withinSpec` boolean DEFAULT null;

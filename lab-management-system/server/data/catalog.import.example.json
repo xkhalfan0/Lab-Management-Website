@@ -1,0 +1,43 @@
+{
+  "sectors": [
+    { "sectorKey": "sector_1", "nameAr": "طرق وجسور", "nameEn": "Roads & bridges", "description": "RB-* contracts" },
+    { "sectorKey": "sector_2", "nameAr": "مباني حكومية", "nameEn": "Government buildings", "description": "GB-*" },
+    { "sectorKey": "sector_3", "nameAr": "بنية تحتية", "nameEn": "Infrastructure", "description": "INF-*" },
+    { "sectorKey": "sector_4", "nameAr": "منطقة صناعية", "nameEn": "Industrial zone", "description": "IND-*" },
+    { "sectorKey": "sector_5", "nameAr": "إسكان", "nameEn": "Housing", "description": "HSG-*" }
+  ],
+  "contractors": [
+    {
+      "nameEn": "Example Contractor A",
+      "nameAr": "مقاول أ",
+      "contractorCode": "CTR-RB-01",
+      "contactPerson": "",
+      "phone": "",
+      "email": ""
+    },
+    {
+      "nameEn": "Example Contractor B",
+      "nameAr": "مقاول ب",
+      "contractorCode": "CTR-GB-01",
+      "contactPerson": "",
+      "phone": "",
+      "email": ""
+    }
+  ],
+  "contracts": [
+    {
+      "contractNumber": "RB-2025-001",
+      "contractName": "Your project title (Arabic or English)",
+      "contractorCode": "CTR-RB-01",
+      "sectorKey": "sector_1",
+      "notes": ""
+    },
+    {
+      "contractNumber": "GB-2025-001",
+      "contractName": "Another project",
+      "contractorCode": "CTR-GB-01",
+      "sectorKey": "sector_2",
+      "notes": ""
+    }
+  ]
+}

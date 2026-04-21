@@ -1,0 +1,34 @@
+{
+  "query": "SHOW COLUMNS FROM contracts LIKE 'sector%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SHOW COLUMNS FROM contracts LIKE 'sector%';",
+  "rows": [
+    {
+      "Field": "sectorKey",
+      "Type": "varchar(32)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "sectorNameAr",
+      "Type": "varchar(128)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "sectorNameEn",
+      "Type": "varchar(128)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    }
+  ],
+  "messages": [],
+  "stdout": "Field\tType\tNull\tKey\tDefault\tExtra\nsectorKey\tvarchar(32)\tYES\t\tNULL\t\nsectorNameAr\tvarchar(128)\tYES\t\tNULL\t\nsectorNameEn\tvarchar(128)\tYES\t\tNULL\t\n",
+  "stderr": "",
+  "execution_time_ms": 1527
+}

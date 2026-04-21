@@ -1,0 +1,20 @@
+{
+  "query": "\nSELECT * FROM sectors;\nSELECT id, nameEn, nameAr, contractorCode FROM contractors;\nSELECT id, contractNumber, contractName, contractorId, sectorKey FROM contracts;\nSELECT id, sectorKey, username, role FROM sector_accounts LIMIT 10;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nSELECT * FROM sectors;\nSELECT id, nameEn, nameAr, contractorCode FROM contractors;\nSELECT id, contractNumber, contractName, contractorId, sectorKey FROM contracts;\nSELECT id, sectorKey, username, role FROM sector_accounts LIMIT 10;\n",
+  "returncode": 1,
+  "logs": [
+    "id\tsectorKey\tnameAr\tnameEn\tdescription\tisActive\tcreatedAt\tupdatedAt",
+    "1\tsector_1\tالقطاع الأول\tSector 1\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02",
+    "2\tsector_2\tالقطاع الثاني\tSector 2\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02",
+    "3\tsector_3\tالقطاع الثالث\tSector 3\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02",
+    "4\tsector_4\tالقطاع الرابع\tSector 4\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02",
+    "5\tsector_5\tالقطاع الخامس\tSector 5\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02",
+    "id\tnameEn\tnameAr\tcontractorCode",
+    "50001\tUnited Construction Co.\tشركة الإنشاءات المتحدة\tCON-T001",
+    "60001\tNael bin Harmal co\tشركة نايل بن حرمل للمقاولات\tCONT-83459",
+    "id\tcontractNumber\tcontractName\tcontractorId\tsectorKey",
+    "30001\tDOI-22222-C001\tإنشاء سكن\t60001\tNULL",
+    "40001\tDOI-2025-T001\tمشروع تطوير البنية التحتية - الدفعة الأولى\t50001\tsector_1",
+    "ERROR 1054 (42S22) at line 5: Unknown column 'role' in 'field list'"
+  ]
+}

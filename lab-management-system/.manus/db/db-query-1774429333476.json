@@ -1,0 +1,46 @@
+{
+  "query": "SELECT id, name, email, role FROM users LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, name, email, role FROM users LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "kh al",
+      "email": "xkhalfan0@gmail.com",
+      "role": "admin"
+    },
+    {
+      "id": "30009",
+      "name": "Ahmed Ali",
+      "email": "NULL",
+      "role": "reception"
+    },
+    {
+      "id": "60007",
+      "name": "ahmed",
+      "email": "NULL",
+      "role": "lab_manager"
+    },
+    {
+      "id": "60011",
+      "name": "ahh",
+      "email": "NULL",
+      "role": "technician"
+    },
+    {
+      "id": "60015",
+      "name": "aaaaa",
+      "email": "NULL",
+      "role": "sample_manager"
+    },
+    {
+      "id": "60019",
+      "name": "qwe",
+      "email": "NULL",
+      "role": "qc_inspector"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\trole\n1\tkh al\txkhalfan0@gmail.com\tadmin\n30009\tAhmed Ali\tNULL\treception\n60007\tahmed\tNULL\tlab_manager\n60011\tahh\tNULL\ttechnician\n60015\taaaaa\tNULL\tsample_manager\n60019\tqwe\tNULL\tqc_inspector\n",
+  "stderr": "",
+  "execution_time_ms": 1570
+}

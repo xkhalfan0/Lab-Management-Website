@@ -1,0 +1,25 @@
+# Local MySQL for Lab Management (development / single-machine use).
+# Start from this folder:  docker compose up -d
+# Stop:                    docker compose down
+# Data is kept in a Docker volume and survives restarts.
+#
+# Default password below matches README — change MYSQL_ROOT_PASSWORD for shared or production use.
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: lab-management-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: labroot123
+      MYSQL_DATABASE: lab_management
+    ports:
+      - "3306:3306"
+    volumes:
+      - lab_mysql_data:/var/lib/mysql
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+
+volumes:
+  lab_mysql_data:

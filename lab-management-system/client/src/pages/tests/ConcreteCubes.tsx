@@ -1,0 +1,555 @@
+import { useState, useCallback, useEffect } from "react";
+import { useParams, useLocation } from "wouter";
+import { trpc } from "@/lib/trpc";
+import DashboardLayout from "@/components/DashboardLayout";
+import { PassFailBadge, ResultBanner } from "@/components/PassFailBadge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
+import { Plus, Trash2, Send, FlaskConical, Printer, Calendar } from "lucide-react";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+// ─── Cube size factor → equivalent 150 mm cube strength (BS EN 12390-3 style) ─
+// Reference specimen is 150 mm; smaller cubes tend to read higher, larger slightly lower.
+const CUBE_SIZE_FACTORS: Record<string, number> = {
+  "100": 0.97,
+  "150": 1.0,
+  "200": 1.05,
+};
+
+function getCubeSizeFactor(sizeLabel: string): number {
+  const key = String(parseFloat(sizeLabel) || 150);
+  return CUBE_SIZE_FACTORS[key] ?? 1.0;
+}
+
+// ─── Expected strength at age (Eurocode / BS approach) ───────────────────────
+// Estimate expected strength at test age relative to 28-day strength
+function getStrengthFactor(ageDays: number): number {
+  if (ageDays <= 3)  return 0.40;
+  if (ageDays <= 7)  return 0.65;
+  if (ageDays <= 14) return 0.85;
+  if (ageDays <= 28) return 1.00;
+  if (ageDays <= 56) return 1.10;
+  return 1.15;
+}
+
+interface CubeRow {
+  id: string;
+  cubeNo: string;
+  location: string;
+  cubeSize: string;   // e.g. "150" or "100"
+  maxLoad: string;
+  area?: number;
+  cubeStrength?: number;
+  correctedStrength?: number; // after size factor
+  result?: "pass" | "fail" | "pending";
+}
+
+function newRow(index: number): CubeRow {
+  return {
+    id: `row_${Date.now()}_${index}`,
+    cubeNo: `C${index + 1}`,
+    location: "",
+    cubeSize: "150",
+    maxLoad: "",
+  };
+}
+
+function computeRow(row: CubeRow, requiredStrength: number): CubeRow {
+  const size = parseFloat(row.cubeSize) || 150;
+  const load = parseFloat(row.maxLoad);
+  if (!load) return row;
+  const area = size * size;
+  const rawStrength = (load * 1000) / area;
+  const sizeFactor = getCubeSizeFactor(row.cubeSize);
+  const correctedStrength = rawStrength * sizeFactor;
+  // Round to nearest 0.5 N/mm²
+  const correctedRounded = Math.round(correctedStrength * 2) / 2;
+  return {
+    ...row,
+    area,
+    cubeStrength: Math.round(rawStrength * 2) / 2,
+    correctedStrength: correctedRounded,
+    result: correctedRounded >= requiredStrength ? "pass" : "fail",
+  };
+}
+
+export default function ConcreteCubes() {
+  const { distributionId } = useParams<{ distributionId: string }>();
+  const [, setLocation] = useLocation();
+  const distId = parseInt(distributionId ?? "0");
+  const { data: dist } = trpc.distributions.get.useQuery({ id: distId }, { enabled: !!distId });
+  const { data: existing } = trpc.specializedTests.getByDistribution.useQuery(
+    { distributionId: distId },
+    { enabled: !!distId }
+  );
+
+  const [specifiedStrength, setSpecifiedStrength] = useState("30");
+  const [structureType, setStructureType] = useState("");
+  const [curingCondition, setCuringCondition] = useState("water_20c");
+  const [batchReference, setBatchReference] = useState("");
+  const [notes, setNotes] = useState("");
+  const [rows, setRows] = useState<CubeRow[]>([newRow(0), newRow(1), newRow(2)]);
+  const [saving, setSaving] = useState(false);
+  const { lang } = useLanguage();
+  const ar = lang === "ar";
+  const { user } = useAuth();
+  const [submitted, setSubmitted] = useState(false);
+
+  // ─── Compute sample age from castingDate ──────────────────────────────────
+  const castingDate = dist?.castingDate ? new Date(dist.castingDate) : null;
+  const testDate = new Date();
+  const sampleAgeDays = castingDate
+    ? Math.floor((testDate.getTime() - castingDate.getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+
+  // Required strength at test age (based on age factor)
+  const specStr = parseFloat(specifiedStrength) || 30;
+  const ageFactor = sampleAgeDays ? getStrengthFactor(sampleAgeDays) : 1.0;
+  const requiredAtAge = specStr * ageFactor;
+
+  const saveResult = trpc.specializedTests.save.useMutation({
+    onSuccess: (_, vars) => {
+      if (vars.status === "submitted") {
+        toast.success(ar ? "تم إرسال النتائج بنجاح" : "Test results submitted successfully");
+        setSubmitted(true);
+      } else {
+        toast.success(ar ? "تم حفظ المسودة" : "Draft saved");
+      }
+    },
+    onError: (e) => toast.error(e.message),
+  });
+
+  // ─── Load existing data ───────────────────────────────────────────────────
+  useEffect(() => {
+    if (!existing?.formData) return;
+    const fd = existing.formData as any;
+    if (fd.specifiedStrength) setSpecifiedStrength(String(fd.specifiedStrength));
+    if (fd.structureType) setStructureType(fd.structureType);
+    if (fd.curingCondition) setCuringCondition(String(fd.curingCondition));
+    if (fd.batchReference) setBatchReference(String(fd.batchReference));
+    if (fd.notes) setNotes(fd.notes);
+    if (fd.cubes && Array.isArray(fd.cubes)) {
+      setRows(fd.cubes.map((c: any) => ({
+        id: c.id || `row_${Date.now()}_${Math.random()}`,
+        cubeNo: c.cubeNo || "",
+        location: c.location || "",
+        cubeSize: c.cubeSize || "150",
+        maxLoad: c.maxLoad || "",
+      })));
+    }
+    if (existing.status === "submitted") setSubmitted(true);
+  }, [existing]);
+
+  const computedRows = rows.map(r => computeRow(r, requiredAtAge));
+  const validRows = computedRows.filter(r => r.correctedStrength && r.correctedStrength > 0);
+  const avgStrength = validRows.length > 0
+    ? validRows.reduce((s, r) => s + (r.correctedStrength ?? 0), 0) / validRows.length
+    : 0;
+  const overallResult: "pass" | "fail" | "pending" =
+    validRows.length === 0 ? "pending"
+    : validRows.every(r => r.result === "pass") ? "pass" : "fail";
+
+  const updateRow = useCallback((id: string, field: keyof CubeRow, value: string) => {
+    setRows(prev => prev.map(r => r.id === id ? { ...r, [field]: value } : r));
+  }, []);
+  const addRow = () => setRows(prev => [...prev, newRow(prev.length)]);
+  const removeRow = (id: string) => setRows(prev => prev.filter(r => r.id !== id));
+
+  const handleSave = async (status: "draft" | "submitted") => {
+    if (status === "submitted" && validRows.length === 0) {
+      toast.error(ar ? "الرجاء إدخال نتيجة مكعب واحد على الأقل" : "Please enter at least one cube result");
+      return;
+    }
+    setSaving(true);
+    try {
+      await saveResult.mutateAsync({
+        distributionId: distId,
+        sampleId: dist?.sampleId ?? 0,
+        testTypeCode: "CONC_CUBE",
+        formTemplate: "concrete_cubes",
+        formData: {
+          specifiedStrength: specStr,
+          structureType,
+          curingCondition,
+          batchReference: batchReference.trim() || undefined,
+          castingDate: castingDate?.toISOString(),
+          sampleAgeDays,
+          requiredAtAge: parseFloat(requiredAtAge.toFixed(2)),
+          cubes: computedRows,
+          avgStrength: parseFloat(avgStrength.toFixed(2)),
+          // Nominal cube size: determined from the first cube row (all cubes in one test are same size)
+          nominalCubeSize: computedRows.length > 0 ? `${computedRows[0].cubeSize ?? 150}mm` : "150mm",
+        },
+        overallResult,
+        summaryValues: {
+          avgStrength: avgStrength.toFixed(2),
+          required: requiredAtAge.toFixed(1),
+          ageDays: sampleAgeDays ?? "N/A",
+          cubeCount: validRows.length,
+        },
+        notes,
+        status,
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <DashboardLayout>
+      <div className="max-w-6xl mx-auto p-6 space-y-6">
+        {/* Header */}
+        <div className="flex items-start justify-between flex-wrap gap-3">
+          <div>
+            <div className="flex items-center gap-2 text-sm text-slate-500 mb-1">
+              <FlaskConical size={16} />
+              <span>{ar ? "اختبارات الخرسانة" : "Concrete Tests"}</span>
+              <span>/</span>
+              <span className="font-medium text-slate-700">
+                {ar ? "قوة الضغط لمكعبات الخرسانة" : "Compressive Strength of Concrete Cubes"}
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold text-slate-900">
+              {ar ? "قوة الضغط لمكعبات الخرسانة" : "Compressive Strength of Concrete Cubes"}
+            </h1>
+            <p className="text-slate-500 text-sm mt-1">
+              {ar ? "BS EN 12390-3 | أمر التوزيع:" : "BS EN 12390-3 | Distribution:"}{" "}
+              {dist?.distributionCode ?? `DIST-${distId}`}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            {submitted ? (
+              <>
+                <Button variant="outline" size="sm" onClick={() => setLocation("/technician")}>
+                  {ar ? "العودة للوحة التحكم" : "Back to Dashboard"}
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-700 gap-1.5"
+                  onClick={() => window.open(`/test-report/${distId}`, "_blank")}
+                >
+                  <Printer size={14} />
+                  {ar ? "طباعة التقرير / PDF" : "Print Report / PDF"}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" size="sm" onClick={() => handleSave("draft")} disabled={saving}>
+                  {ar ? "حفظ مسودة" : "Save Draft"}
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-700 gap-1.5"
+                  onClick={() => handleSave("submitted")}
+                  disabled={saving}
+                >
+                  <Send size={14} />
+                  {ar ? "إرسال النتائج" : "Submit Results"}
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Sample Info & Age */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Calendar size={16} />
+              {ar ? "معلومات العينة والعمر" : "Sample Info & Age"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-slate-50 rounded-lg p-3 border">
+                <p className="text-xs text-slate-500 mb-1">{ar ? "رمز العينة" : "Sample Code"}</p>
+                <p className="font-semibold text-slate-800 text-sm">{dist?.sampleCode ?? "—"}</p>
+              </div>
+              <div className="bg-slate-50 rounded-lg p-3 border">
+                <p className="text-xs text-slate-500 mb-1">{ar ? "تاريخ الصب" : "Date of Casting"}</p>
+                <p className="font-semibold text-slate-800 text-sm">
+                  {castingDate ? castingDate.toLocaleDateString() : (
+                    <span className="text-amber-600 text-xs">{ar ? "غير محدد" : "Not set"}</span>
+                  )}
+                </p>
+              </div>
+              <div className={`rounded-lg p-3 border ${sampleAgeDays !== null ? "bg-blue-50 border-blue-200" : "bg-slate-50"}`}>
+                <p className="text-xs text-slate-500 mb-1">{ar ? "عمر العينة (محسوب)" : "Sample Age (calculated)"}</p>
+                <p className={`font-bold text-xl ${sampleAgeDays !== null ? "text-blue-700" : "text-slate-400"}`}>
+                  {sampleAgeDays !== null ? `${sampleAgeDays} ${ar ? "يوم" : "days"}` : "—"}
+                </p>
+              </div>
+              <div className="bg-slate-50 rounded-lg p-3 border">
+                <p className="text-xs text-slate-500 mb-1">{ar ? "موقع العينة" : "Sample Location"}</p>
+                <p className="font-semibold text-slate-800 text-sm">{dist?.sampleLocation ?? "—"}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Test Parameters */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">{ar ? "معاملات الاختبار" : "Test Parameters"}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="space-y-1.5 md:col-span-3">
+                <Label className="text-xs">
+                  {ar ? "حجم المكعب الافتراضي (يطبّق على كل الصفوف)" : "Default cube size (applies to all rows)"}
+                </Label>
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    className="h-9 text-sm border rounded px-2 font-mono min-w-[120px]"
+                    value={rows[0]?.cubeSize ?? "150"}
+                    disabled={submitted}
+                    onChange={e => {
+                      const v = e.target.value;
+                      setRows(prev => prev.map(r => ({ ...r, cubeSize: v })));
+                    }}
+                  >
+                    <option value="100">100 mm</option>
+                    <option value="150">150 mm</option>
+                    <option value="200">200 mm</option>
+                  </select>
+                  <span className="text-[11px] text-slate-500">
+                    {ar
+                      ? "عوامل التصحيح: 100→0.97، 150→1.00، 200→1.05 (مكافئ 150مم)"
+                      : "Correction to 150 mm equiv.: 100→0.97, 150→1.00, 200→1.05"}
+                  </span>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">{ar ? "قوة المكعب المحددة عند 28 يوم (N/mm²)" : "Specified Cube Strength at 28 days (N/mm²)"}</Label>
+                <Input
+                  type="number"
+                  value={specifiedStrength}
+                  onChange={e => setSpecifiedStrength(e.target.value)}
+                  className="font-mono"
+                  placeholder="30"
+                  disabled={submitted}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">{ar ? "نوع الهيكل" : "Structure Type"}</Label>
+                <Input
+                  value={structureType}
+                  onChange={e => setStructureType(e.target.value)}
+                  placeholder={ar ? "مثال: عمود، جسر، بلاطة..." : "e.g. Column, Beam, Slab..."}
+                  disabled={submitted}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">{ar ? "ظروف المعالجة" : "Curing condition"}</Label>
+                <select
+                  className="w-full h-9 text-sm border rounded px-2 bg-white"
+                  value={curingCondition}
+                  disabled={submitted}
+                  onChange={e => setCuringCondition(e.target.value)}
+                >
+                  <option value="water_20c">{ar ? "ماء عند 20±2°م" : "Water at 20 ±2 °C"}</option>
+                  <option value="water_lab">{ar ? "ماء حسب المختبر" : "Water (lab standard)"}</option>
+                  <option value="site_covered">{ar ? "موقع (مغطى)" : "Site (covered)"}</option>
+                  <option value="other">{ar ? "أخرى (انظر الملاحظات)" : "Other (see notes)"}</option>
+                </select>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">{ar ? "مرجع الدفعة / الشهادة" : "Batch / certificate ref."}</Label>
+                <Input
+                  value={batchReference}
+                  onChange={e => setBatchReference(e.target.value)}
+                  placeholder={ar ? "اختياري" : "Optional"}
+                  disabled={submitted}
+                />
+              </div>
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                <p className="text-xs text-amber-700 font-medium mb-1">
+                  {ar ? "القوة المطلوبة عند العمر الحالي" : "Required Strength at Current Age"}
+                </p>
+                <p className="text-2xl font-bold text-amber-800">
+                  {requiredAtAge.toFixed(1)} <span className="text-sm font-normal">N/mm²</span>
+                </p>
+                {sampleAgeDays !== null && (
+                  <p className="text-xs text-amber-600 mt-1">
+                    {ar
+                      ? `${specStr} × ${(ageFactor * 100).toFixed(0)}% (معامل العمر ${sampleAgeDays} يوم)`
+                      : `${specStr} × ${(ageFactor * 100).toFixed(0)}% (age factor at ${sampleAgeDays} days)`}
+                  </p>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Results Table */}
+        <Card>
+          <CardHeader className="pb-3 flex flex-row items-center justify-between">
+            <CardTitle className="text-base">
+              {ar ? "نتائج المكعبات" : "Cube Test Results"}
+              <span className="ml-2 text-xs font-normal text-slate-500">
+                ({ar ? "3 مكعبات كحد أدنى" : "3 cubes minimum"})
+              </span>
+            </CardTitle>
+            {!submitted && (
+              <Button variant="outline" size="sm" onClick={addRow} className="gap-1.5">
+                <Plus size={14} />
+                {ar ? "إضافة مكعب" : "Add Cube"}
+              </Button>
+            )}
+          </CardHeader>
+          <CardContent className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="bg-slate-50">
+                  {[
+                    ar ? "رقم المكعب" : "Cube No.",
+                    ar ? "الموقع" : "Location",
+                    ar ? "الحجم (مم)" : "Size (mm)",
+                    ar ? "الحمل الأقصى (كيلونيوتن)" : "Max Load (kN)",
+                    ar ? "المساحة (مم²)" : "Area (mm²)",
+                    ar ? "القوة الخام (N/mm²)" : "Raw Str. (N/mm²)",
+                    ar ? "القوة المصححة (N/mm²)" : "Corrected Str. (N/mm²)",
+                    ar ? "النتيجة" : "Result",
+                    "",
+                  ].map(h => (
+                    <th key={h} className="border border-slate-200 px-2 py-2 text-center text-xs font-semibold text-slate-600 whitespace-nowrap">
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {computedRows.map((row, idx) => (
+                  <tr key={row.id} className={idx % 2 === 0 ? "bg-white" : "bg-slate-50/50"}>
+                    <td className="border border-slate-200 px-1 py-1">
+                      <Input
+                        value={row.cubeNo}
+                        onChange={e => updateRow(row.id, "cubeNo", e.target.value)}
+                        className="h-7 text-xs w-14"
+                        disabled={submitted}
+                      />
+                    </td>
+                    <td className="border border-slate-200 px-1 py-1">
+                      <Input
+                        value={row.location}
+                        onChange={e => updateRow(row.id, "location", e.target.value)}
+                        className="h-7 text-xs w-28"
+                        placeholder={ar ? "الموقع" : "Location"}
+                        disabled={submitted}
+                      />
+                    </td>
+                    <td className="border border-slate-200 px-1 py-1">
+                      <select
+                        value={row.cubeSize}
+                        onChange={e => updateRow(row.id, "cubeSize", e.target.value)}
+                        className="h-7 text-xs w-[4.25rem] border rounded px-1 font-mono"
+                        disabled={submitted}
+                      >
+                        <option value="100">100</option>
+                        <option value="150">150</option>
+                        <option value="200">200</option>
+                      </select>
+                    </td>
+                    <td className="border border-slate-200 px-1 py-1">
+                      <Input
+                        value={row.maxLoad}
+                        onChange={e => updateRow(row.id, "maxLoad", e.target.value)}
+                        className="h-7 text-xs w-20 text-center font-mono"
+                        placeholder="—"
+                        disabled={submitted}
+                      />
+                    </td>
+                    <td className="border border-slate-200 px-1 py-1 text-center font-mono text-xs text-slate-600">
+                      {row.area ?? "—"}
+                    </td>
+                    <td className="border border-slate-200 px-1 py-1 text-center font-mono text-xs text-slate-600">
+                      {row.cubeStrength ?? "—"}
+                    </td>
+                    <td className="border border-slate-200 px-1 py-1 text-center font-mono text-xs font-bold text-slate-800">
+                      {row.correctedStrength ?? "—"}
+                    </td>
+                    <td className="border border-slate-200 px-1 py-1 text-center">
+                      {row.result && row.result !== "pending" ? (
+                        <PassFailBadge result={row.result} size="sm" />
+                      ) : "—"}
+                    </td>
+                    <td className="border border-slate-200 px-1 py-1 text-center">
+                      {!submitted && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0 text-red-400 hover:text-red-600"
+                          onClick={() => removeRow(row.id)}
+                          disabled={rows.length <= 1}
+                        >
+                          <Trash2 size={12} />
+                        </Button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+
+        {/* Summary */}
+        {validRows.length > 0 && (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">{ar ? "ملخص" : "Summary"}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-slate-50 rounded-xl p-4 text-center border">
+                  <p className="text-xs text-slate-500 mb-1">{ar ? "عدد المكعبات المختبرة" : "No. of Cubes Tested"}</p>
+                  <p className="text-3xl font-bold text-slate-800">{validRows.length}</p>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-4 text-center border">
+                  <p className="text-xs text-slate-500 mb-1">{ar ? "متوسط القوة المصححة" : "Avg. Corrected Strength"}</p>
+                  <p className="text-3xl font-bold text-slate-800">{avgStrength.toFixed(2)}</p>
+                  <p className="text-xs text-slate-400">N/mm²</p>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-4 text-center border">
+                  <p className="text-xs text-slate-500 mb-1">
+                    {ar
+                      ? `المطلوب عند ${sampleAgeDays ?? "—"} يوم`
+                      : `Required at ${sampleAgeDays ?? "—"} days`}
+                  </p>
+                  <p className="text-3xl font-bold text-slate-800">{requiredAtAge.toFixed(1)}</p>
+                  <p className="text-xs text-slate-400">N/mm²</p>
+                </div>
+              </div>
+              <ResultBanner
+                result={overallResult}
+                testName={ar ? "قوة الضغط لمكعبات الخرسانة" : "Compressive Strength of Concrete Cubes"}
+                standard="BS EN 12390-3"
+              />
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Notes */}
+        <Card>
+          <CardContent className="pt-4">
+            <Label className="text-xs text-slate-500 mb-1 block">
+              {ar ? "ملاحظات الاختبار" : "Test Notes / Observations"}
+            </Label>
+            <Textarea
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              placeholder={ar ? "أدخل أي ملاحظات أو معلومات إضافية..." : "Enter any observations or additional information..."}
+              rows={3}
+              disabled={submitted}
+            />
+          </CardContent>
+        </Card>
+      </div>
+    </DashboardLayout>
+  );
+}

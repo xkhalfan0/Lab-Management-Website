@@ -1,0 +1,130 @@
+{
+  "query": "SELECT id, code, nameAr, category FROM test_types LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, code, nameAr, category FROM test_types LIMIT 20;",
+  "rows": [
+    {
+      "id": "1001",
+      "code": "CONC_CUBE",
+      "nameAr": "مقاومة الانضغاط لمكعبات الخرسانة",
+      "category": "concrete"
+    },
+    {
+      "id": "1002",
+      "code": "CONC_CORE",
+      "nameAr": "مقاومة الانضغاط لعينات الخرسانة القلبية",
+      "category": "concrete"
+    },
+    {
+      "id": "1003",
+      "code": "CONC_BLOCK",
+      "nameAr": "مقاومة الانضغاط للطابوق الخرساني",
+      "category": "concrete"
+    },
+    {
+      "id": "1004",
+      "code": "CONC_INTERLOCK",
+      "nameAr": "مقاومة الانضغاط للبلاط المعشق",
+      "category": "concrete"
+    },
+    {
+      "id": "1005",
+      "code": "CONC_FOAM",
+      "nameAr": "مقاومة الانضغاط لمكعبات الخرسانة الرغوية",
+      "category": "concrete"
+    },
+    {
+      "id": "1006",
+      "code": "CONC_FOAM_DENSITY",
+      "nameAr": "الكثافة الاجمالية لمكعب الخرسانة الرغوية",
+      "category": "concrete"
+    },
+    {
+      "id": "1007",
+      "code": "CEM_SETTING_TIME",
+      "nameAr": "زمن الشك الابتدائي والنهائي للاسمنت",
+      "category": "concrete"
+    },
+    {
+      "id": "1008",
+      "code": "CONC_MORTAR_SAND",
+      "nameAr": "تحليل بالمناخل لرملي البلاستر والبناء",
+      "category": "concrete"
+    },
+    {
+      "id": "1009",
+      "code": "CONC_BEAM_SMALL",
+      "nameAr": "كمرات خرسانية 10x10x50 سم",
+      "category": "concrete"
+    },
+    {
+      "id": "1010",
+      "code": "CONC_BEAM_LARGE",
+      "nameAr": "كمرات خرسانية 15x15x75 سم",
+      "category": "concrete"
+    },
+    {
+      "id": "2001",
+      "code": "SOIL_SIEVE",
+      "nameAr": "تحليل بالمناخل للتربة (بالغسيل)",
+      "category": "soil"
+    },
+    {
+      "id": "2002",
+      "code": "SOIL_ATTERBERG",
+      "nameAr": "حدود اتربرج للتربة الناعمة ومعامل اللدونة",
+      "category": "soil"
+    },
+    {
+      "id": "2003",
+      "code": "SOIL_PROCTOR",
+      "nameAr": "اختبار بروكتور المعدل",
+      "category": "soil"
+    },
+    {
+      "id": "2004",
+      "code": "SOIL_CBR",
+      "nameAr": "اختبار معامل تحميل كاليفورنيا CBR",
+      "category": "soil"
+    },
+    {
+      "id": "2005",
+      "code": "SOIL_FIELD_DENSITY",
+      "nameAr": "تحديد الكثافة الحقلية بطريقة الاحلال بالرمل",
+      "category": "soil"
+    },
+    {
+      "id": "3001",
+      "code": "STEEL_REBAR",
+      "nameAr": "اختبار الشد لقضبان حديد التسليح",
+      "category": "steel"
+    },
+    {
+      "id": "3002",
+      "code": "STEEL_BEND",
+      "nameAr": "اختبار ثني قضبان حديد التسليح",
+      "category": "steel"
+    },
+    {
+      "id": "3003",
+      "code": "STEEL_REBEND",
+      "nameAr": "اختبار ثني واعادة الثني لقضبان حديد التسليح",
+      "category": "steel"
+    },
+    {
+      "id": "3004",
+      "code": "STEEL_ANCHOR",
+      "nameAr": "اختبار الشد لمسامير التثبيت",
+      "category": "steel"
+    },
+    {
+      "id": "3005",
+      "code": "STEEL_STRUCTURAL",
+      "nameAr": "اختبار الشد للحديد الانشائي",
+      "category": "steel"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcode\tnameAr\tcategory\n1001\tCONC_CUBE\tمقاومة الانضغاط لمكعبات الخرسانة\tconcrete\n1002\tCONC_CORE\tمقاومة الانضغاط لعينات الخرسانة القلبية\tconcrete\n1003\tCONC_BLOCK\tمقاومة الانضغاط للطابوق الخرساني\tconcrete\n1004\tCONC_INTERLOCK\tمقاومة الانضغاط للبلاط المعشق\tconcrete\n1005\tCONC_FOAM\tمقاومة الانضغاط لمكعبات الخرسانة الرغوية\tconcrete\n1006\tCONC_FOAM_DENSITY\tالكثافة الاجمالية لمكعب الخرسانة الرغوية\tconcrete\n1007\tCEM_SETTING_TIME\tزمن الشك الابتدائي والنهائي للاسمنت\tconcrete\n1008\tCONC_MORTAR_SAND\tتحليل بالمناخل لرملي البلاستر والبناء\tconcrete\n1009\tCONC_BEAM_SMALL\tكمرات خرسانية 10x10x50 سم\tconcrete\n1010\tCONC_BEAM_LARGE\tكمرات خرسانية 15x15x75 سم\tconcrete\n2001\tSOIL_SIEVE\tتحليل بالمناخل للتربة (بالغسيل)\tsoil\n2002\tSOIL_ATTERBERG\tحدود اتربرج للتربة الناعمة ومعامل اللدونة\tsoil\n2003\tSOIL_PROCTOR\tاختبار بروكتور المعدل\tsoil\n2004\tSOIL_CBR\tاختبار معامل تحميل كاليفورنيا CBR\tsoil\n2005\tSOIL_FIELD_DENSITY\tتحديد الكثافة الحقلية بطريقة الاحلال بالرمل\tsoil\n3001\tSTEEL_REBAR\tاختبار الشد لقضبان حديد التسليح\tsteel\n3002\tSTEEL_BEND\tاختبار ثني قضبان حديد التسليح\tsteel\n3003\tSTEEL_REBEND\tاختبار ثني واعادة الثني لقضبان حديد التسليح\tsteel\n3004\tSTEEL_ANCHOR\tاختبار الشد لمسامير التثبيت\tsteel\n3005\tSTEEL_STRUCTURAL\tاختبار الشد للحديد الانشائي\tsteel\n",
+  "stderr": "",
+  "execution_time_ms": 1602
+}

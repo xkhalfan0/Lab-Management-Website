@@ -1,0 +1,1 @@
+ALTER TABLE `samples` ADD `location` varchar(256);

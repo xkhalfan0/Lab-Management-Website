@@ -1,0 +1,50 @@
+{
+  "query": "SELECT id, sectorKey, nameAr, nameEn, username, isActive FROM sector_accounts;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, sectorKey, nameAr, nameEn, username, isActive FROM sector_accounts;",
+  "rows": [
+    {
+      "id": "1",
+      "sectorKey": "sector_1",
+      "nameAr": "القطاع الأول",
+      "nameEn": "Sector 1",
+      "username": "sector1",
+      "isActive": "1"
+    },
+    {
+      "id": "2",
+      "sectorKey": "sector_2",
+      "nameAr": "القطاع الثاني",
+      "nameEn": "Sector 2",
+      "username": "sector2",
+      "isActive": "1"
+    },
+    {
+      "id": "3",
+      "sectorKey": "sector_3",
+      "nameAr": "القطاع الثالث",
+      "nameEn": "Sector 3",
+      "username": "sector3",
+      "isActive": "1"
+    },
+    {
+      "id": "4",
+      "sectorKey": "sector_4",
+      "nameAr": "القطاع الرابع",
+      "nameEn": "Sector 4",
+      "username": "sector4",
+      "isActive": "1"
+    },
+    {
+      "id": "5",
+      "sectorKey": "sector_5",
+      "nameAr": "القطاع الخامس",
+      "nameEn": "Sector 5",
+      "username": "sector5",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tsectorKey\tnameAr\tnameEn\tusername\tisActive\n1\tsector_1\tالقطاع الأول\tSector 1\tsector1\t1\n2\tsector_2\tالقطاع الثاني\tSector 2\tsector2\t1\n3\tsector_3\tالقطاع الثالث\tSector 3\tsector3\t1\n4\tsector_4\tالقطاع الرابع\tSector 4\tsector4\t1\n5\tsector_5\tالقطاع الخامس\tSector 5\tsector5\t1\n",
+  "stderr": "",
+  "execution_time_ms": 1615
+}

@@ -1,0 +1,22 @@
+{
+  "query": "SELECT id, name, role, permissions FROM users WHERE name LIKE '%Ahmed%' OR name LIKE '%ahmed%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, name, role, permissions FROM users WHERE name LIKE '%Ahmed%' OR name LIKE '%ahmed%';",
+  "rows": [
+    {
+      "id": "30009",
+      "name": "Ahmed Ali",
+      "role": "reception",
+      "permissions": "{\"certificates.view\": true, \"distribution.view\": true, \"reports.view\": true, \"results.view\": false, \"samples.create\": true, \"samples.edit\": true, \"samples.view\": true}"
+    },
+    {
+      "id": "60007",
+      "name": "ahmed",
+      "role": "lab_manager",
+      "permissions": "{\"certificates.create\": true, \"certificates.view\": true, \"distribution.assign\": true, \"distribution.create\": true, \"distribution.view\": true, \"reports.export\": true, \"reports.view\": true, \"results.view\": true, \"reviews.view\": true, \"samples.create\": false, \"samples.edit\": false, \"samples.view\": false, \"users.view\": true}"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\trole\tpermissions\n30009\tAhmed Ali\treception\t{\"certificates.view\": true, \"distribution.view\": true, \"reports.view\": true, \"results.view\": false, \"samples.create\": true, \"samples.edit\": true, \"samples.view\": true}\n60007\tahmed\tlab_manager\t{\"certificates.create\": true, \"certificates.view\": true, \"distribution.assign\": true, \"distribution.create\": true, \"distribution.view\": true, \"reports.export\": true, \"reports.view\": true, \"results.view\": true, \"reviews.view\": true, \"samples.create\": false, \"samples.edit\": false, \"samples.view\": false, \"users.view\": true}\n",
+  "stderr": "",
+  "execution_time_ms": 1631
+}

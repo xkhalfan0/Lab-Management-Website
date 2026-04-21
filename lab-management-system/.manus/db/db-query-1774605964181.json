@@ -1,0 +1,19 @@
+{
+  "query": "SELECT id, username, name, role, openId, isActive, passwordHash FROM users WHERE role = 'admin';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, username, name, role, openId, isActive, passwordHash FROM users WHERE role = 'admin';",
+  "rows": [
+    {
+      "id": "1",
+      "username": "NULL",
+      "name": "kh al",
+      "role": "admin",
+      "openId": "LTzgsdvpQKhCBwL2MzUToD",
+      "isActive": "1",
+      "passwordHash": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tusername\tname\trole\topenId\tisActive\tpasswordHash\n1\tNULL\tkh al\tadmin\tLTzgsdvpQKhCBwL2MzUToD\t1\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 1505
+}

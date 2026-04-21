@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO users (openId, name, email, loginMethod, role, username, passwordHash, isActive, createdAt, updatedAt, lastSignedIn)\nVALUES (\n  'local-admin-001',\n  'Admin',\n  'admin@lab.local',\n  'local',\n  'admin',\n  'admin',\n  '$2b$10$dhsEIMwbSfUql4TA2CYm8OwQvghKlop96V1LqBUs1GH66CYGed9Xy',\n  1,\n  NOW(),\n  NOW(),\n  NOW()\n)\nON DUPLICATE KEY UPDATE\n  passwordHash = '$2b$10$dhsEIMwbSfUql4TA2CYm8OwQvghKlop96V1LqBUs1GH66CYGed9Xy',\n  isActive = 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute INSERT INTO users (openId, name, email, loginMethod, role, username, passwordHash, isActive, createdAt, updatedAt, lastSignedIn)\nVALUES (\n  'local-admin-001',\n  'Admin',\n  'admin@lab.local',\n  'local',\n  'admin',\n  'admin',\n  '$2b$10$dhsEIMwbSfUql4TA2CYm8OwQvghKlop96V1LqBUs1GH66CYGed9Xy',\n  1,\n  NOW(),\n  NOW(),\n  NOW()\n)\nON DUPLICATE KEY UPDATE\n  passwordHash = '$2b$10$dhsEIMwbSfUql4TA2CYm8OwQvghKlop96V1LqBUs1GH66CYGed9Xy',\n  isActive = 1;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1105 (HY000): No available TiDB instances, please make sure TiDB is available"
+  ]
+}

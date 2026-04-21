@@ -1,0 +1,13 @@
+{
+  "query": "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'samples' AND COLUMN_NAME = 'sampleType' AND TABLE_SCHEMA = DATABASE();",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'samples' AND COLUMN_NAME = 'sampleType' AND TABLE_SCHEMA = DATABASE();",
+  "rows": [
+    {
+      "COLUMN_TYPE": "enum('concrete','soil','metal','asphalt','steel','aggregates')"
+    }
+  ],
+  "messages": [],
+  "stdout": "COLUMN_TYPE\nenum('concrete','soil','metal','asphalt','steel','aggregates')\n",
+  "stderr": "",
+  "execution_time_ms": 1709
+}

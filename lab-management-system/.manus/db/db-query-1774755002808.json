@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS sectors (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  sectorKey VARCHAR(64) NOT NULL UNIQUE,\n  nameAr VARCHAR(128) NOT NULL,\n  nameEn VARCHAR(128) NOT NULL,\n  description TEXT,\n  isActive BOOLEAN NOT NULL DEFAULT TRUE,\n  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP\n);\n\nINSERT IGNORE INTO sectors (sectorKey, nameAr, nameEn) VALUES\n  ('sector_1', 'القطاع الأول', 'Sector 1'),\n  ('sector_2', 'القطاع الثاني', 'Sector 2'),\n  ('sector_3', 'القطاع الثالث', 'Sector 3'),\n  ('sector_4', 'القطاع الرابع', 'Sector 4'),\n  ('sector_5', 'القطاع الخامس', 'Sector 5');",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute CREATE TABLE IF NOT EXISTS sectors (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  sectorKey VARCHAR(64) NOT NULL UNIQUE,\n  nameAr VARCHAR(128) NOT NULL,\n  nameEn VARCHAR(128) NOT NULL,\n  description TEXT,\n  isActive BOOLEAN NOT NULL DEFAULT TRUE,\n  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP\n);\n\nINSERT IGNORE INTO sectors (sectorKey, nameAr, nameEn) VALUES\n  ('sector_1', 'القطاع الأول', 'Sector 1'),\n  ('sector_2', 'القطاع الثاني', 'Sector 2'),\n  ('sector_3', 'القطاع الثالث', 'Sector 3'),\n  ('sector_4', 'القطاع الرابع', 'Sector 4'),\n  ('sector_5', 'القطاع الخامس', 'Sector 5');",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1929
+}

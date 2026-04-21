@@ -1,0 +1,234 @@
+{
+  "query": "SELECT id, code, nameAr, category, unitPrice FROM test_types ORDER BY sortOrder;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, code, nameAr, category, unitPrice FROM test_types ORDER BY sortOrder;",
+  "rows": [
+    {
+      "id": "1001",
+      "code": "CONC_CUBE",
+      "nameAr": "مقاومة الانضغاط لمكعبات الخرسانة",
+      "category": "concrete",
+      "unitPrice": "15.00"
+    },
+    {
+      "id": "1002",
+      "code": "CONC_CORE",
+      "nameAr": "مقاومة الانضغاط لعينات الخرسانة القلبية",
+      "category": "concrete",
+      "unitPrice": "20.00"
+    },
+    {
+      "id": "1003",
+      "code": "CONC_BLOCK",
+      "nameAr": "مقاومة الانضغاط للطابوق الخرساني",
+      "category": "concrete",
+      "unitPrice": "30.00"
+    },
+    {
+      "id": "1004",
+      "code": "CONC_INTERLOCK",
+      "nameAr": "مقاومة الانضغاط للبلاط المعشق",
+      "category": "concrete",
+      "unitPrice": "20.00"
+    },
+    {
+      "id": "1005",
+      "code": "CONC_FOAM",
+      "nameAr": "مقاومة الانضغاط لمكعبات الخرسانة الرغوية",
+      "category": "concrete",
+      "unitPrice": "15.00"
+    },
+    {
+      "id": "1006",
+      "code": "CONC_FOAM_DENSITY",
+      "nameAr": "الكثافة الاجمالية لمكعب الخرسانة الرغوية",
+      "category": "concrete",
+      "unitPrice": "40.00"
+    },
+    {
+      "id": "1007",
+      "code": "CEM_SETTING_TIME",
+      "nameAr": "زمن الشك الابتدائي والنهائي للاسمنت",
+      "category": "concrete",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "1008",
+      "code": "CONC_MORTAR_SAND",
+      "nameAr": "تحليل بالمناخل لرملي البلاستر والبناء",
+      "category": "concrete",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "1009",
+      "code": "CONC_BEAM_SMALL",
+      "nameAr": "كمرات خرسانية 10x10x50 سم",
+      "category": "concrete",
+      "unitPrice": "80.00"
+    },
+    {
+      "id": "1010",
+      "code": "CONC_BEAM_LARGE",
+      "nameAr": "كمرات خرسانية 15x15x75 سم",
+      "category": "concrete",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "2001",
+      "code": "SOIL_SIEVE",
+      "nameAr": "تحليل بالمناخل للتربة (بالغسيل)",
+      "category": "soil",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "2002",
+      "code": "SOIL_ATTERBERG",
+      "nameAr": "حدود اتربرج للتربة الناعمة ومعامل اللدونة",
+      "category": "soil",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "2003",
+      "code": "SOIL_PROCTOR",
+      "nameAr": "اختبار بروكتور المعدل",
+      "category": "soil",
+      "unitPrice": "300.00"
+    },
+    {
+      "id": "2004",
+      "code": "SOIL_CBR",
+      "nameAr": "اختبار معامل تحميل كاليفورنيا CBR",
+      "category": "soil",
+      "unitPrice": "250.00"
+    },
+    {
+      "id": "2005",
+      "code": "SOIL_FIELD_DENSITY",
+      "nameAr": "تحديد الكثافة الحقلية بطريقة الاحلال بالرمل",
+      "category": "soil",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "3001",
+      "code": "STEEL_REBAR",
+      "nameAr": "اختبار الشد لقضبان حديد التسليح",
+      "category": "steel",
+      "unitPrice": "300.00"
+    },
+    {
+      "id": "3002",
+      "code": "STEEL_BEND",
+      "nameAr": "اختبار ثني قضبان حديد التسليح",
+      "category": "steel",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "3003",
+      "code": "STEEL_REBEND",
+      "nameAr": "اختبار ثني واعادة الثني لقضبان حديد التسليح",
+      "category": "steel",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "3004",
+      "code": "STEEL_ANCHOR",
+      "nameAr": "اختبار الشد لمسامير التثبيت",
+      "category": "steel",
+      "unitPrice": "300.00"
+    },
+    {
+      "id": "3005",
+      "code": "STEEL_STRUCTURAL",
+      "nameAr": "اختبار الشد للحديد الانشائي",
+      "category": "steel",
+      "unitPrice": "300.00"
+    },
+    {
+      "id": "4001",
+      "code": "ASPH_HOTBIN",
+      "nameAr": "التحليل بالمناخل للخلطة التصميمية",
+      "category": "asphalt",
+      "unitPrice": "50.00"
+    },
+    {
+      "id": "4002",
+      "code": "ASPH_BITUMEN_EXTRACT",
+      "nameAr": "استخلاص البيتيومين",
+      "category": "asphalt",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "4003",
+      "code": "ASPH_EXTRACTED_SIEVE",
+      "nameAr": "تحليل بالمناخل للركام بعد الاستخلاص",
+      "category": "asphalt",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "4004",
+      "code": "ASPH_MARSHALL",
+      "nameAr": "قياس الثباتية والهبوط والفراغات لعينات مارشال",
+      "category": "asphalt",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "4005",
+      "code": "ASPH_MARSHALL_DENSITY",
+      "nameAr": "قياس الكثافة الاجمالية لعينات مارشال",
+      "category": "asphalt",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "4006",
+      "code": "ASPH_CORE",
+      "nameAr": "اختبار العينات القلبية للاسفلت",
+      "category": "asphalt",
+      "unitPrice": "75.00"
+    },
+    {
+      "id": "5001",
+      "code": "AGG_SIEVE",
+      "nameAr": "تحليل بالمناخل لركام الخرسانة (بالغسيل)",
+      "category": "aggregates",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "5002",
+      "code": "AGG_SG",
+      "nameAr": "اختبار الكثافة النوعية ونسبة الامتصاص",
+      "category": "aggregates",
+      "unitPrice": "75.00"
+    },
+    {
+      "id": "5003",
+      "code": "AGG_FLAKINESS_ELONGATION",
+      "nameAr": "اختبار معاملي الاسطبالة والترقق",
+      "category": "aggregates",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "5004",
+      "code": "AGG_CRUSHING",
+      "nameAr": "اختبار معامل التهشيم للركام",
+      "category": "aggregates",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "5005",
+      "code": "AGG_IMPACT",
+      "nameAr": "اختبار معامل الصدم للركام",
+      "category": "aggregates",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "5006",
+      "code": "AGG_LA",
+      "nameAr": "اختبار لوس انجلوس للبري للركام",
+      "category": "aggregates",
+      "unitPrice": "150.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcode\tnameAr\tcategory\tunitPrice\n1001\tCONC_CUBE\tمقاومة الانضغاط لمكعبات الخرسانة\tconcrete\t15.00\n1002\tCONC_CORE\tمقاومة الانضغاط لعينات الخرسانة القلبية\tconcrete\t20.00\n1003\tCONC_BLOCK\tمقاومة الانضغاط للطابوق الخرساني\tconcrete\t30.00\n1004\tCONC_INTERLOCK\tمقاومة الانضغاط للبلاط المعشق\tconcrete\t20.00\n1005\tCONC_FOAM\tمقاومة الانضغاط لمكعبات الخرسانة الرغوية\tconcrete\t15.00\n1006\tCONC_FOAM_DENSITY\tالكثافة الاجمالية لمكعب الخرسانة الرغوية\tconcrete\t40.00\n1007\tCEM_SETTING_TIME\tزمن الشك الابتدائي والنهائي للاسمنت\tconcrete\t100.00\n1008\tCONC_MORTAR_SAND\tتحليل بالمناخل لرملي البلاستر والبناء\tconcrete\t200.00\n1009\tCONC_BEAM_SMALL\tكمرات خرسانية 10x10x50 سم\tconcrete\t80.00\n1010\tCONC_BEAM_LARGE\tكمرات خرسانية 15x15x75 سم\tconcrete\t100.00\n2001\tSOIL_SIEVE\tتحليل بالمناخل للتربة (بالغسيل)\tsoil\t100.00\n2002\tSOIL_ATTERBERG\tحدود اتربرج للتربة الناعمة ومعامل اللدونة\tsoil\t150.00\n2003\tSOIL_PROCTOR\tاختبار بروكتور المعدل\tsoil\t300.00\n2004\tSOIL_CBR\tاختبار معامل تحميل كاليفورنيا CBR\tsoil\t250.00\n2005\tSOIL_FIELD_DENSITY\tتحديد الكثافة الحقلية بطريقة الاحلال بالرمل\tsoil\t100.00\n3001\tSTEEL_REBAR\tاختبار الشد لقضبان حديد التسليح\tsteel\t300.00\n3002\tSTEEL_BEND\tاختبار ثني قضبان حديد التسليح\tsteel\t100.00\n3003\tSTEEL_REBEND\tاختبار ثني واعادة الثني لقضبان حديد التسليح\tsteel\t100.00\n3004\tSTEEL_ANCHOR\tاختبار الشد لمسامير التثبيت\tsteel\t300.00\n3005\tSTEEL_STRUCTURAL\tاختبار الشد للحديد الانشائي\tsteel\t300.00\n4001\tASPH_HOTBIN\tالتحليل بالمناخل للخلطة التصميمية\tasphalt\t50.00\n4002\tASPH_BITUMEN_EXTRACT\tاستخلاص البيتيومين\tasphalt\t200.00\n4003\tASPH_EXTRACTED_SIEVE\tتحليل بالمناخل للركام بعد الاستخلاص\tasphalt\t100.00\n4004\tASPH_MARSHALL\tقياس الثباتية والهبوط والفراغات لعينات مارشال\tasphalt\t150.00\n4005\tASPH_MARSHALL_DENSITY\tقياس الكثافة الاجمالية لعينات مارشال\tasphalt\t150.00\n4006\tASPH_CORE\tاختبار العينات القلبية للاسفلت\tasphalt\t75.00\n5001\tAGG_SIEVE\tتحليل بالمناخل لركام الخرسانة (بالغسيل)\taggregates\t100.00\n5002\tAGG_SG\tاختبار الكثافة النوعية ونسبة الامتصاص\taggregates\t75.00\n5003\tAGG_FLAKINESS_ELONGATION\tاختبار معاملي الاسطبالة والترقق\taggregates\t100.00\n5004\tAGG_CRUSHING\tاختبار معامل التهشيم للركام\taggregates\t100.00\n5005\tAGG_IMPACT\tاختبار معامل الصدم للركام\taggregates\t100.00\n5006\tAGG_LA\tاختبار لوس انجلوس للبري للركام\taggregates\t150.00\n",
+  "stderr": "",
+  "execution_time_ms": 1568
+}

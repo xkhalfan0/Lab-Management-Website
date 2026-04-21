@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE `specialized_test_results` ADD `managerReviewedByName` varchar(256);\nALTER TABLE `specialized_test_results` ADD `managerReviewedAt` timestamp;\nALTER TABLE `specialized_test_results` ADD `managerNotes` text;\nALTER TABLE `specialized_test_results` ADD `qcReviewedByName` varchar(256);\nALTER TABLE `specialized_test_results` ADD `qcReviewedAt` timestamp;\nALTER TABLE `specialized_test_results` ADD `qcNotes` text;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute ALTER TABLE `specialized_test_results` ADD `managerReviewedByName` varchar(256);\nALTER TABLE `specialized_test_results` ADD `managerReviewedAt` timestamp;\nALTER TABLE `specialized_test_results` ADD `managerNotes` text;\nALTER TABLE `specialized_test_results` ADD `qcReviewedByName` varchar(256);\nALTER TABLE `specialized_test_results` ADD `qcReviewedAt` timestamp;\nALTER TABLE `specialized_test_results` ADD `qcNotes` text;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 7159
+}

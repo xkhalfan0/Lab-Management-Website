@@ -1,0 +1,60 @@
+{
+  "query": "SELECT * FROM sectors LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT * FROM sectors LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "sectorKey": "sector_1",
+      "nameAr": "القطاع الأول",
+      "nameEn": "Sector 1",
+      "description": "NULL",
+      "isActive": "1",
+      "createdAt": "2026-03-29 03:30:02",
+      "updatedAt": "2026-03-29 03:30:02"
+    },
+    {
+      "id": "2",
+      "sectorKey": "sector_2",
+      "nameAr": "القطاع الثاني",
+      "nameEn": "Sector 2",
+      "description": "NULL",
+      "isActive": "1",
+      "createdAt": "2026-03-29 03:30:02",
+      "updatedAt": "2026-03-29 03:30:02"
+    },
+    {
+      "id": "3",
+      "sectorKey": "sector_3",
+      "nameAr": "القطاع الثالث",
+      "nameEn": "Sector 3",
+      "description": "NULL",
+      "isActive": "1",
+      "createdAt": "2026-03-29 03:30:02",
+      "updatedAt": "2026-03-29 03:30:02"
+    },
+    {
+      "id": "4",
+      "sectorKey": "sector_4",
+      "nameAr": "القطاع الرابع",
+      "nameEn": "Sector 4",
+      "description": "NULL",
+      "isActive": "1",
+      "createdAt": "2026-03-29 03:30:02",
+      "updatedAt": "2026-03-29 03:30:02"
+    },
+    {
+      "id": "5",
+      "sectorKey": "sector_5",
+      "nameAr": "القطاع الخامس",
+      "nameEn": "Sector 5",
+      "description": "NULL",
+      "isActive": "1",
+      "createdAt": "2026-03-29 03:30:02",
+      "updatedAt": "2026-03-29 03:30:02"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tsectorKey\tnameAr\tnameEn\tdescription\tisActive\tcreatedAt\tupdatedAt\n1\tsector_1\tالقطاع الأول\tSector 1\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02\n2\tsector_2\tالقطاع الثاني\tSector 2\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02\n3\tsector_3\tالقطاع الثالث\tSector 3\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02\n4\tsector_4\tالقطاع الرابع\tSector 4\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02\n5\tsector_5\tالقطاع الخامس\tSector 5\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02\n",
+  "stderr": "",
+  "execution_time_ms": 1562
+}

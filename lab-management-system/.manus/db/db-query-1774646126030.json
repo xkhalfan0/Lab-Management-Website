@@ -1,0 +1,186 @@
+{
+  "query": "SELECT code, nameEn, nameAr, category, unit, unitPrice FROM test_types WHERE isActive = 1 AND category IN ('soil','steel','asphalt','aggregates') ORDER BY category, sortOrder;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT code, nameEn, nameAr, category, unit, unitPrice FROM test_types WHERE isActive = 1 AND category IN ('soil','steel','asphalt','aggregates') ORDER BY category, sortOrder;",
+  "rows": [
+    {
+      "code": "SOIL_SIEVE",
+      "nameEn": "Sieve Analysis of Soil",
+      "nameAr": "تحليل بالمناخل للتربة (بالغسيل)",
+      "category": "soil",
+      "unit": "-",
+      "unitPrice": "100.00"
+    },
+    {
+      "code": "SOIL_ATTERBERG",
+      "nameEn": "Atterberg Limits of Soil (Plasticity Index)",
+      "nameAr": "حدود اتربرج للتربة الناعمة ومعامل اللدونة",
+      "category": "soil",
+      "unit": "-",
+      "unitPrice": "150.00"
+    },
+    {
+      "code": "SOIL_PROCTOR",
+      "nameEn": "MDD/OMC (Proctor) test",
+      "nameAr": "اختبار بروكتور المعدل",
+      "category": "soil",
+      "unit": "kg/m3",
+      "unitPrice": "300.00"
+    },
+    {
+      "code": "SOIL_CBR",
+      "nameEn": "California Bearing Ratio (CBR) Test",
+      "nameAr": "اختبار معامل تحميل كاليفورنيا CBR",
+      "category": "soil",
+      "unit": "%",
+      "unitPrice": "250.00"
+    },
+    {
+      "code": "SOIL_FIELD_DENSITY",
+      "nameEn": "Field Density (Compaction test) at Site",
+      "nameAr": "تحديد الكثافة الحقلية بطريقة الاحلال بالرمل",
+      "category": "soil",
+      "unit": "kg/m3",
+      "unitPrice": "100.00"
+    },
+    {
+      "code": "STEEL_REBAR",
+      "nameEn": "Tensile Strength of Reinforcement Steel",
+      "nameAr": "اختبار الشد لقضبان حديد التسليح",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "300.00"
+    },
+    {
+      "code": "STEEL_BEND",
+      "nameEn": "Bend Test",
+      "nameAr": "اختبار ثني قضبان حديد التسليح",
+      "category": "steel",
+      "unit": "Pass/Fail",
+      "unitPrice": "100.00"
+    },
+    {
+      "code": "STEEL_REBEND",
+      "nameEn": "Rebend Test",
+      "nameAr": "اختبار ثني واعادة الثني لقضبان حديد التسليح",
+      "category": "steel",
+      "unit": "Pass/Fail",
+      "unitPrice": "100.00"
+    },
+    {
+      "code": "STEEL_ANCHOR",
+      "nameEn": "Tensile Strength of Anchor Bolts",
+      "nameAr": "اختبار الشد لمسامير التثبيت",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "300.00"
+    },
+    {
+      "code": "STEEL_STRUCTURAL",
+      "nameEn": "Tensile Strength of Structural Steel",
+      "nameAr": "اختبار الشد للحديد الانشائي",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "300.00"
+    },
+    {
+      "code": "ASPH_HOTBIN",
+      "nameEn": "Asphalt Trial mix & Hotbin Aggregates - Grading",
+      "nameAr": "التحليل بالمناخل للخلطة التصميمية",
+      "category": "asphalt",
+      "unit": "-",
+      "unitPrice": "50.00"
+    },
+    {
+      "code": "ASPH_BITUMEN_EXTRACT",
+      "nameEn": "Bitumen Extraction",
+      "nameAr": "استخلاص البيتيومين",
+      "category": "asphalt",
+      "unit": "%",
+      "unitPrice": "200.00"
+    },
+    {
+      "code": "ASPH_EXTRACTED_SIEVE",
+      "nameEn": "Sieve analysis of Extracted Aggregates",
+      "nameAr": "تحليل بالمناخل للركام بعد الاستخلاص",
+      "category": "asphalt",
+      "unit": "-",
+      "unitPrice": "100.00"
+    },
+    {
+      "code": "ASPH_MARSHALL",
+      "nameEn": "Stability, Flow & Voids Percentage of Marshall Specimens",
+      "nameAr": "قياس الثباتية والهبوط والفراغات لعينات مارشال",
+      "category": "asphalt",
+      "unit": "-",
+      "unitPrice": "150.00"
+    },
+    {
+      "code": "ASPH_MARSHALL_DENSITY",
+      "nameEn": "Marshall Density for Asphalt Samples",
+      "nameAr": "قياس الكثافة الاجمالية لعينات مارشال",
+      "category": "asphalt",
+      "unit": "kg/m3",
+      "unitPrice": "150.00"
+    },
+    {
+      "code": "ASPH_CORE",
+      "nameEn": "Density and Percentage of Compaction of Asphalt Core specimens",
+      "nameAr": "اختبار العينات القلبية للاسفلت",
+      "category": "asphalt",
+      "unit": "%",
+      "unitPrice": "75.00"
+    },
+    {
+      "code": "AGG_SIEVE",
+      "nameEn": "Seive Analysis Concrete Aggregates",
+      "nameAr": "تحليل بالمناخل لركام الخرسانة (بالغسيل)",
+      "category": "aggregates",
+      "unit": "-",
+      "unitPrice": "100.00"
+    },
+    {
+      "code": "AGG_SG",
+      "nameEn": "Specific Gravity & Absorption of Coarse & Fine Aggregates",
+      "nameAr": "اختبار الكثافة النوعية ونسبة الامتصاص",
+      "category": "aggregates",
+      "unit": "-",
+      "unitPrice": "75.00"
+    },
+    {
+      "code": "AGG_FLAKINESS_ELONGATION",
+      "nameEn": "Flakiness & Elongation Index of Aggregtes",
+      "nameAr": "اختبار معاملي الاسطبالة والترقق",
+      "category": "aggregates",
+      "unit": "-",
+      "unitPrice": "100.00"
+    },
+    {
+      "code": "AGG_CRUSHING",
+      "nameEn": "Aggregate Crushing Value",
+      "nameAr": "اختبار معامل التهشيم للركام",
+      "category": "aggregates",
+      "unit": "-",
+      "unitPrice": "100.00"
+    },
+    {
+      "code": "AGG_IMPACT",
+      "nameEn": "Aggregate Impact Value",
+      "nameAr": "اختبار معامل الصدم للركام",
+      "category": "aggregates",
+      "unit": "-",
+      "unitPrice": "100.00"
+    },
+    {
+      "code": "AGG_LA",
+      "nameEn": "Los Angeles Abrasion Test",
+      "nameAr": "اختبار لوس انجلوس للبري للركام",
+      "category": "aggregates",
+      "unit": "-",
+      "unitPrice": "150.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "code\tnameEn\tnameAr\tcategory\tunit\tunitPrice\nSOIL_SIEVE\tSieve Analysis of Soil\tتحليل بالمناخل للتربة (بالغسيل)\tsoil\t-\t100.00\nSOIL_ATTERBERG\tAtterberg Limits of Soil (Plasticity Index)\tحدود اتربرج للتربة الناعمة ومعامل اللدونة\tsoil\t-\t150.00\nSOIL_PROCTOR\tMDD/OMC (Proctor) test\tاختبار بروكتور المعدل\tsoil\tkg/m3\t300.00\nSOIL_CBR\tCalifornia Bearing Ratio (CBR) Test\tاختبار معامل تحميل كاليفورنيا CBR\tsoil\t%\t250.00\nSOIL_FIELD_DENSITY\tField Density (Compaction test) at Site\tتحديد الكثافة الحقلية بطريقة الاحلال بالرمل\tsoil\tkg/m3\t100.00\nSTEEL_REBAR\tTensile Strength of Reinforcement Steel\tاختبار الشد لقضبان حديد التسليح\tsteel\tN/mm²\t300.00\nSTEEL_BEND\tBend Test\tاختبار ثني قضبان حديد التسليح\tsteel\tPass/Fail\t100.00\nSTEEL_REBEND\tRebend Test\tاختبار ثني واعادة الثني لقضبان حديد التسليح\tsteel\tPass/Fail\t100.00\nSTEEL_ANCHOR\tTensile Strength of Anchor Bolts\tاختبار الشد لمسامير التثبيت\tsteel\tN/mm²\t300.00\nSTEEL_STRUCTURAL\tTensile Strength of Structural Steel\tاختبار الشد للحديد الانشائي\tsteel\tN/mm²\t300.00\nASPH_HOTBIN\tAsphalt Trial mix & Hotbin Aggregates - Grading\tالتحليل بالمناخل للخلطة التصميمية\tasphalt\t-\t50.00\nASPH_BITUMEN_EXTRACT\tBitumen Extraction\tاستخلاص البيتيومين\tasphalt\t%\t200.00\nASPH_EXTRACTED_SIEVE\tSieve analysis of Extracted Aggregates\tتحليل بالمناخل للركام بعد الاستخلاص\tasphalt\t-\t100.00\nASPH_MARSHALL\tStability, Flow & Voids Percentage of Marshall Specimens\tقياس الثباتية والهبوط والفراغات لعينات مارشال\tasphalt\t-\t150.00\nASPH_MARSHALL_DENSITY\tMarshall Density for Asphalt Samples\tقياس الكثافة الاجمالية لعينات مارشال\tasphalt\tkg/m3\t150.00\nASPH_CORE\tDensity and Percentage of Compaction of Asphalt Core specimens\tاختبار العينات القلبية للاسفلت\tasphalt\t%\t75.00\nAGG_SIEVE\tSeive Analysis Concrete Aggregates\tتحليل بالمناخل لركام الخرسانة (بالغسيل)\taggregates\t-\t100.00\nAGG_SG\tSpecific Gravity & Absorption of Coarse & Fine Aggregates\tاختبار الكثافة النوعية ونسبة الامتصاص\taggregates\t-\t75.00\nAGG_FLAKINESS_ELONGATION\tFlakiness & Elongation Index of Aggregtes\tاختبار معاملي الاسطبالة والترقق\taggregates\t-\t100.00\nAGG_CRUSHING\tAggregate Crushing Value\tاختبار معامل التهشيم للركام\taggregates\t-\t100.00\nAGG_IMPACT\tAggregate Impact Value\tاختبار معامل الصدم للركام\taggregates\t-\t100.00\nAGG_LA\tLos Angeles Abrasion Test\tاختبار لوس انجلوس للبري للركام\taggregates\t-\t150.00\n",
+  "stderr": "",
+  "execution_time_ms": 1628
+}

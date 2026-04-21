@@ -1,0 +1,42 @@
+{
+  "query": "\nSELECT 'samples' as tbl, COUNT(*) as cnt FROM samples\nUNION ALL SELECT 'distributions', COUNT(*) FROM distributions\nUNION ALL SELECT 'specialized_test_results', COUNT(*) FROM specialized_test_results\nUNION ALL SELECT 'reviews', COUNT(*) FROM reviews\nUNION ALL SELECT 'clearance_requests', COUNT(*) FROM clearance_requests\nUNION ALL SELECT 'certificates', COUNT(*) FROM certificates\nUNION ALL SELECT 'notifications', COUNT(*) FROM notifications\nUNION ALL SELECT 'sample_history', COUNT(*) FROM sample_history;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nSELECT 'samples' as tbl, COUNT(*) as cnt FROM samples\nUNION ALL SELECT 'distributions', COUNT(*) FROM distributions\nUNION ALL SELECT 'specialized_test_results', COUNT(*) FROM specialized_test_results\nUNION ALL SELECT 'reviews', COUNT(*) FROM reviews\nUNION ALL SELECT 'clearance_requests', COUNT(*) FROM clearance_requests\nUNION ALL SELECT 'certificates', COUNT(*) FROM certificates\nUNION ALL SELECT 'notifications', COUNT(*) FROM notifications\nUNION ALL SELECT 'sample_history', COUNT(*) FROM sample_history;\n",
+  "rows": [
+    {
+      "tbl": "samples",
+      "cnt": "0"
+    },
+    {
+      "tbl": "reviews",
+      "cnt": "0"
+    },
+    {
+      "tbl": "clearance_requests",
+      "cnt": "0"
+    },
+    {
+      "tbl": "specialized_test_results",
+      "cnt": "0"
+    },
+    {
+      "tbl": "distributions",
+      "cnt": "0"
+    },
+    {
+      "tbl": "notifications",
+      "cnt": "0"
+    },
+    {
+      "tbl": "certificates",
+      "cnt": "0"
+    },
+    {
+      "tbl": "sample_history",
+      "cnt": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "tbl\tcnt\nsamples\t0\nreviews\t0\nclearance_requests\t0\nspecialized_test_results\t0\ndistributions\t0\nnotifications\t0\ncertificates\t0\nsample_history\t0\n",
+  "stderr": "",
+  "execution_time_ms": 1578
+}

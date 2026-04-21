@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE contracts SET sectorKey = 'sector_1', sectorNameAr = 'القطاع الأول', sectorNameEn = 'Sector 1' WHERE id = 40001;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute UPDATE contracts SET sectorKey = 'sector_1', sectorNameAr = 'القطاع الأول', sectorNameEn = 'Sector 1' WHERE id = 40001;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1617
+}

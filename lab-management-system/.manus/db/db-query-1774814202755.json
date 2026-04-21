@@ -1,0 +1,40 @@
+{
+  "query": "\nSELECT id, sectorKey, nameAr, nameEn FROM sectors ORDER BY id;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nSELECT id, sectorKey, nameAr, nameEn FROM sectors ORDER BY id;\n",
+  "rows": [
+    {
+      "id": "1",
+      "sectorKey": "sector_1",
+      "nameAr": "قطاع الطرق والجسور",
+      "nameEn": "Roads & Bridges Sector"
+    },
+    {
+      "id": "2",
+      "sectorKey": "sector_2",
+      "nameAr": "قطاع المباني الحكومية",
+      "nameEn": "Government Buildings Sector"
+    },
+    {
+      "id": "3",
+      "sectorKey": "sector_3",
+      "nameAr": "قطاع البنية التحتية",
+      "nameEn": "Infrastructure Sector"
+    },
+    {
+      "id": "4",
+      "sectorKey": "sector_4",
+      "nameAr": "قطاع المشاريع الصناعية",
+      "nameEn": "Industrial Projects Sector"
+    },
+    {
+      "id": "5",
+      "sectorKey": "sector_5",
+      "nameAr": "قطاع الإسكان والتطوير",
+      "nameEn": "Housing & Development Sector"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tsectorKey\tnameAr\tnameEn\n1\tsector_1\tقطاع الطرق والجسور\tRoads & Bridges Sector\n2\tsector_2\tقطاع المباني الحكومية\tGovernment Buildings Sector\n3\tsector_3\tقطاع البنية التحتية\tInfrastructure Sector\n4\tsector_4\tقطاع المشاريع الصناعية\tIndustrial Projects Sector\n5\tsector_5\tقطاع الإسكان والتطوير\tHousing & Development Sector\n",
+  "stderr": "",
+  "execution_time_ms": 1579
+}

@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE sector_accounts SET nameAr = 'قطاع/1', nameEn = 'Sector/1' WHERE sectorKey = 'sector_1';\nUPDATE sector_accounts SET nameAr = 'قطاع/2', nameEn = 'Sector/2' WHERE sectorKey = 'sector_2';\nUPDATE sector_accounts SET nameAr = 'قطاع/3', nameEn = 'Sector/3' WHERE sectorKey = 'sector_3';\nUPDATE sector_accounts SET nameAr = 'قطاع/4', nameEn = 'Sector/4' WHERE sectorKey = 'sector_4';\nUPDATE sector_accounts SET nameAr = 'قطاع/5', nameEn = 'Sector/5' WHERE sectorKey = 'sector_5';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute UPDATE sector_accounts SET nameAr = 'قطاع/1', nameEn = 'Sector/1' WHERE sectorKey = 'sector_1';\nUPDATE sector_accounts SET nameAr = 'قطاع/2', nameEn = 'Sector/2' WHERE sectorKey = 'sector_2';\nUPDATE sector_accounts SET nameAr = 'قطاع/3', nameEn = 'Sector/3' WHERE sectorKey = 'sector_3';\nUPDATE sector_accounts SET nameAr = 'قطاع/4', nameEn = 'Sector/4' WHERE sectorKey = 'sector_4';\nUPDATE sector_accounts SET nameAr = 'قطاع/5', nameEn = 'Sector/5' WHERE sectorKey = 'sector_5';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2443
+}

@@ -1,0 +1,52 @@
+{
+  "query": "SELECT id, username, name, role, createdAt FROM users ORDER BY createdAt LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, username, name, role, createdAt FROM users ORDER BY createdAt LIMIT 20;",
+  "rows": [
+    {
+      "id": "1",
+      "username": "NULL",
+      "name": "kh al",
+      "role": "admin",
+      "createdAt": "2026-03-22 21:05:14"
+    },
+    {
+      "id": "30009",
+      "username": "ahmed.a",
+      "name": "Ahmed Ali",
+      "role": "reception",
+      "createdAt": "2026-03-23 01:16:49"
+    },
+    {
+      "id": "60007",
+      "username": "ahmadm",
+      "name": "ahmed",
+      "role": "lab_manager",
+      "createdAt": "2026-03-23 03:15:54"
+    },
+    {
+      "id": "60011",
+      "username": "ahmedt",
+      "name": "ahh",
+      "role": "technician",
+      "createdAt": "2026-03-23 03:16:19"
+    },
+    {
+      "id": "60015",
+      "username": "ahmeds",
+      "name": "aaaaa",
+      "role": "sample_manager",
+      "createdAt": "2026-03-23 03:16:47"
+    },
+    {
+      "id": "60019",
+      "username": "ahmedq",
+      "name": "qwe",
+      "role": "qc_inspector",
+      "createdAt": "2026-03-23 03:17:11"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tusername\tname\trole\tcreatedAt\n1\tNULL\tkh al\tadmin\t2026-03-22 21:05:14\n30009\tahmed.a\tAhmed Ali\treception\t2026-03-23 01:16:49\n60007\tahmadm\tahmed\tlab_manager\t2026-03-23 03:15:54\n60011\tahmedt\tahh\ttechnician\t2026-03-23 03:16:19\n60015\tahmeds\taaaaa\tsample_manager\t2026-03-23 03:16:47\n60019\tahmedq\tqwe\tqc_inspector\t2026-03-23 03:17:11\n",
+  "stderr": "",
+  "execution_time_ms": 1984
+}

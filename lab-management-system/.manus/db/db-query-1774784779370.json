@@ -1,0 +1,82 @@
+{
+  "query": "SELECT code, nameEn, nameAr, category FROM test_types WHERE category IN ('asphalt','aggregates') ORDER BY category, code;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT code, nameEn, nameAr, category FROM test_types WHERE category IN ('asphalt','aggregates') ORDER BY category, code;",
+  "rows": [
+    {
+      "code": "ASPH_BITUMEN_EXTRACT",
+      "nameEn": "Bitumen Extraction",
+      "nameAr": "استخلاص البيتيومين",
+      "category": "asphalt"
+    },
+    {
+      "code": "ASPH_CORE",
+      "nameEn": "Density and Percentage of Compaction of Asphalt Core specimens",
+      "nameAr": "اختبار العينات القلبية للاسفلت",
+      "category": "asphalt"
+    },
+    {
+      "code": "ASPH_EXTRACTED_SIEVE",
+      "nameEn": "Sieve analysis of Extracted Aggregates",
+      "nameAr": "تحليل بالمناخل للركام بعد الاستخلاص",
+      "category": "asphalt"
+    },
+    {
+      "code": "ASPH_HOTBIN",
+      "nameEn": "Asphalt Trial mix & Hotbin Aggregates - Grading",
+      "nameAr": "التحليل بالمناخل للخلطة التصميمية",
+      "category": "asphalt"
+    },
+    {
+      "code": "ASPH_MARSHALL",
+      "nameEn": "Stability, Flow & Voids Percentage of Marshall Specimens",
+      "nameAr": "قياس الثباتية والهبوط والفراغات لعينات مارشال",
+      "category": "asphalt"
+    },
+    {
+      "code": "ASPH_MARSHALL_DENSITY",
+      "nameEn": "Marshall Density for Asphalt Samples",
+      "nameAr": "قياس الكثافة الاجمالية لعينات مارشال",
+      "category": "asphalt"
+    },
+    {
+      "code": "AGG_CRUSHING",
+      "nameEn": "Aggregate Crushing Value",
+      "nameAr": "اختبار معامل التهشيم للركام",
+      "category": "aggregates"
+    },
+    {
+      "code": "AGG_FLAKINESS_ELONGATION",
+      "nameEn": "Flakiness & Elongation Index of Aggregtes",
+      "nameAr": "اختبار معاملي الاسطبالة والترقق",
+      "category": "aggregates"
+    },
+    {
+      "code": "AGG_IMPACT",
+      "nameEn": "Aggregate Impact Value",
+      "nameAr": "اختبار معامل الصدم للركام",
+      "category": "aggregates"
+    },
+    {
+      "code": "AGG_LA",
+      "nameEn": "Los Angeles Abrasion Test",
+      "nameAr": "اختبار لوس انجلوس للبري للركام",
+      "category": "aggregates"
+    },
+    {
+      "code": "AGG_SG",
+      "nameEn": "Specific Gravity & Absorption of Coarse & Fine Aggregates",
+      "nameAr": "اختبار الكثافة النوعية ونسبة الامتصاص",
+      "category": "aggregates"
+    },
+    {
+      "code": "AGG_SIEVE",
+      "nameEn": "Seive Analysis Concrete Aggregates",
+      "nameAr": "تحليل بالمناخل لركام الخرسانة (بالغسيل)",
+      "category": "aggregates"
+    }
+  ],
+  "messages": [],
+  "stdout": "code\tnameEn\tnameAr\tcategory\nASPH_BITUMEN_EXTRACT\tBitumen Extraction\tاستخلاص البيتيومين\tasphalt\nASPH_CORE\tDensity and Percentage of Compaction of Asphalt Core specimens\tاختبار العينات القلبية للاسفلت\tasphalt\nASPH_EXTRACTED_SIEVE\tSieve analysis of Extracted Aggregates\tتحليل بالمناخل للركام بعد الاستخلاص\tasphalt\nASPH_HOTBIN\tAsphalt Trial mix & Hotbin Aggregates - Grading\tالتحليل بالمناخل للخلطة التصميمية\tasphalt\nASPH_MARSHALL\tStability, Flow & Voids Percentage of Marshall Specimens\tقياس الثباتية والهبوط والفراغات لعينات مارشال\tasphalt\nASPH_MARSHALL_DENSITY\tMarshall Density for Asphalt Samples\tقياس الكثافة الاجمالية لعينات مارشال\tasphalt\nAGG_CRUSHING\tAggregate Crushing Value\tاختبار معامل التهشيم للركام\taggregates\nAGG_FLAKINESS_ELONGATION\tFlakiness & Elongation Index of Aggregtes\tاختبار معاملي الاسطبالة والترقق\taggregates\nAGG_IMPACT\tAggregate Impact Value\tاختبار معامل الصدم للركام\taggregates\nAGG_LA\tLos Angeles Abrasion Test\tاختبار لوس انجلوس للبري للركام\taggregates\nAGG_SG\tSpecific Gravity & Absorption of Coarse & Fine Aggregates\tاختبار الكثافة النوعية ونسبة الامتصاص\taggregates\nAGG_SIEVE\tSeive Analysis Concrete Aggregates\tتحليل بالمناخل لركام الخرسانة (بالغسيل)\taggregates\n",
+  "stderr": "",
+  "execution_time_ms": 1523
+}

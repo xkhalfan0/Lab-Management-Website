@@ -1,0 +1,22 @@
+CREATE TABLE `specialized_test_results` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`distributionId` int NOT NULL,
+	`sampleId` int NOT NULL,
+	`technicianId` int NOT NULL,
+	`testTypeCode` varchar(64) NOT NULL,
+	`formTemplate` varchar(64) NOT NULL,
+	`contractNo` varchar(128),
+	`projectName` varchar(512),
+	`contractorName` varchar(256),
+	`testedBy` varchar(128),
+	`testDate` timestamp,
+	`formData` json NOT NULL,
+	`overallResult` enum('pass','fail','pending') NOT NULL DEFAULT 'pending',
+	`summaryValues` json,
+	`status` enum('draft','submitted','approved','rejected','revision_requested') NOT NULL DEFAULT 'draft',
+	`submittedAt` timestamp,
+	`notes` text,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `specialized_test_results_id` PRIMARY KEY(`id`)
+);

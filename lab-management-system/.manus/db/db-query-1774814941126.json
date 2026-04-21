@@ -1,0 +1,73 @@
+{
+  "query": "SHOW TABLES;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SHOW TABLES;",
+  "rows": [
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "attachments"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "audit_log"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "certificates"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "clearance_requests"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "concrete_cubes"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "concrete_test_groups"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "contractors"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "contracts"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "distributions"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "notifications"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "reviews"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "sample_history"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "samples"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "sector_accounts"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "sector_report_reads"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "sectors"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "specialized_test_results"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "test_results"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "test_types"
+    },
+    {
+      "Tables_in_LsEH5DDGJizNggnY9JVscW": "users"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_LsEH5DDGJizNggnY9JVscW\n__drizzle_migrations\nattachments\naudit_log\ncertificates\nclearance_requests\nconcrete_cubes\nconcrete_test_groups\ncontractors\ncontracts\ndistributions\nnotifications\nreviews\nsample_history\nsamples\nsector_accounts\nsector_report_reads\nsectors\nspecialized_test_results\ntest_results\ntest_types\nusers\n",
+  "stderr": "",
+  "execution_time_ms": 1601
+}

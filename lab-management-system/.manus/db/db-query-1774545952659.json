@@ -1,0 +1,194 @@
+{
+  "query": "SELECT id, code, nameEn, category, unit, unitPrice FROM test_types WHERE unitPrice = 0 ORDER BY category, code;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, code, nameEn, category, unit, unitPrice FROM test_types WHERE unitPrice = 0 ORDER BY category, code;",
+  "rows": [
+    {
+      "id": "90005",
+      "code": "CONC_FOAM_CUBE",
+      "nameEn": "Foamed Concrete Compressive Strength",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90006",
+      "code": "CONC_FOAM_DENSITY",
+      "nameEn": "Foamed Concrete Fresh Density",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90009",
+      "code": "STEEL_ANCHOR_M12",
+      "nameEn": "Anchor Bolt Pull-out Test M12",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90010",
+      "code": "STEEL_ANCHOR_M16",
+      "nameEn": "Anchor Bolt Pull-out Test M16",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90011",
+      "code": "STEEL_ANCHOR_M20",
+      "nameEn": "Anchor Bolt Pull-out Test M20",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90012",
+      "code": "STEEL_ANCHOR_M24",
+      "nameEn": "Anchor Bolt Pull-out Test M24",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90013",
+      "code": "STEEL_ANCHOR_M30",
+      "nameEn": "Anchor Bolt Pull-out Test M30",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "60002",
+      "code": "STEEL_BEND_ASTM",
+      "nameEn": "Bend & Rebend Test (ASTM A615)",
+      "category": "steel",
+      "unit": "Pass/Fail",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "60001",
+      "code": "STEEL_BEND_BS4449",
+      "nameEn": "Bend & Rebend Test (BS 4449)",
+      "category": "steel",
+      "unit": "Pass/Fail",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90008",
+      "code": "STEEL_STRUCTURAL",
+      "nameEn": "Structural Steel Tensile Test",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "60004",
+      "code": "ASPH_BITUMEN_EXTRACT",
+      "nameEn": "Bitumen Content by Extraction",
+      "category": "asphalt",
+      "unit": "%",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90015",
+      "code": "ASPH_EXTRACTED_SIEVE_ACBC",
+      "nameEn": "Extracted Aggregate Sieve Analysis (ACBC)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90014",
+      "code": "ASPH_EXTRACTED_SIEVE_ACWC",
+      "nameEn": "Extracted Aggregate Sieve Analysis (ACWC)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90016",
+      "code": "ASPH_EXTRACTED_SIEVE_DBM",
+      "nameEn": "Extracted Aggregate Sieve Analysis (DBM)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90019",
+      "code": "ASPH_SPRAY_CRS1",
+      "nameEn": "Tack Coat Spray Rate (CRS-1)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90022",
+      "code": "ASPH_SPRAY_MC250",
+      "nameEn": "Prime Coat Spray Rate (MC-250)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90020",
+      "code": "ASPH_SPRAY_MC30",
+      "nameEn": "Prime Coat Spray Rate (MC-30)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90021",
+      "code": "ASPH_SPRAY_MC70",
+      "nameEn": "Prime Coat Spray Rate (MC-70)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90017",
+      "code": "ASPH_SPRAY_SS1",
+      "nameEn": "Tack Coat Spray Rate (SS-1)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90018",
+      "code": "ASPH_SPRAY_SS1H",
+      "nameEn": "Tack Coat Spray Rate (SS-1h)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "60005",
+      "code": "AGG_CRUSHING",
+      "nameEn": "Aggregate Crushing Value (ACV)",
+      "category": "aggregates",
+      "unit": "%",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "60006",
+      "code": "AGG_IMPACT",
+      "nameEn": "Aggregate Impact Value (AIV)",
+      "category": "aggregates",
+      "unit": "%",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "60007",
+      "code": "AGG_LA_ABRASION",
+      "nameEn": "Los Angeles Abrasion Test",
+      "category": "aggregates",
+      "unit": "%",
+      "unitPrice": "0.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcode\tnameEn\tcategory\tunit\tunitPrice\n90005\tCONC_FOAM_CUBE\tFoamed Concrete Compressive Strength\tconcrete\tN/mm²\t0.00\n90006\tCONC_FOAM_DENSITY\tFoamed Concrete Fresh Density\tconcrete\tN/mm²\t0.00\n90009\tSTEEL_ANCHOR_M12\tAnchor Bolt Pull-out Test M12\tsteel\tN/mm²\t0.00\n90010\tSTEEL_ANCHOR_M16\tAnchor Bolt Pull-out Test M16\tsteel\tN/mm²\t0.00\n90011\tSTEEL_ANCHOR_M20\tAnchor Bolt Pull-out Test M20\tsteel\tN/mm²\t0.00\n90012\tSTEEL_ANCHOR_M24\tAnchor Bolt Pull-out Test M24\tsteel\tN/mm²\t0.00\n90013\tSTEEL_ANCHOR_M30\tAnchor Bolt Pull-out Test M30\tsteel\tN/mm²\t0.00\n60002\tSTEEL_BEND_ASTM\tBend & Rebend Test (ASTM A615)\tsteel\tPass/Fail\t0.00\n60001\tSTEEL_BEND_BS4449\tBend & Rebend Test (BS 4449)\tsteel\tPass/Fail\t0.00\n90008\tSTEEL_STRUCTURAL\tStructural Steel Tensile Test\tsteel\tN/mm²\t0.00\n60004\tASPH_BITUMEN_EXTRACT\tBitumen Content by Extraction\tasphalt\t%\t0.00\n90015\tASPH_EXTRACTED_SIEVE_ACBC\tExtracted Aggregate Sieve Analysis (ACBC)\tasphalt\tN/mm²\t0.00\n90014\tASPH_EXTRACTED_SIEVE_ACWC\tExtracted Aggregate Sieve Analysis (ACWC)\tasphalt\tN/mm²\t0.00\n90016\tASPH_EXTRACTED_SIEVE_DBM\tExtracted Aggregate Sieve Analysis (DBM)\tasphalt\tN/mm²\t0.00\n90019\tASPH_SPRAY_CRS1\tTack Coat Spray Rate (CRS-1)\tasphalt\tN/mm²\t0.00\n90022\tASPH_SPRAY_MC250\tPrime Coat Spray Rate (MC-250)\tasphalt\tN/mm²\t0.00\n90020\tASPH_SPRAY_MC30\tPrime Coat Spray Rate (MC-30)\tasphalt\tN/mm²\t0.00\n90021\tASPH_SPRAY_MC70\tPrime Coat Spray Rate (MC-70)\tasphalt\tN/mm²\t0.00\n90017\tASPH_SPRAY_SS1\tTack Coat Spray Rate (SS-1)\tasphalt\tN/mm²\t0.00\n90018\tASPH_SPRAY_SS1H\tTack Coat Spray Rate (SS-1h)\tasphalt\tN/mm²\t0.00\n60005\tAGG_CRUSHING\tAggregate Crushing Value (ACV)\taggregates\t%\t0.00\n60006\tAGG_IMPACT\tAggregate Impact Value (AIV)\taggregates\t%\t0.00\n60007\tAGG_LA_ABRASION\tLos Angeles Abrasion Test\taggregates\t%\t0.00\n",
+  "stderr": "",
+  "execution_time_ms": 1588
+}

@@ -1,0 +1,330 @@
+{
+  "query": "SELECT code, nameEn, nameAr, category, unit, standardRef, unitPrice, formTemplate FROM test_types WHERE isActive = 1 ORDER BY category, sortOrder;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT code, nameEn, nameAr, category, unit, standardRef, unitPrice, formTemplate FROM test_types WHERE isActive = 1 ORDER BY category, sortOrder;",
+  "rows": [
+    {
+      "code": "CONC_CUBE",
+      "nameEn": "Compressive Strength of Concrete Cubes",
+      "nameAr": "مقاومة الانضغاط لمكعبات الخرسانة",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "standardRef": "BS EN 12390-3",
+      "unitPrice": "15.00",
+      "formTemplate": "ConcreteCubes"
+    },
+    {
+      "code": "CONC_CORE",
+      "nameEn": "Compressive Strength of Concrete Cores",
+      "nameAr": "مقاومة الانضغاط لعينات الخرسانة القلبية",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "standardRef": "BS EN 12504-1",
+      "unitPrice": "20.00",
+      "formTemplate": "ConcreteCore"
+    },
+    {
+      "code": "CONC_BLOCK",
+      "nameEn": "Compressive Strength of Masonry Blocks",
+      "nameAr": "مقاومة الانضغاط للطابوق الخرساني",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "standardRef": "BS 6073",
+      "unitPrice": "30.00",
+      "formTemplate": "ConcreteBlocks"
+    },
+    {
+      "code": "CONC_INTERLOCK",
+      "nameEn": "Compressive Strength of Interlocking Tiles",
+      "nameAr": "مقاومة الانضغاط للبلاط المعشق",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "standardRef": "BS EN 1338",
+      "unitPrice": "20.00",
+      "formTemplate": "ConcreteBlocks"
+    },
+    {
+      "code": "CONC_FOAM",
+      "nameEn": "Compressive Strength of Light weight Foam Concrete Cubes",
+      "nameAr": "مقاومة الانضغاط لمكعبات الخرسانة الرغوية",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "standardRef": "BS EN 12390-3",
+      "unitPrice": "15.00",
+      "formTemplate": "ConcreteFoam"
+    },
+    {
+      "code": "CONC_FOAM_DENSITY",
+      "nameEn": "Over Dry Density Foam Concrete",
+      "nameAr": "الكثافة الاجمالية لمكعب الخرسانة الرغوية",
+      "category": "concrete",
+      "unit": "kg/m3",
+      "standardRef": "BS EN 12390-7",
+      "unitPrice": "40.00",
+      "formTemplate": "ConcreteFoam"
+    },
+    {
+      "code": "CEM_SETTING_TIME",
+      "nameEn": "Initial Setting Time of Cement",
+      "nameAr": "زمن الشك الابتدائي والنهائي للاسمنت",
+      "category": "concrete",
+      "unit": "min",
+      "standardRef": "BS EN 196-3",
+      "unitPrice": "100.00",
+      "formTemplate": "CementSetting"
+    },
+    {
+      "code": "CONC_MORTAR_SAND",
+      "nameEn": "Sieve Analysis of Sand for Plaster / Masonry Mortar",
+      "nameAr": "تحليل بالمناخل لرملي البلاستر والبناء",
+      "category": "concrete",
+      "unit": "-",
+      "standardRef": "ASTM C144",
+      "unitPrice": "200.00",
+      "formTemplate": "SieveAnalysis"
+    },
+    {
+      "code": "CONC_BEAM_SMALL",
+      "nameEn": "Flexural Strength of Concrete Beams 10x10x50cm",
+      "nameAr": "كمرات خرسانية 10x10x50 سم",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "standardRef": "ASTM C78",
+      "unitPrice": "80.00",
+      "formTemplate": "ConcreteBeam"
+    },
+    {
+      "code": "CONC_BEAM_LARGE",
+      "nameEn": "Flexural Strength of Concrete Beams 15x15x75cm",
+      "nameAr": "كمرات خرسانية 15x15x75 سم",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "standardRef": "ASTM C78",
+      "unitPrice": "100.00",
+      "formTemplate": "ConcreteBeam"
+    },
+    {
+      "code": "SOIL_SIEVE",
+      "nameEn": "Sieve Analysis of Soil",
+      "nameAr": "تحليل بالمناخل للتربة (بالغسيل)",
+      "category": "soil",
+      "unit": "-",
+      "standardRef": "BS 1377-2",
+      "unitPrice": "100.00",
+      "formTemplate": "SieveAnalysis"
+    },
+    {
+      "code": "SOIL_ATTERBERG",
+      "nameEn": "Atterberg Limits of Soil (Plasticity Index)",
+      "nameAr": "حدود اتربرج للتربة الناعمة ومعامل اللدونة",
+      "category": "soil",
+      "unit": "-",
+      "standardRef": "BS 1377-2",
+      "unitPrice": "150.00",
+      "formTemplate": "SoilAtterberg"
+    },
+    {
+      "code": "SOIL_PROCTOR",
+      "nameEn": "MDD/OMC (Proctor) test",
+      "nameAr": "اختبار بروكتور المعدل",
+      "category": "soil",
+      "unit": "kg/m3",
+      "standardRef": "BS 1377-4",
+      "unitPrice": "300.00",
+      "formTemplate": "SoilProctor"
+    },
+    {
+      "code": "SOIL_CBR",
+      "nameEn": "California Bearing Ratio (CBR) Test",
+      "nameAr": "اختبار معامل تحميل كاليفورنيا CBR",
+      "category": "soil",
+      "unit": "%",
+      "standardRef": "BS 1377-4",
+      "unitPrice": "250.00",
+      "formTemplate": "SoilCBR"
+    },
+    {
+      "code": "SOIL_FIELD_DENSITY",
+      "nameEn": "Field Density (Compaction test) at Site",
+      "nameAr": "تحديد الكثافة الحقلية بطريقة الاحلال بالرمل",
+      "category": "soil",
+      "unit": "kg/m3",
+      "standardRef": "BS 1377-9",
+      "unitPrice": "100.00",
+      "formTemplate": "SoilFieldDensity"
+    },
+    {
+      "code": "STEEL_REBAR",
+      "nameEn": "Tensile Strength of Reinforcement Steel",
+      "nameAr": "اختبار الشد لقضبان حديد التسليح",
+      "category": "steel",
+      "unit": "N/mm²",
+      "standardRef": "BS 4449 / ASTM A615",
+      "unitPrice": "300.00",
+      "formTemplate": "SteelRebar"
+    },
+    {
+      "code": "STEEL_BEND",
+      "nameEn": "Bend Test",
+      "nameAr": "اختبار ثني قضبان حديد التسليح",
+      "category": "steel",
+      "unit": "Pass/Fail",
+      "standardRef": "BS 4449 / ASTM A615",
+      "unitPrice": "100.00",
+      "formTemplate": "SteelBendRebend"
+    },
+    {
+      "code": "STEEL_REBEND",
+      "nameEn": "Rebend Test",
+      "nameAr": "اختبار ثني واعادة الثني لقضبان حديد التسليح",
+      "category": "steel",
+      "unit": "Pass/Fail",
+      "standardRef": "BS 4449 / ASTM A615",
+      "unitPrice": "100.00",
+      "formTemplate": "SteelBendRebend"
+    },
+    {
+      "code": "STEEL_ANCHOR",
+      "nameEn": "Tensile Strength of Anchor Bolts",
+      "nameAr": "اختبار الشد لمسامير التثبيت",
+      "category": "steel",
+      "unit": "N/mm²",
+      "standardRef": "BS EN ISO 898-1",
+      "unitPrice": "300.00",
+      "formTemplate": "SteelAnchorBolt"
+    },
+    {
+      "code": "STEEL_STRUCTURAL",
+      "nameEn": "Tensile Strength of Structural Steel",
+      "nameAr": "اختبار الشد للحديد الانشائي",
+      "category": "steel",
+      "unit": "N/mm²",
+      "standardRef": "ASTM A36 / BS EN 10025",
+      "unitPrice": "300.00",
+      "formTemplate": "SteelStructural"
+    },
+    {
+      "code": "ASPH_HOTBIN",
+      "nameEn": "Asphalt Trial mix & Hotbin Aggregates - Grading",
+      "nameAr": "التحليل بالمناخل للخلطة التصميمية",
+      "category": "asphalt",
+      "unit": "-",
+      "standardRef": "BS EN 13108-1",
+      "unitPrice": "50.00",
+      "formTemplate": "AsphaltHotBin"
+    },
+    {
+      "code": "ASPH_BITUMEN_EXTRACT",
+      "nameEn": "Bitumen Extraction",
+      "nameAr": "استخلاص البيتيومين",
+      "category": "asphalt",
+      "unit": "%",
+      "standardRef": "BS EN 12697-1",
+      "unitPrice": "200.00",
+      "formTemplate": "AsphaltBitumenExtraction"
+    },
+    {
+      "code": "ASPH_EXTRACTED_SIEVE",
+      "nameEn": "Sieve analysis of Extracted Aggregates",
+      "nameAr": "تحليل بالمناخل للركام بعد الاستخلاص",
+      "category": "asphalt",
+      "unit": "-",
+      "standardRef": "BS EN 12697-2",
+      "unitPrice": "100.00",
+      "formTemplate": "AsphaltExtractedSieve"
+    },
+    {
+      "code": "ASPH_MARSHALL",
+      "nameEn": "Stability, Flow & Voids Percentage of Marshall Specimens",
+      "nameAr": "قياس الثباتية والهبوط والفراغات لعينات مارشال",
+      "category": "asphalt",
+      "unit": "-",
+      "standardRef": "ASTM D1559",
+      "unitPrice": "150.00",
+      "formTemplate": "AsphaltMarshall"
+    },
+    {
+      "code": "ASPH_MARSHALL_DENSITY",
+      "nameEn": "Marshall Density for Asphalt Samples",
+      "nameAr": "قياس الكثافة الاجمالية لعينات مارشال",
+      "category": "asphalt",
+      "unit": "kg/m3",
+      "standardRef": "ASTM D2726",
+      "unitPrice": "150.00",
+      "formTemplate": "AsphaltMarshall"
+    },
+    {
+      "code": "ASPH_CORE",
+      "nameEn": "Density and Percentage of Compaction of Asphalt Core specimens",
+      "nameAr": "اختبار العينات القلبية للاسفلت",
+      "category": "asphalt",
+      "unit": "%",
+      "standardRef": "ASTM D2726",
+      "unitPrice": "75.00",
+      "formTemplate": "AsphaltCore"
+    },
+    {
+      "code": "AGG_SIEVE",
+      "nameEn": "Seive Analysis Concrete Aggregates",
+      "nameAr": "تحليل بالمناخل لركام الخرسانة (بالغسيل)",
+      "category": "aggregates",
+      "unit": "-",
+      "standardRef": "BS 812-103",
+      "unitPrice": "100.00",
+      "formTemplate": "SieveAnalysis"
+    },
+    {
+      "code": "AGG_SG",
+      "nameEn": "Specific Gravity & Absorption of Coarse & Fine Aggregates",
+      "nameAr": "اختبار الكثافة النوعية ونسبة الامتصاص",
+      "category": "aggregates",
+      "unit": "-",
+      "standardRef": "BS 812-2",
+      "unitPrice": "75.00",
+      "formTemplate": "AggSieveAnalysis"
+    },
+    {
+      "code": "AGG_FLAKINESS_ELONGATION",
+      "nameEn": "Flakiness & Elongation Index of Aggregtes",
+      "nameAr": "اختبار معاملي الاسطبالة والترقق",
+      "category": "aggregates",
+      "unit": "-",
+      "standardRef": "BS 812-105",
+      "unitPrice": "100.00",
+      "formTemplate": "AggCrushingImpact"
+    },
+    {
+      "code": "AGG_CRUSHING",
+      "nameEn": "Aggregate Crushing Value",
+      "nameAr": "اختبار معامل التهشيم للركام",
+      "category": "aggregates",
+      "unit": "-",
+      "standardRef": "BS 812-110",
+      "unitPrice": "100.00",
+      "formTemplate": "AggCrushingImpact"
+    },
+    {
+      "code": "AGG_IMPACT",
+      "nameEn": "Aggregate Impact Value",
+      "nameAr": "اختبار معامل الصدم للركام",
+      "category": "aggregates",
+      "unit": "-",
+      "standardRef": "BS 812-112",
+      "unitPrice": "100.00",
+      "formTemplate": "AggCrushingImpact"
+    },
+    {
+      "code": "AGG_LA",
+      "nameEn": "Los Angeles Abrasion Test",
+      "nameAr": "اختبار لوس انجلوس للبري للركام",
+      "category": "aggregates",
+      "unit": "-",
+      "standardRef": "ASTM C131",
+      "unitPrice": "150.00",
+      "formTemplate": "AggLAAbrasion"
+    }
+  ],
+  "messages": [],
+  "stdout": "code\tnameEn\tnameAr\tcategory\tunit\tstandardRef\tunitPrice\tformTemplate\nCONC_CUBE\tCompressive Strength of Concrete Cubes\tمقاومة الانضغاط لمكعبات الخرسانة\tconcrete\tN/mm²\tBS EN 12390-3\t15.00\tConcreteCubes\nCONC_CORE\tCompressive Strength of Concrete Cores\tمقاومة الانضغاط لعينات الخرسانة القلبية\tconcrete\tN/mm²\tBS EN 12504-1\t20.00\tConcreteCore\nCONC_BLOCK\tCompressive Strength of Masonry Blocks\tمقاومة الانضغاط للطابوق الخرساني\tconcrete\tN/mm²\tBS 6073\t30.00\tConcreteBlocks\nCONC_INTERLOCK\tCompressive Strength of Interlocking Tiles\tمقاومة الانضغاط للبلاط المعشق\tconcrete\tN/mm²\tBS EN 1338\t20.00\tConcreteBlocks\nCONC_FOAM\tCompressive Strength of Light weight Foam Concrete Cubes\tمقاومة الانضغاط لمكعبات الخرسانة الرغوية\tconcrete\tN/mm²\tBS EN 12390-3\t15.00\tConcreteFoam\nCONC_FOAM_DENSITY\tOver Dry Density Foam Concrete\tالكثافة الاجمالية لمكعب الخرسانة الرغوية\tconcrete\tkg/m3\tBS EN 12390-7\t40.00\tConcreteFoam\nCEM_SETTING_TIME\tInitial Setting Time of Cement\tزمن الشك الابتدائي والنهائي للاسمنت\tconcrete\tmin\tBS EN 196-3\t100.00\tCementSetting\nCONC_MORTAR_SAND\tSieve Analysis of Sand for Plaster / Masonry Mortar\tتحليل بالمناخل لرملي البلاستر والبناء\tconcrete\t-\tASTM C144\t200.00\tSieveAnalysis\nCONC_BEAM_SMALL\tFlexural Strength of Concrete Beams 10x10x50cm\tكمرات خرسانية 10x10x50 سم\tconcrete\tN/mm²\tASTM C78\t80.00\tConcreteBeam\nCONC_BEAM_LARGE\tFlexural Strength of Concrete Beams 15x15x75cm\tكمرات خرسانية 15x15x75 سم\tconcrete\tN/mm²\tASTM C78\t100.00\tConcreteBeam\nSOIL_SIEVE\tSieve Analysis of Soil\tتحليل بالمناخل للتربة (بالغسيل)\tsoil\t-\tBS 1377-2\t100.00\tSieveAnalysis\nSOIL_ATTERBERG\tAtterberg Limits of Soil (Plasticity Index)\tحدود اتربرج للتربة الناعمة ومعامل اللدونة\tsoil\t-\tBS 1377-2\t150.00\tSoilAtterberg\nSOIL_PROCTOR\tMDD/OMC (Proctor) test\tاختبار بروكتور المعدل\tsoil\tkg/m3\tBS 1377-4\t300.00\tSoilProctor\nSOIL_CBR\tCalifornia Bearing Ratio (CBR) Test\tاختبار معامل تحميل كاليفورنيا CBR\tsoil\t%\tBS 1377-4\t250.00\tSoilCBR\nSOIL_FIELD_DENSITY\tField Density (Compaction test) at Site\tتحديد الكثافة الحقلية بطريقة الاحلال بالرمل\tsoil\tkg/m3\tBS 1377-9\t100.00\tSoilFieldDensity\nSTEEL_REBAR\tTensile Strength of Reinforcement Steel\tاختبار الشد لقضبان حديد التسليح\tsteel\tN/mm²\tBS 4449 / ASTM A615\t300.00\tSteelRebar\nSTEEL_BEND\tBend Test\tاختبار ثني قضبان حديد التسليح\tsteel\tPass/Fail\tBS 4449 / ASTM A615\t100.00\tSteelBendRebend\nSTEEL_REBEND\tRebend Test\tاختبار ثني واعادة الثني لقضبان حديد التسليح\tsteel\tPass/Fail\tBS 4449 / ASTM A615\t100.00\tSteelBendRebend\nSTEEL_ANCHOR\tTensile Strength of Anchor Bolts\tاختبار الشد لمسامير التثبيت\tsteel\tN/mm²\tBS EN ISO 898-1\t300.00\tSteelAnchorBolt\nSTEEL_STRUCTURAL\tTensile Strength of Structural Steel\tاختبار الشد للحديد الانشائي\tsteel\tN/mm²\tASTM A36 / BS EN 10025\t300.00\tSteelStructural\nASPH_HOTBIN\tAsphalt Trial mix & Hotbin Aggregates - Grading\tالتحليل بالمناخل للخلطة التصميمية\tasphalt\t-\tBS EN 13108-1\t50.00\tAsphaltHotBin\nASPH_BITUMEN_EXTRACT\tBitumen Extraction\tاستخلاص البيتيومين\tasphalt\t%\tBS EN 12697-1\t200.00\tAsphaltBitumenExtraction\nASPH_EXTRACTED_SIEVE\tSieve analysis of Extracted Aggregates\tتحليل بالمناخل للركام بعد الاستخلاص\tasphalt\t-\tBS EN 12697-2\t100.00\tAsphaltExtractedSieve\nASPH_MARSHALL\tStability, Flow & Voids Percentage of Marshall Specimens\tقياس الثباتية والهبوط والفراغات لعينات مارشال\tasphalt\t-\tASTM D1559\t150.00\tAsphaltMarshall\nASPH_MARSHALL_DENSITY\tMarshall Density for Asphalt Samples\tقياس الكثافة الاجمالية لعينات مارشال\tasphalt\tkg/m3\tASTM D2726\t150.00\tAsphaltMarshall\nASPH_CORE\tDensity and Percentage of Compaction of Asphalt Core specimens\tاختبار العينات القلبية للاسفلت\tasphalt\t%\tASTM D2726\t75.00\tAsphaltCore\nAGG_SIEVE\tSeive Analysis Concrete Aggregates\tتحليل بالمناخل لركام الخرسانة (بالغسيل)\taggregates\t-\tBS 812-103\t100.00\tSieveAnalysis\nAGG_SG\tSpecific Gravity & Absorption of Coarse & Fine Aggregates\tاختبار الكثافة النوعية ونسبة الامتصاص\taggregates\t-\tBS 812-2\t75.00\tAggSieveAnalysis\nAGG_FLAKINESS_ELONGATION\tFlakiness & Elongation Index of Aggregtes\tاختبار معاملي الاسطبالة والترقق\taggregates\t-\tBS 812-105\t100.00\tAggCrushingImpact\nAGG_CRUSHING\tAggregate Crushing Value\tاختبار معامل التهشيم للركام\taggregates\t-\tBS 812-110\t100.00\tAggCrushingImpact\nAGG_IMPACT\tAggregate Impact Value\tاختبار معامل الصدم للركام\taggregates\t-\tBS 812-112\t100.00\tAggCrushingImpact\nAGG_LA\tLos Angeles Abrasion Test\tاختبار لوس انجلوس للبري للركام\taggregates\t-\tASTM C131\t150.00\tAggLAAbrasion\n",
+  "stderr": "",
+  "execution_time_ms": 1615
+}

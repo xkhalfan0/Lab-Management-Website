@@ -1,0 +1,330 @@
+{
+  "query": "SELECT code, nameEn, nameAr, category, standardRef, unitPrice FROM test_types ORDER BY category, code LIMIT 50;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT code, nameEn, nameAr, category, standardRef, unitPrice FROM test_types ORDER BY category, code LIMIT 50;",
+  "rows": [
+    {
+      "code": "CEM_SETTING_TIME",
+      "nameEn": "OPC Cement - Setting Time (Initial & Final)",
+      "nameAr": "أسمنت OPC - زمن الشك الابتدائي والنهائي",
+      "category": "concrete",
+      "standardRef": "BS EN 196-3",
+      "unitPrice": "200.00"
+    },
+    {
+      "code": "CONC_BEAM_LARGE",
+      "nameEn": "Compressive Strength of Concrete Beams (15x15x75)",
+      "nameAr": "مقاومة الانحناء لكمرات الخرسانة 15×15×75",
+      "category": "concrete",
+      "standardRef": "BS 1881 / ASTM C78",
+      "unitPrice": "200.00"
+    },
+    {
+      "code": "CONC_BEAM_SMALL",
+      "nameEn": "Compressive Strength of Concrete Beams (10x10x50)",
+      "nameAr": "مقاومة الانحناء لكمرات الخرسانة 10×10×50",
+      "category": "concrete",
+      "standardRef": "BS 1881 / ASTM C78",
+      "unitPrice": "200.00"
+    },
+    {
+      "code": "CONC_BLOCK_HOLLOW",
+      "nameEn": "Compressive Strength of Hollow Blocks (20cm)",
+      "nameAr": "مقاومة ضغط البلوك المجوف 20سم",
+      "category": "concrete",
+      "standardRef": "BS 6073",
+      "unitPrice": "180.00"
+    },
+    {
+      "code": "CONC_BLOCK_SOLID",
+      "nameEn": "Compressive Strength of Solid Blocks (10cm)",
+      "nameAr": "مقاومة ضغط البلوك الصلب 10سم",
+      "category": "concrete",
+      "standardRef": "BS 6073",
+      "unitPrice": "180.00"
+    },
+    {
+      "code": "CONC_BLOCK_THERMAL",
+      "nameEn": "Compressive Strength of Thermal Blocks (25cm)",
+      "nameAr": "مقاومة ضغط البلوك الحراري 25سم",
+      "category": "concrete",
+      "standardRef": "BS 6073",
+      "unitPrice": "180.00"
+    },
+    {
+      "code": "CONC_CORE",
+      "nameEn": "Compressive Strength of Concrete Cores",
+      "nameAr": "مقاومة ضغط كور الخرسانة",
+      "category": "concrete",
+      "standardRef": "BS 1881-120",
+      "unitPrice": "200.00"
+    },
+    {
+      "code": "CONC_CUBE",
+      "nameEn": "Compressive Strength of Concrete Cubes",
+      "nameAr": "مقاومة ضغط مكعبات الخرسانة",
+      "category": "concrete",
+      "standardRef": "BS 1881 / ASTM C39",
+      "unitPrice": "150.00"
+    },
+    {
+      "code": "CONC_INTERLOCK_6",
+      "nameEn": "Compressive Strength of Interlocking Tiles (6cm)",
+      "nameAr": "مقاومة ضغط الإنترلوكينج 6سم",
+      "category": "concrete",
+      "standardRef": "BS EN 1338",
+      "unitPrice": "160.00"
+    },
+    {
+      "code": "CONC_INTERLOCK_8",
+      "nameEn": "Compressive Strength of Interlocking Tiles (8cm)",
+      "nameAr": "مقاومة ضغط الإنترلوكينج 8سم",
+      "category": "concrete",
+      "standardRef": "BS EN 1338",
+      "unitPrice": "160.00"
+    },
+    {
+      "code": "CONC_MIX_GRAD",
+      "nameEn": "Concrete Mix Aggregate Gradation",
+      "nameAr": "تدرج ركام الخلطة الخرسانية",
+      "category": "concrete",
+      "standardRef": "BS 882 / ASTM C136",
+      "unitPrice": "250.00"
+    },
+    {
+      "code": "CONC_MORTAR_SAND",
+      "nameEn": "Sieve Analysis of Sand for Mortar/Plaster",
+      "nameAr": "تحليل منخل رمل الملاط والبلاستر",
+      "category": "concrete",
+      "standardRef": "ASTM C144",
+      "unitPrice": "120.00"
+    },
+    {
+      "code": "SOIL_ATTERBERG",
+      "nameEn": "Atterberg Limits (LL, PL, PI)",
+      "nameAr": "حدود أتربرج (حد السيولة والليونة ومؤشر اللدونة)",
+      "category": "soil",
+      "standardRef": "BS 1377 / ASTM D4318",
+      "unitPrice": "150.00"
+    },
+    {
+      "code": "SOIL_CBR",
+      "nameEn": "California Bearing Ratio (CBR)",
+      "nameAr": "نسبة تحمل كاليفورنيا CBR",
+      "category": "soil",
+      "standardRef": "BS 1377 / ASTM D1883",
+      "unitPrice": "400.00"
+    },
+    {
+      "code": "SOIL_FIELD_DENSITY",
+      "nameEn": "Field Density Test (Sand Replacement)",
+      "nameAr": "اختبار الكثافة الحقلية (طريقة الرمل)",
+      "category": "soil",
+      "standardRef": "BS 1377 / ASTM D1556",
+      "unitPrice": "120.00"
+    },
+    {
+      "code": "SOIL_PROCTOR",
+      "nameEn": "Proctor Compaction Test (Modified)",
+      "nameAr": "اختبار الدمك بروكتور المعدل",
+      "category": "soil",
+      "standardRef": "BS 1377 / ASTM D1557",
+      "unitPrice": "350.00"
+    },
+    {
+      "code": "SOIL_SIEVE",
+      "nameEn": "Sieve Analysis of Soil",
+      "nameAr": "تحليل منخل التربة",
+      "category": "soil",
+      "standardRef": "BS 1377 / ASTM D422",
+      "unitPrice": "130.00"
+    },
+    {
+      "code": "STEEL_ANCHOR_88",
+      "nameEn": "Tensile Test - Anchor Bolts (BS EN ISO 898-1 Grade 8.8)",
+      "nameAr": "اختبار شد أنكر بولت (BS EN ISO 898-1 Grade 8.8)",
+      "category": "steel",
+      "standardRef": "BS EN ISO 898-1",
+      "unitPrice": "350.00"
+    },
+    {
+      "code": "STEEL_PIPE_A53",
+      "nameEn": "Tensile Test - Steel Pipes (ASTM A53 Grade B)",
+      "nameAr": "اختبار شد أنابيب الصلب (ASTM A53 Grade B)",
+      "category": "steel",
+      "standardRef": "ASTM A53",
+      "unitPrice": "280.00"
+    },
+    {
+      "code": "STEEL_REBAR_A615",
+      "nameEn": "Tensile Test - Rebar (ASTM A615 Grade 60)",
+      "nameAr": "اختبار شد حديد التسليح (ASTM A615 Grade 60)",
+      "category": "steel",
+      "standardRef": "ASTM A615",
+      "unitPrice": "300.00"
+    },
+    {
+      "code": "STEEL_REBAR_BS4449",
+      "nameEn": "Tensile Test - Deformed Rebar (BS 4449-2005 Grade B500B)",
+      "nameAr": "اختبار شد حديد التسليح المضلع (BS 4449-2005 Grade B500B)",
+      "category": "steel",
+      "standardRef": "BS 4449:2005",
+      "unitPrice": "300.00"
+    },
+    {
+      "code": "STEEL_STRUCT_A36",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A36)",
+      "nameAr": "اختبار شد الصلب الإنشائي (ASTM A36)",
+      "category": "steel",
+      "standardRef": "ASTM A36",
+      "unitPrice": "280.00"
+    },
+    {
+      "code": "STEEL_STRUCT_A500",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A500 Grade B)",
+      "nameAr": "اختبار شد الصلب الإنشائي (ASTM A500 Grade B)",
+      "category": "steel",
+      "standardRef": "ASTM A500",
+      "unitPrice": "280.00"
+    },
+    {
+      "code": "STEEL_STRUCT_A501",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A501 Grade A)",
+      "nameAr": "اختبار شد الصلب الإنشائي (ASTM A501 Grade A)",
+      "category": "steel",
+      "standardRef": "ASTM A501",
+      "unitPrice": "280.00"
+    },
+    {
+      "code": "STEEL_STRUCT_A572",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A572 Grade 50)",
+      "nameAr": "اختبار شد الصلب الإنشائي (ASTM A572 Grade 50)",
+      "category": "steel",
+      "standardRef": "ASTM A572",
+      "unitPrice": "280.00"
+    },
+    {
+      "code": "STEEL_STRUCT_A653",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A653 Grade 340)",
+      "nameAr": "اختبار شد الصلب الإنشائي (ASTM A653 Grade 340)",
+      "category": "steel",
+      "standardRef": "ASTM A653",
+      "unitPrice": "280.00"
+    },
+    {
+      "code": "STEEL_STRUCT_S275",
+      "nameEn": "Tensile Test - Structural Steel (BS EN 10025 S275 JR)",
+      "nameAr": "اختبار شد الصلب الإنشائي (BS EN 10025 S275 JR)",
+      "category": "steel",
+      "standardRef": "BS EN 10025",
+      "unitPrice": "280.00"
+    },
+    {
+      "code": "STEEL_STRUCT_S355",
+      "nameEn": "Tensile Test - Structural Steel (BS EN 10025 S355 JR)",
+      "nameAr": "اختبار شد الصلب الإنشائي (BS EN 10025 S355 JR)",
+      "category": "steel",
+      "standardRef": "BS EN 10025",
+      "unitPrice": "280.00"
+    },
+    {
+      "code": "ASPH_ACBC",
+      "nameEn": "Hot Mix Asphalt - ACBC (Bitumen + Gradation + Marshall)",
+      "nameAr": "خلطة أسفلت ACBC (بيتومين + تدرج + مارشال)",
+      "category": "asphalt",
+      "standardRef": "ASTM D6307 / D6927",
+      "unitPrice": "600.00"
+    },
+    {
+      "code": "ASPH_ACWC",
+      "nameEn": "Hot Mix Asphalt - ACWC (Bitumen + Gradation + Marshall)",
+      "nameAr": "خلطة أسفلت ACWC (بيتومين + تدرج + مارشال)",
+      "category": "asphalt",
+      "standardRef": "ASTM D6307 / D6927",
+      "unitPrice": "600.00"
+    },
+    {
+      "code": "ASPH_CORE",
+      "nameEn": "Asphalt Core - Density & Compaction",
+      "nameAr": "كور الأسفلت - الكثافة ونسبة الدمك",
+      "category": "asphalt",
+      "standardRef": "ASTM D2726",
+      "unitPrice": "200.00"
+    },
+    {
+      "code": "ASPH_HOTBIN",
+      "nameEn": "Hot Bin Gradation",
+      "nameAr": "تدرج الخلطة الساخنة (Hot Bin)",
+      "category": "asphalt",
+      "standardRef": "ASTM C136",
+      "unitPrice": "250.00"
+    },
+    {
+      "code": "ASPH_PRIME_MC70",
+      "nameEn": "Rate of Spray - Prime Coat (MC-70)",
+      "nameAr": "معدل رش طبقة التنشيط (MC-70)",
+      "category": "asphalt",
+      "standardRef": "AASHTO T59",
+      "unitPrice": "150.00"
+    },
+    {
+      "code": "ASPH_TACK_SS1H",
+      "nameEn": "Rate of Spray - Tack Coat (SS1H)",
+      "nameAr": "معدل رش طبقة الربط (SS1H)",
+      "category": "asphalt",
+      "standardRef": "AASHTO T59",
+      "unitPrice": "150.00"
+    },
+    {
+      "code": "AGG_ELONGATION",
+      "nameEn": "Elongation Index",
+      "nameAr": "مؤشر الاستطالة",
+      "category": "aggregates",
+      "standardRef": "BS 812-105.2",
+      "unitPrice": "140.00"
+    },
+    {
+      "code": "AGG_FLAKINESS",
+      "nameEn": "Flakiness Index",
+      "nameAr": "مؤشر التفلطح",
+      "category": "aggregates",
+      "standardRef": "BS 812-105.1",
+      "unitPrice": "140.00"
+    },
+    {
+      "code": "AGG_SG_COARSE",
+      "nameEn": "Specific Gravity & Water Absorption - Coarse",
+      "nameAr": "الكثافة النوعية وامتصاص الماء - ركام خشن",
+      "category": "aggregates",
+      "standardRef": "BS 812 / ASTM C127",
+      "unitPrice": "150.00"
+    },
+    {
+      "code": "AGG_SG_FINE",
+      "nameEn": "Specific Gravity & Water Absorption - Fine",
+      "nameAr": "الكثافة النوعية وامتصاص الماء - ركام ناعم",
+      "category": "aggregates",
+      "standardRef": "BS 812 / ASTM C128",
+      "unitPrice": "150.00"
+    },
+    {
+      "code": "AGG_SIEVE_COARSE",
+      "nameEn": "Sieve Analysis of Coarse Aggregates",
+      "nameAr": "تحليل منخل الركام الخشن",
+      "category": "aggregates",
+      "standardRef": "BS 882 / ASTM C136",
+      "unitPrice": "130.00"
+    },
+    {
+      "code": "AGG_SIEVE_FINE",
+      "nameEn": "Sieve Analysis of Fine Aggregates",
+      "nameAr": "تحليل منخل الركام الناعم",
+      "category": "aggregates",
+      "standardRef": "BS 882 / ASTM C136",
+      "unitPrice": "130.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "code\tnameEn\tnameAr\tcategory\tstandardRef\tunitPrice\nCEM_SETTING_TIME\tOPC Cement - Setting Time (Initial & Final)\tأسمنت OPC - زمن الشك الابتدائي والنهائي\tconcrete\tBS EN 196-3\t200.00\nCONC_BEAM_LARGE\tCompressive Strength of Concrete Beams (15x15x75)\tمقاومة الانحناء لكمرات الخرسانة 15×15×75\tconcrete\tBS 1881 / ASTM C78\t200.00\nCONC_BEAM_SMALL\tCompressive Strength of Concrete Beams (10x10x50)\tمقاومة الانحناء لكمرات الخرسانة 10×10×50\tconcrete\tBS 1881 / ASTM C78\t200.00\nCONC_BLOCK_HOLLOW\tCompressive Strength of Hollow Blocks (20cm)\tمقاومة ضغط البلوك المجوف 20سم\tconcrete\tBS 6073\t180.00\nCONC_BLOCK_SOLID\tCompressive Strength of Solid Blocks (10cm)\tمقاومة ضغط البلوك الصلب 10سم\tconcrete\tBS 6073\t180.00\nCONC_BLOCK_THERMAL\tCompressive Strength of Thermal Blocks (25cm)\tمقاومة ضغط البلوك الحراري 25سم\tconcrete\tBS 6073\t180.00\nCONC_CORE\tCompressive Strength of Concrete Cores\tمقاومة ضغط كور الخرسانة\tconcrete\tBS 1881-120\t200.00\nCONC_CUBE\tCompressive Strength of Concrete Cubes\tمقاومة ضغط مكعبات الخرسانة\tconcrete\tBS 1881 / ASTM C39\t150.00\nCONC_INTERLOCK_6\tCompressive Strength of Interlocking Tiles (6cm)\tمقاومة ضغط الإنترلوكينج 6سم\tconcrete\tBS EN 1338\t160.00\nCONC_INTERLOCK_8\tCompressive Strength of Interlocking Tiles (8cm)\tمقاومة ضغط الإنترلوكينج 8سم\tconcrete\tBS EN 1338\t160.00\nCONC_MIX_GRAD\tConcrete Mix Aggregate Gradation\tتدرج ركام الخلطة الخرسانية\tconcrete\tBS 882 / ASTM C136\t250.00\nCONC_MORTAR_SAND\tSieve Analysis of Sand for Mortar/Plaster\tتحليل منخل رمل الملاط والبلاستر\tconcrete\tASTM C144\t120.00\nSOIL_ATTERBERG\tAtterberg Limits (LL, PL, PI)\tحدود أتربرج (حد السيولة والليونة ومؤشر اللدونة)\tsoil\tBS 1377 / ASTM D4318\t150.00\nSOIL_CBR\tCalifornia Bearing Ratio (CBR)\tنسبة تحمل كاليفورنيا CBR\tsoil\tBS 1377 / ASTM D1883\t400.00\nSOIL_FIELD_DENSITY\tField Density Test (Sand Replacement)\tاختبار الكثافة الحقلية (طريقة الرمل)\tsoil\tBS 1377 / ASTM D1556\t120.00\nSOIL_PROCTOR\tProctor Compaction Test (Modified)\tاختبار الدمك بروكتور المعدل\tsoil\tBS 1377 / ASTM D1557\t350.00\nSOIL_SIEVE\tSieve Analysis of Soil\tتحليل منخل التربة\tsoil\tBS 1377 / ASTM D422\t130.00\nSTEEL_ANCHOR_88\tTensile Test - Anchor Bolts (BS EN ISO 898-1 Grade 8.8)\tاختبار شد أنكر بولت (BS EN ISO 898-1 Grade 8.8)\tsteel\tBS EN ISO 898-1\t350.00\nSTEEL_PIPE_A53\tTensile Test - Steel Pipes (ASTM A53 Grade B)\tاختبار شد أنابيب الصلب (ASTM A53 Grade B)\tsteel\tASTM A53\t280.00\nSTEEL_REBAR_A615\tTensile Test - Rebar (ASTM A615 Grade 60)\tاختبار شد حديد التسليح (ASTM A615 Grade 60)\tsteel\tASTM A615\t300.00\nSTEEL_REBAR_BS4449\tTensile Test - Deformed Rebar (BS 4449-2005 Grade B500B)\tاختبار شد حديد التسليح المضلع (BS 4449-2005 Grade B500B)\tsteel\tBS 4449:2005\t300.00\nSTEEL_STRUCT_A36\tTensile Test - Structural Steel (ASTM A36)\tاختبار شد الصلب الإنشائي (ASTM A36)\tsteel\tASTM A36\t280.00\nSTEEL_STRUCT_A500\tTensile Test - Structural Steel (ASTM A500 Grade B)\tاختبار شد الصلب الإنشائي (ASTM A500 Grade B)\tsteel\tASTM A500\t280.00\nSTEEL_STRUCT_A501\tTensile Test - Structural Steel (ASTM A501 Grade A)\tاختبار شد الصلب الإنشائي (ASTM A501 Grade A)\tsteel\tASTM A501\t280.00\nSTEEL_STRUCT_A572\tTensile Test - Structural Steel (ASTM A572 Grade 50)\tاختبار شد الصلب الإنشائي (ASTM A572 Grade 50)\tsteel\tASTM A572\t280.00\nSTEEL_STRUCT_A653\tTensile Test - Structural Steel (ASTM A653 Grade 340)\tاختبار شد الصلب الإنشائي (ASTM A653 Grade 340)\tsteel\tASTM A653\t280.00\nSTEEL_STRUCT_S275\tTensile Test - Structural Steel (BS EN 10025 S275 JR)\tاختبار شد الصلب الإنشائي (BS EN 10025 S275 JR)\tsteel\tBS EN 10025\t280.00\nSTEEL_STRUCT_S355\tTensile Test - Structural Steel (BS EN 10025 S355 JR)\tاختبار شد الصلب الإنشائي (BS EN 10025 S355 JR)\tsteel\tBS EN 10025\t280.00\nASPH_ACBC\tHot Mix Asphalt - ACBC (Bitumen + Gradation + Marshall)\tخلطة أسفلت ACBC (بيتومين + تدرج + مارشال)\tasphalt\tASTM D6307 / D6927\t600.00\nASPH_ACWC\tHot Mix Asphalt - ACWC (Bitumen + Gradation + Marshall)\tخلطة أسفلت ACWC (بيتومين + تدرج + مارشال)\tasphalt\tASTM D6307 / D6927\t600.00\nASPH_CORE\tAsphalt Core - Density & Compaction\tكور الأسفلت - الكثافة ونسبة الدمك\tasphalt\tASTM D2726\t200.00\nASPH_HOTBIN\tHot Bin Gradation\tتدرج الخلطة الساخنة (Hot Bin)\tasphalt\tASTM C136\t250.00\nASPH_PRIME_MC70\tRate of Spray - Prime Coat (MC-70)\tمعدل رش طبقة التنشيط (MC-70)\tasphalt\tAASHTO T59\t150.00\nASPH_TACK_SS1H\tRate of Spray - Tack Coat (SS1H)\tمعدل رش طبقة الربط (SS1H)\tasphalt\tAASHTO T59\t150.00\nAGG_ELONGATION\tElongation Index\tمؤشر الاستطالة\taggregates\tBS 812-105.2\t140.00\nAGG_FLAKINESS\tFlakiness Index\tمؤشر التفلطح\taggregates\tBS 812-105.1\t140.00\nAGG_SG_COARSE\tSpecific Gravity & Water Absorption - Coarse\tالكثافة النوعية وامتصاص الماء - ركام خشن\taggregates\tBS 812 / ASTM C127\t150.00\nAGG_SG_FINE\tSpecific Gravity & Water Absorption - Fine\tالكثافة النوعية وامتصاص الماء - ركام ناعم\taggregates\tBS 812 / ASTM C128\t150.00\nAGG_SIEVE_COARSE\tSieve Analysis of Coarse Aggregates\tتحليل منخل الركام الخشن\taggregates\tBS 882 / ASTM C136\t130.00\nAGG_SIEVE_FINE\tSieve Analysis of Fine Aggregates\tتحليل منخل الركام الناعم\taggregates\tBS 882 / ASTM C136\t130.00\n",
+  "stderr": "",
+  "execution_time_ms": 1556
+}

@@ -1,0 +1,45 @@
+{
+  "query": "SELECT id, sectorKey, nameAr, username, isActive FROM sector_accounts ORDER BY sectorKey;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, sectorKey, nameAr, username, isActive FROM sector_accounts ORDER BY sectorKey;",
+  "rows": [
+    {
+      "id": "30001",
+      "sectorKey": "sector_1",
+      "nameAr": "قطاع الطرق والجسور",
+      "username": "sector_roads",
+      "isActive": "1"
+    },
+    {
+      "id": "30002",
+      "sectorKey": "sector_2",
+      "nameAr": "قطاع المباني الحكومية",
+      "username": "sector_buildings",
+      "isActive": "1"
+    },
+    {
+      "id": "30003",
+      "sectorKey": "sector_3",
+      "nameAr": "قطاع البنية التحتية",
+      "username": "sector_infra",
+      "isActive": "1"
+    },
+    {
+      "id": "30004",
+      "sectorKey": "sector_4",
+      "nameAr": "قطاع المشاريع الصناعية",
+      "username": "sector_industrial",
+      "isActive": "1"
+    },
+    {
+      "id": "30005",
+      "sectorKey": "sector_5",
+      "nameAr": "قطاع الإسكان والتطوير",
+      "username": "sector_housing",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tsectorKey\tnameAr\tusername\tisActive\n30001\tsector_1\tقطاع الطرق والجسور\tsector_roads\t1\n30002\tsector_2\tقطاع المباني الحكومية\tsector_buildings\t1\n30003\tsector_3\tقطاع البنية التحتية\tsector_infra\t1\n30004\tsector_4\tقطاع المشاريع الصناعية\tsector_industrial\t1\n30005\tsector_5\tقطاع الإسكان والتطوير\tsector_housing\t1\n",
+  "stderr": "",
+  "execution_time_ms": 1569
+}

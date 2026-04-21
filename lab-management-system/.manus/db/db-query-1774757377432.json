@@ -1,0 +1,9 @@
+{
+  "query": "-- إضافة مقاول تجريبي\nINSERT IGNORE INTO contractors (id, nameEn, nameAr, contactPerson, phone, email, address, contractorCode, isActive, createdAt, updatedAt)\nVALUES (50001, 'United Construction Co.', 'شركة الإنشاءات المتحدة', 'أحمد محمد', '0501234567', 'info@united-const.ae', 'أبوظبي - منطقة المصفح', 'CON-T001', 1, NOW(), NOW());\n\n-- إضافة عقد تجريبي مرتبط بالقطاع الأول\nINSERT IGNORE INTO contracts (id, contractorId, contractNumber, contractName, sectorKey, sectorNameAr, sectorNameEn, startDate, endDate, notes, isActive, createdAt, updatedAt)\nVALUES (40001, 50001, 'DOI-2025-T001', 'مشروع تطوير البنية التحتية - الدفعة الأولى', 'sector_1', 'القطاع الأول', 'Sector 1', '2025-01-01', '2026-12-31', 'عقد تجريبي لاختبار سير العمل', 1, NOW(), NOW());",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute -- إضافة مقاول تجريبي\nINSERT IGNORE INTO contractors (id, nameEn, nameAr, contactPerson, phone, email, address, contractorCode, isActive, createdAt, updatedAt)\nVALUES (50001, 'United Construction Co.', 'شركة الإنشاءات المتحدة', 'أحمد محمد', '0501234567', 'info@united-const.ae', 'أبوظبي - منطقة المصفح', 'CON-T001', 1, NOW(), NOW());\n\n-- إضافة عقد تجريبي مرتبط بالقطاع الأول\nINSERT IGNORE INTO contracts (id, contractorId, contractNumber, contractName, sectorKey, sectorNameAr, sectorNameEn, startDate, endDate, notes, isActive, createdAt, updatedAt)\nVALUES (40001, 50001, 'DOI-2025-T001', 'مشروع تطوير البنية التحتية - الدفعة الأولى', 'sector_1', 'القطاع الأول', 'Sector 1', '2025-01-01', '2026-12-31', 'عقد تجريبي لاختبار سير العمل', 1, NOW(), NOW());",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1780
+}

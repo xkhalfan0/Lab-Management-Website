@@ -1,0 +1,82 @@
+{
+  "query": "SELECT id, code, nameAr, category FROM test_types WHERE id > 3005 LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, code, nameAr, category FROM test_types WHERE id > 3005 LIMIT 20;",
+  "rows": [
+    {
+      "id": "4001",
+      "code": "ASPH_HOTBIN",
+      "nameAr": "التحليل بالمناخل للخلطة التصميمية",
+      "category": "asphalt"
+    },
+    {
+      "id": "4002",
+      "code": "ASPH_BITUMEN_EXTRACT",
+      "nameAr": "استخلاص البيتيومين",
+      "category": "asphalt"
+    },
+    {
+      "id": "4003",
+      "code": "ASPH_EXTRACTED_SIEVE",
+      "nameAr": "تحليل بالمناخل للركام بعد الاستخلاص",
+      "category": "asphalt"
+    },
+    {
+      "id": "4004",
+      "code": "ASPH_MARSHALL",
+      "nameAr": "قياس الثباتية والهبوط والفراغات لعينات مارشال",
+      "category": "asphalt"
+    },
+    {
+      "id": "4005",
+      "code": "ASPH_MARSHALL_DENSITY",
+      "nameAr": "قياس الكثافة الاجمالية لعينات مارشال",
+      "category": "asphalt"
+    },
+    {
+      "id": "4006",
+      "code": "ASPH_CORE",
+      "nameAr": "اختبار العينات القلبية للاسفلت",
+      "category": "asphalt"
+    },
+    {
+      "id": "5001",
+      "code": "AGG_SIEVE",
+      "nameAr": "تحليل بالمناخل لركام الخرسانة (بالغسيل)",
+      "category": "aggregates"
+    },
+    {
+      "id": "5002",
+      "code": "AGG_SG",
+      "nameAr": "اختبار الكثافة النوعية ونسبة الامتصاص",
+      "category": "aggregates"
+    },
+    {
+      "id": "5003",
+      "code": "AGG_FLAKINESS_ELONGATION",
+      "nameAr": "اختبار معاملي الاسطبالة والترقق",
+      "category": "aggregates"
+    },
+    {
+      "id": "5004",
+      "code": "AGG_CRUSHING",
+      "nameAr": "اختبار معامل التهشيم للركام",
+      "category": "aggregates"
+    },
+    {
+      "id": "5005",
+      "code": "AGG_IMPACT",
+      "nameAr": "اختبار معامل الصدم للركام",
+      "category": "aggregates"
+    },
+    {
+      "id": "5006",
+      "code": "AGG_LA",
+      "nameAr": "اختبار لوس انجلوس للبري للركام",
+      "category": "aggregates"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcode\tnameAr\tcategory\n4001\tASPH_HOTBIN\tالتحليل بالمناخل للخلطة التصميمية\tasphalt\n4002\tASPH_BITUMEN_EXTRACT\tاستخلاص البيتيومين\tasphalt\n4003\tASPH_EXTRACTED_SIEVE\tتحليل بالمناخل للركام بعد الاستخلاص\tasphalt\n4004\tASPH_MARSHALL\tقياس الثباتية والهبوط والفراغات لعينات مارشال\tasphalt\n4005\tASPH_MARSHALL_DENSITY\tقياس الكثافة الاجمالية لعينات مارشال\tasphalt\n4006\tASPH_CORE\tاختبار العينات القلبية للاسفلت\tasphalt\n5001\tAGG_SIEVE\tتحليل بالمناخل لركام الخرسانة (بالغسيل)\taggregates\n5002\tAGG_SG\tاختبار الكثافة النوعية ونسبة الامتصاص\taggregates\n5003\tAGG_FLAKINESS_ELONGATION\tاختبار معاملي الاسطبالة والترقق\taggregates\n5004\tAGG_CRUSHING\tاختبار معامل التهشيم للركام\taggregates\n5005\tAGG_IMPACT\tاختبار معامل الصدم للركام\taggregates\n5006\tAGG_LA\tاختبار لوس انجلوس للبري للركام\taggregates\n",
+  "stderr": "",
+  "execution_time_ms": 1517
+}

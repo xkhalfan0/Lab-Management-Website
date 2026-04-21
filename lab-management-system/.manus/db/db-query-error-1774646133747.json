@@ -1,0 +1,15 @@
+{
+  "query": "SELECT code, nameEn, nameAr, category, unit, unitPrice FROM test_types WHERE isActive = 1 AND category = 'aggregates' ORDER BY sortOrder; SELECT id, name, trade_license FROM contractors LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT code, nameEn, nameAr, category, unit, unitPrice FROM test_types WHERE isActive = 1 AND category = 'aggregates' ORDER BY sortOrder; SELECT id, name, trade_license FROM contractors LIMIT 5;",
+  "returncode": 1,
+  "logs": [
+    "code\tnameEn\tnameAr\tcategory\tunit\tunitPrice",
+    "AGG_SIEVE\tSeive Analysis Concrete Aggregates\tتحليل بالمناخل لركام الخرسانة (بالغسيل)\taggregates\t-\t100.00",
+    "AGG_SG\tSpecific Gravity & Absorption of Coarse & Fine Aggregates\tاختبار الكثافة النوعية ونسبة الامتصاص\taggregates\t-\t75.00",
+    "AGG_FLAKINESS_ELONGATION\tFlakiness & Elongation Index of Aggregtes\tاختبار معاملي الاسطبالة والترقق\taggregates\t-\t100.00",
+    "AGG_CRUSHING\tAggregate Crushing Value\tاختبار معامل التهشيم للركام\taggregates\t-\t100.00",
+    "AGG_IMPACT\tAggregate Impact Value\tاختبار معامل الصدم للركام\taggregates\t-\t100.00",
+    "AGG_LA\tLos Angeles Abrasion Test\tاختبار لوس انجلوس للبري للركام\taggregates\t-\t150.00",
+    "ERROR 1054 (42S22) at line 1: Unknown column 'name' in 'field list'"
+  ]
+}

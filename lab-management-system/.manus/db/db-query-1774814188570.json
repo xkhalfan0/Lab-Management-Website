@@ -1,0 +1,46 @@
+{
+  "query": "SELECT id, username, role, specialty FROM users ORDER BY role, id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, username, role, specialty FROM users ORDER BY role, id;",
+  "rows": [
+    {
+      "id": "1",
+      "username": "admin",
+      "role": "admin",
+      "specialty": "NULL"
+    },
+    {
+      "id": "990792",
+      "username": "reception",
+      "role": "reception",
+      "specialty": "NULL"
+    },
+    {
+      "id": "990795",
+      "username": "supervisor",
+      "role": "lab_manager",
+      "specialty": "NULL"
+    },
+    {
+      "id": "990794",
+      "username": "tech",
+      "role": "technician",
+      "specialty": "NULL"
+    },
+    {
+      "id": "990796",
+      "username": "qcc",
+      "role": "qc_inspector",
+      "specialty": "NULL"
+    },
+    {
+      "id": "990797",
+      "username": "accountant",
+      "role": "accountant",
+      "specialty": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tusername\trole\tspecialty\n1\tadmin\tadmin\tNULL\n990792\treception\treception\tNULL\n990795\tsupervisor\tlab_manager\tNULL\n990794\ttech\ttechnician\tNULL\n990796\tqcc\tqc_inspector\tNULL\n990797\taccountant\taccountant\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 1598
+}

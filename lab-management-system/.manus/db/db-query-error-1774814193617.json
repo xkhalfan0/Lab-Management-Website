@@ -1,0 +1,8 @@
+{
+  "query": "\nSELECT s.id, s.name, s.code, s.username, s.password_hash \nFROM sectors s \nORDER BY s.id;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nSELECT s.id, s.name, s.code, s.username, s.password_hash \nFROM sectors s \nORDER BY s.id;\n",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 2: Unknown column 's.name' in 'field list'"
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "query": "SELECT id, code, nameAr, nameEn, category FROM test_types ORDER BY category, code LIMIT 50;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, code, nameAr, nameEn, category FROM test_types ORDER BY category, code LIMIT 50;",
+  "rows": [
+    {
+      "id": "1007",
+      "code": "CEM_SETTING_TIME",
+      "nameAr": "زمن الشك الابتدائي والنهائي للاسمنت",
+      "nameEn": "Initial Setting Time of Cement",
+      "category": "concrete"
+    },
+    {
+      "id": "1010",
+      "code": "CONC_BEAM_LARGE",
+      "nameAr": "كمرات خرسانية 15x15x75 سم",
+      "nameEn": "Flexural Strength of Concrete Beams 15x15x75cm",
+      "category": "concrete"
+    },
+    {
+      "id": "1009",
+      "code": "CONC_BEAM_SMALL",
+      "nameAr": "كمرات خرسانية 10x10x50 سم",
+      "nameEn": "Flexural Strength of Concrete Beams 10x10x50cm",
+      "category": "concrete"
+    },
+    {
+      "id": "1003",
+      "code": "CONC_BLOCK",
+      "nameAr": "مقاومة الانضغاط للطابوق الخرساني",
+      "nameEn": "Compressive Strength of Masonry Blocks",
+      "category": "concrete"
+    },
+    {
+      "id": "1002",
+      "code": "CONC_CORE",
+      "nameAr": "مقاومة الانضغاط لعينات الخرسانة القلبية",
+      "nameEn": "Compressive Strength of Concrete Cores",
+      "category": "concrete"
+    },
+    {
+      "id": "1001",
+      "code": "CONC_CUBE",
+      "nameAr": "مقاومة الانضغاط لمكعبات الخرسانة",
+      "nameEn": "Compressive Strength of Concrete Cubes",
+      "category": "concrete"
+    },
+    {
+      "id": "1005",
+      "code": "CONC_FOAM",
+      "nameAr": "مقاومة الانضغاط لمكعبات الخرسانة الرغوية",
+      "nameEn": "Compressive Strength of Light weight Foam Concrete Cubes",
+      "category": "concrete"
+    },
+    {
+      "id": "1006",
+      "code": "CONC_FOAM_DENSITY",
+      "nameAr": "الكثافة الاجمالية لمكعب الخرسانة الرغوية",
+      "nameEn": "Over Dry Density Foam Concrete",
+      "category": "concrete"
+    },
+    {
+      "id": "1004",
+      "code": "CONC_INTERLOCK",
+      "nameAr": "مقاومة الانضغاط للبلاط المعشق",
+      "nameEn": "Compressive Strength of Interlocking Tiles",
+      "category": "concrete"
+    },
+    {
+      "id": "1008",
+      "code": "CONC_MORTAR_SAND",
+      "nameAr": "تحليل بالمناخل لرملي البلاستر والبناء",
+      "nameEn": "Sieve Analysis of Sand for Plaster / Masonry Mortar",
+      "category": "concrete"
+    },
+    {
+      "id": "2002",
+      "code": "SOIL_ATTERBERG",
+      "nameAr": "حدود اتربرج للتربة الناعمة ومعامل اللدونة",
+      "nameEn": "Atterberg Limits of Soil (Plasticity Index)",
+      "category": "soil"
+    },
+    {
+      "id": "2004",
+      "code": "SOIL_CBR",
+      "nameAr": "اختبار معامل تحميل كاليفورنيا CBR",
+      "nameEn": "California Bearing Ratio (CBR) Test",
+      "category": "soil"
+    },
+    {
+      "id": "2005",
+      "code": "SOIL_FIELD_DENSITY",
+      "nameAr": "تحديد الكثافة الحقلية بطريقة الاحلال بالرمل",
+      "nameEn": "Field Density (Compaction test) at Site",
+      "category": "soil"
+    },
+    {
+      "id": "2003",
+      "code": "SOIL_PROCTOR",
+      "nameAr": "اختبار بروكتور المعدل",
+      "nameEn": "MDD/OMC (Proctor) test",
+      "category": "soil"
+    },
+    {
+      "id": "2001",
+      "code": "SOIL_SIEVE",
+      "nameAr": "تحليل بالمناخل للتربة (بالغسيل)",
+      "nameEn": "Sieve Analysis of Soil",
+      "category": "soil"
+    },
+    {
+      "id": "3004",
+      "code": "STEEL_ANCHOR",
+      "nameAr": "اختبار الشد لمسامير التثبيت",
+      "nameEn": "Tensile Strength of Anchor Bolts",
+      "category": "steel"
+    },
+    {
+      "id": "3002",
+      "code": "STEEL_BEND",
+      "nameAr": "اختبار ثني قضبان حديد التسليح",
+      "nameEn": "Bend Test",
+      "category": "steel"
+    },
+    {
+      "id": "3001",
+      "code": "STEEL_REBAR",
+      "nameAr": "اختبار الشد لقضبان حديد التسليح",
+      "nameEn": "Tensile Strength of Reinforcement Steel",
+      "category": "steel"
+    },
+    {
+      "id": "3003",
+      "code": "STEEL_REBEND",
+      "nameAr": "اختبار ثني واعادة الثني لقضبان حديد التسليح",
+      "nameEn": "Rebend Test",
+      "category": "steel"
+    },
+    {
+      "id": "3005",
+      "code": "STEEL_STRUCTURAL",
+      "nameAr": "اختبار الشد للحديد الانشائي",
+      "nameEn": "Tensile Strength of Structural Steel",
+      "category": "steel"
+    },
+    {
+      "id": "4002",
+      "code": "ASPH_BITUMEN_EXTRACT",
+      "nameAr": "استخلاص البيتيومين",
+      "nameEn": "Bitumen Extraction",
+      "category": "asphalt"
+    },
+    {
+      "id": "4006",
+      "code": "ASPH_CORE",
+      "nameAr": "اختبار العينات القلبية للاسفلت",
+      "nameEn": "Density and Percentage of Compaction of Asphalt Core specimens",
+      "category": "asphalt"
+    },
+    {
+      "id": "4003",
+      "code": "ASPH_EXTRACTED_SIEVE",
+      "nameAr": "تحليل بالمناخل للركام بعد الاستخلاص",
+      "nameEn": "Sieve analysis of Extracted Aggregates",
+      "category": "asphalt"
+    },
+    {
+      "id": "4001",
+      "code": "ASPH_HOTBIN",
+      "nameAr": "التحليل بالمناخل للخلطة التصميمية",
+      "nameEn": "Asphalt Trial mix & Hotbin Aggregates - Grading",
+      "category": "asphalt"
+    },
+    {
+      "id": "4004",
+      "code": "ASPH_MARSHALL",
+      "nameAr": "قياس الثباتية والهبوط والفراغات لعينات مارشال",
+      "nameEn": "Stability, Flow & Voids Percentage of Marshall Specimens",
+      "category": "asphalt"
+    },
+    {
+      "id": "4005",
+      "code": "ASPH_MARSHALL_DENSITY",
+      "nameAr": "قياس الكثافة الاجمالية لعينات مارشال",
+      "nameEn": "Marshall Density for Asphalt Samples",
+      "category": "asphalt"
+    },
+    {
+      "id": "5004",
+      "code": "AGG_CRUSHING",
+      "nameAr": "اختبار معامل التهشيم للركام",
+      "nameEn": "Aggregate Crushing Value",
+      "category": "aggregates"
+    },
+    {
+      "id": "5003",
+      "code": "AGG_FLAKINESS_ELONGATION",
+      "nameAr": "اختبار معاملي الاسطبالة والترقق",
+      "nameEn": "Flakiness & Elongation Index of Aggregtes",
+      "category": "aggregates"
+    },
+    {
+      "id": "5005",
+      "code": "AGG_IMPACT",
+      "nameAr": "اختبار معامل الصدم للركام",
+      "nameEn": "Aggregate Impact Value",
+      "category": "aggregates"
+    },
+    {
+      "id": "5006",
+      "code": "AGG_LA",
+      "nameAr": "اختبار لوس انجلوس للبري للركام",
+      "nameEn": "Los Angeles Abrasion Test",
+      "category": "aggregates"
+    },
+    {
+      "id": "5002",
+      "code": "AGG_SG",
+      "nameAr": "اختبار الكثافة النوعية ونسبة الامتصاص",
+      "nameEn": "Specific Gravity & Absorption of Coarse & Fine Aggregates",
+      "category": "aggregates"
+    },
+    {
+      "id": "5001",
+      "code": "AGG_SIEVE",
+      "nameAr": "تحليل بالمناخل لركام الخرسانة (بالغسيل)",
+      "nameEn": "Seive Analysis Concrete Aggregates",
+      "category": "aggregates"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcode\tnameAr\tnameEn\tcategory\n1007\tCEM_SETTING_TIME\tزمن الشك الابتدائي والنهائي للاسمنت\tInitial Setting Time of Cement\tconcrete\n1010\tCONC_BEAM_LARGE\tكمرات خرسانية 15x15x75 سم\tFlexural Strength of Concrete Beams 15x15x75cm\tconcrete\n1009\tCONC_BEAM_SMALL\tكمرات خرسانية 10x10x50 سم\tFlexural Strength of Concrete Beams 10x10x50cm\tconcrete\n1003\tCONC_BLOCK\tمقاومة الانضغاط للطابوق الخرساني\tCompressive Strength of Masonry Blocks\tconcrete\n1002\tCONC_CORE\tمقاومة الانضغاط لعينات الخرسانة القلبية\tCompressive Strength of Concrete Cores\tconcrete\n1001\tCONC_CUBE\tمقاومة الانضغاط لمكعبات الخرسانة\tCompressive Strength of Concrete Cubes\tconcrete\n1005\tCONC_FOAM\tمقاومة الانضغاط لمكعبات الخرسانة الرغوية\tCompressive Strength of Light weight Foam Concrete Cubes\tconcrete\n1006\tCONC_FOAM_DENSITY\tالكثافة الاجمالية لمكعب الخرسانة الرغوية\tOver Dry Density Foam Concrete\tconcrete\n1004\tCONC_INTERLOCK\tمقاومة الانضغاط للبلاط المعشق\tCompressive Strength of Interlocking Tiles\tconcrete\n1008\tCONC_MORTAR_SAND\tتحليل بالمناخل لرملي البلاستر والبناء\tSieve Analysis of Sand for Plaster / Masonry Mortar\tconcrete\n2002\tSOIL_ATTERBERG\tحدود اتربرج للتربة الناعمة ومعامل اللدونة\tAtterberg Limits of Soil (Plasticity Index)\tsoil\n2004\tSOIL_CBR\tاختبار معامل تحميل كاليفورنيا CBR\tCalifornia Bearing Ratio (CBR) Test\tsoil\n2005\tSOIL_FIELD_DENSITY\tتحديد الكثافة الحقلية بطريقة الاحلال بالرمل\tField Density (Compaction test) at Site\tsoil\n2003\tSOIL_PROCTOR\tاختبار بروكتور المعدل\tMDD/OMC (Proctor) test\tsoil\n2001\tSOIL_SIEVE\tتحليل بالمناخل للتربة (بالغسيل)\tSieve Analysis of Soil\tsoil\n3004\tSTEEL_ANCHOR\tاختبار الشد لمسامير التثبيت\tTensile Strength of Anchor Bolts\tsteel\n3002\tSTEEL_BEND\tاختبار ثني قضبان حديد التسليح\tBend Test\tsteel\n3001\tSTEEL_REBAR\tاختبار الشد لقضبان حديد التسليح\tTensile Strength of Reinforcement Steel\tsteel\n3003\tSTEEL_REBEND\tاختبار ثني واعادة الثني لقضبان حديد التسليح\tRebend Test\tsteel\n3005\tSTEEL_STRUCTURAL\tاختبار الشد للحديد الانشائي\tTensile Strength of Structural Steel\tsteel\n4002\tASPH_BITUMEN_EXTRACT\tاستخلاص البيتيومين\tBitumen Extraction\tasphalt\n4006\tASPH_CORE\tاختبار العينات القلبية للاسفلت\tDensity and Percentage of Compaction of Asphalt Core specimens\tasphalt\n4003\tASPH_EXTRACTED_SIEVE\tتحليل بالمناخل للركام بعد الاستخلاص\tSieve analysis of Extracted Aggregates\tasphalt\n4001\tASPH_HOTBIN\tالتحليل بالمناخل للخلطة التصميمية\tAsphalt Trial mix & Hotbin Aggregates - Grading\tasphalt\n4004\tASPH_MARSHALL\tقياس الثباتية والهبوط والفراغات لعينات مارشال\tStability, Flow & Voids Percentage of Marshall Specimens\tasphalt\n4005\tASPH_MARSHALL_DENSITY\tقياس الكثافة الاجمالية لعينات مارشال\tMarshall Density for Asphalt Samples\tasphalt\n5004\tAGG_CRUSHING\tاختبار معامل التهشيم للركام\tAggregate Crushing Value\taggregates\n5003\tAGG_FLAKINESS_ELONGATION\tاختبار معاملي الاسطبالة والترقق\tFlakiness & Elongation Index of Aggregtes\taggregates\n5005\tAGG_IMPACT\tاختبار معامل الصدم للركام\tAggregate Impact Value\taggregates\n5006\tAGG_LA\tاختبار لوس انجلوس للبري للركام\tLos Angeles Abrasion Test\taggregates\n5002\tAGG_SG\tاختبار الكثافة النوعية ونسبة الامتصاص\tSpecific Gravity & Absorption of Coarse & Fine Aggregates\taggregates\n5001\tAGG_SIEVE\tتحليل بالمناخل لركام الخرسانة (بالغسيل)\tSeive Analysis Concrete Aggregates\taggregates\n",
+  "stderr": "",
+  "execution_time_ms": 1591
+}

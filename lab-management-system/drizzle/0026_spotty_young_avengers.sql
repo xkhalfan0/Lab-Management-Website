@@ -1,0 +1,1 @@
+ALTER TABLE `distributions` ADD `batchDistributionId` varchar(32);

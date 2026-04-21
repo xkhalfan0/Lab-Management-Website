@@ -1,0 +1,146 @@
+{
+  "query": "SHOW COLUMNS FROM samples;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SHOW COLUMNS FROM samples;",
+  "rows": [
+    {
+      "Field": "id",
+      "Type": "int",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": "NULL",
+      "Extra": "auto_increment"
+    },
+    {
+      "Field": "sampleCode",
+      "Type": "varchar(32)",
+      "Null": "NO",
+      "Key": "UNI",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "contractorName",
+      "Type": "varchar(256)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "sampleType",
+      "Type": "enum('concrete','soil','metal','asphalt')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "quantity",
+      "Type": "int",
+      "Null": "NO",
+      "Key": "",
+      "Default": "1",
+      "Extra": ""
+    },
+    {
+      "Field": "condition",
+      "Type": "enum('good','damaged','partial')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "good",
+      "Extra": ""
+    },
+    {
+      "Field": "notes",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "status",
+      "Type": "enum('received','distributed','tested','processed','reviewed','approved','qc_passed','qc_failed','clearance_issued','rejected','revision_requested')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "received",
+      "Extra": ""
+    },
+    {
+      "Field": "receivedById",
+      "Type": "int",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "receivedAt",
+      "Type": "timestamp",
+      "Null": "NO",
+      "Key": "",
+      "Default": "CURRENT_TIMESTAMP",
+      "Extra": ""
+    },
+    {
+      "Field": "createdAt",
+      "Type": "timestamp",
+      "Null": "NO",
+      "Key": "",
+      "Default": "CURRENT_TIMESTAMP",
+      "Extra": ""
+    },
+    {
+      "Field": "updatedAt",
+      "Type": "timestamp",
+      "Null": "NO",
+      "Key": "",
+      "Default": "CURRENT_TIMESTAMP",
+      "Extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP"
+    },
+    {
+      "Field": "contractId",
+      "Type": "int",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "contractNumber",
+      "Type": "varchar(128)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "contractName",
+      "Type": "varchar(512)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "sector",
+      "Type": "enum('sector_1','sector_2','sector_3','sector_4','sector_5')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "sector_1",
+      "Extra": ""
+    },
+    {
+      "Field": "requestedTestTypeId",
+      "Type": "int",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    }
+  ],
+  "messages": [],
+  "stdout": "Field\tType\tNull\tKey\tDefault\tExtra\nid\tint\tNO\tPRI\tNULL\tauto_increment\nsampleCode\tvarchar(32)\tNO\tUNI\tNULL\t\ncontractorName\tvarchar(256)\tYES\t\tNULL\t\nsampleType\tenum('concrete','soil','metal','asphalt')\tNO\t\tNULL\t\nquantity\tint\tNO\t\t1\t\ncondition\tenum('good','damaged','partial')\tNO\t\tgood\t\nnotes\ttext\tYES\t\tNULL\t\nstatus\tenum('received','distributed','tested','processed','reviewed','approved','qc_passed','qc_failed','clearance_issued','rejected','revision_requested')\tNO\t\treceived\t\nreceivedById\tint\tNO\t\tNULL\t\nreceivedAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\t\ncreatedAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\t\nupdatedAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\tDEFAULT_GENERATED on update CURRENT_TIMESTAMP\ncontractId\tint\tYES\t\tNULL\t\ncontractNumber\tvarchar(128)\tYES\t\tNULL\t\ncontractName\tvarchar(512)\tYES\t\tNULL\t\nsector\tenum('sector_1','sector_2','sector_3','sector_4','sector_5')\tNO\t\tsector_1\t\nrequestedTestTypeId\tint\tYES\t\tNULL\t\n",
+  "stderr": "",
+  "execution_time_ms": 1562
+}

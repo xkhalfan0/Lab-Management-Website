@@ -1,0 +1,1368 @@
+import DashboardLayout from "@/components/DashboardLayout";
+import { StatusBadge } from "@/components/StatusBadge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { trpc } from "@/lib/trpc";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { FlaskConical, Plus, Search, Eye, Printer, FileText, Lock, Building2, Pencil, X, Trash2, Layers, CheckSquare, Package, CalendarIcon } from "lucide-react";
+import { useState, useMemo } from "react";
+import { format } from "date-fns";
+import { toast } from "sonner";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { useLocation } from "wouter";
+
+// ─── Sub-type options per test CODE ─────────────────────────────────────────
+const SUBTYPES_BY_CODE: Record<string, { value: string; labelAr: string; labelEn: string }[]> = {
+  CONC_FOAM: [
+    { value: "7_days", labelAr: "7 أيام", labelEn: "7 Days" },
+    { value: "14_days", labelAr: "14 يوم", labelEn: "14 Days" },
+    { value: "28_days", labelAr: "28 يوم", labelEn: "28 Days" },
+  ],
+  CONC_FOAM_DENSITY: [
+    { value: "7_days", labelAr: "7 أيام", labelEn: "7 Days" },
+    { value: "28_days", labelAr: "28 يوم", labelEn: "28 Days" },
+  ],
+  CONC_BEAM_SMALL: [
+    { value: "7_days", labelAr: "7 أيام", labelEn: "7 Days" },
+    { value: "28_days", labelAr: "28 يوم", labelEn: "28 Days" },
+  ],
+  CONC_BEAM_LARGE: [
+    { value: "7_days", labelAr: "7 أيام", labelEn: "7 Days" },
+    { value: "28_days", labelAr: "28 يوم", labelEn: "28 Days" },
+  ],
+  CONC_BLOCK: [
+    { value: "solid_block", labelAr: "بلوك صلب", labelEn: "Solid Block" },
+    { value: "hollow_block", labelAr: "بلوك مجوف", labelEn: "Hollow Block" },
+    { value: "thermal_block", labelAr: "بلوك حراري", labelEn: "Thermal Block" },
+  ],
+  CONC_INTERLOCK: [
+    { value: "interlock_6cm", labelAr: "إنترلوك 6 سم", labelEn: "Interlock 6cm" },
+    { value: "interlock_8cm", labelAr: "إنترلوك 8 سم", labelEn: "Interlock 8cm" },
+    { value: "interlock_10cm", labelAr: "إنترلوك 10 سم", labelEn: "Interlock 10cm" },
+  ],
+  STEEL_REBAR: [
+    { value: "rebar_T8", labelAr: "T8 - قطر 8مم", labelEn: "T8 - 8mm" },
+    { value: "rebar_T10", labelAr: "T10 - قطر 10مم", labelEn: "T10 - 10mm" },
+    { value: "rebar_T12", labelAr: "T12 - قطر 12مم", labelEn: "T12 - 12mm" },
+    { value: "rebar_T16", labelAr: "T16 - قطر 16مم", labelEn: "T16 - 16mm" },
+    { value: "rebar_T20", labelAr: "T20 - قطر 20مم", labelEn: "T20 - 20mm" },
+    { value: "rebar_T25", labelAr: "T25 - قطر 25مم", labelEn: "T25 - 25mm" },
+    { value: "rebar_T32", labelAr: "T32 - قطر 32مم", labelEn: "T32 - 32mm" },
+  ],
+  STEEL_BEND: [
+    { value: "rebar_T8", labelAr: "T8 - قطر 8مم", labelEn: "T8 - 8mm" },
+    { value: "rebar_T10", labelAr: "T10 - قطر 10مم", labelEn: "T10 - 10mm" },
+    { value: "rebar_T12", labelAr: "T12 - قطر 12مم", labelEn: "T12 - 12mm" },
+    { value: "rebar_T16", labelAr: "T16 - قطر 16مم", labelEn: "T16 - 16mm" },
+    { value: "rebar_T20", labelAr: "T20 - قطر 20مم", labelEn: "T20 - 20mm" },
+    { value: "rebar_T25", labelAr: "T25 - قطر 25مم", labelEn: "T25 - 25mm" },
+    { value: "rebar_T32", labelAr: "T32 - قطر 32مم", labelEn: "T32 - 32mm" },
+  ],
+  STEEL_REBEND: [
+    { value: "rebar_T8", labelAr: "T8 - قطر 8مم", labelEn: "T8 - 8mm" },
+    { value: "rebar_T10", labelAr: "T10 - قطر 10مم", labelEn: "T10 - 10mm" },
+    { value: "rebar_T12", labelAr: "T12 - قطر 12مم", labelEn: "T12 - 12mm" },
+    { value: "rebar_T16", labelAr: "T16 - قطر 16مم", labelEn: "T16 - 16mm" },
+    { value: "rebar_T20", labelAr: "T20 - قطر 20مم", labelEn: "T20 - 20mm" },
+    { value: "rebar_T25", labelAr: "T25 - قطر 25مم", labelEn: "T25 - 25mm" },
+    { value: "rebar_T32", labelAr: "T32 - قطر 32مم", labelEn: "T32 - 32mm" },
+  ],
+  STEEL_STRUCTURAL: [
+    { value: "hea_100", labelAr: "HEA 100", labelEn: "HEA 100" },
+    { value: "hea_120", labelAr: "HEA 120", labelEn: "HEA 120" },
+    { value: "hea_160", labelAr: "HEA 160", labelEn: "HEA 160" },
+    { value: "heb_100", labelAr: "HEB 100", labelEn: "HEB 100" },
+    { value: "ipe_100", labelAr: "IPE 100", labelEn: "IPE 100" },
+    { value: "ipe_160", labelAr: "IPE 160", labelEn: "IPE 160" },
+    { value: "angle_steel", labelAr: "حديد زاوية", labelEn: "Angle Steel" },
+    { value: "flat_bar", labelAr: "شريط مسطح", labelEn: "Flat Bar" },
+    { value: "hollow_section", labelAr: "قطاع مجوف", labelEn: "Hollow Section" },
+  ],
+  STEEL_ANCHOR: [
+    { value: "anchor_12mm", labelAr: "أنكر بولت 12مم", labelEn: "Anchor Bolt 12mm" },
+    { value: "anchor_16mm", labelAr: "أنكر بولت 16مم", labelEn: "Anchor Bolt 16mm" },
+    { value: "anchor_20mm", labelAr: "أنكر بولت 20مم", labelEn: "Anchor Bolt 20mm" },
+    { value: "anchor_24mm", labelAr: "أنكر بولت 24مم", labelEn: "Anchor Bolt 24mm" },
+    { value: "anchor_30mm", labelAr: "أنكر بولت 30مم", labelEn: "Anchor Bolt 30mm" },
+    { value: "anchor_40mm", labelAr: "أنكر بولت 40مم", labelEn: "Anchor Bolt 40mm" },
+    { value: "anchor_50mm", labelAr: "أنكر بولت 50مم", labelEn: "Anchor Bolt 50mm" },
+    { value: "anchor_other", labelAr: "قطر آخر", labelEn: "Other Dia." },
+  ],
+  AGG_SIEVE: [
+    { value: "agg_32mm", labelAr: "ركام 32مم", labelEn: "32mm Aggregate" },
+    { value: "agg_20mm", labelAr: "ركام 20مم", labelEn: "20mm Aggregate" },
+    { value: "agg_10mm", labelAr: "ركام 10مم", labelEn: "10mm Aggregate" },
+    { value: "agg_0_5mm", labelAr: "ركام 0-5مم", labelEn: "0-5mm Aggregate" },
+    { value: "dune_sand", labelAr: "رمل كثبان", labelEn: "Dune Sand" },
+    { value: "others", labelAr: "أخرى", labelEn: "Others" },
+  ],
+  SOIL_SIEVE: [
+    { value: "formation_level", labelAr: "مادة مستوى التأسيس", labelEn: "Formation Level Material" },
+    { value: "general_backfill", labelAr: "ردم عام", labelEn: "General Backfill" },
+    { value: "structural_fill", labelAr: "ردم إنشائي", labelEn: "Structural Fill" },
+    { value: "granular_fill", labelAr: "ردم حبيبي", labelEn: "Granular Fill" },
+    { value: "embankment_fill", labelAr: "ردم جسر", labelEn: "Embankment Fill" },
+    { value: "road_sub_grade", labelAr: "طبقة التربة الطبيعية للطريق", labelEn: "Road Sub Grade" },
+    { value: "agg_sub_base", labelAr: "ركام الطبقة التحتية", labelEn: "Agg. Sub Base" },
+    { value: "agg_base_course", labelAr: "ركام طبقة الأساس (قاعدة الطريق)", labelEn: "Agg. Base Course (Road Base)" },
+    { value: "others", labelAr: "أخرى", labelEn: "Others" },
+  ],
+  ASPH_MARSHALL: [
+    { value: "wearing_course", labelAr: "طبقة رابطة (ويرنج)", labelEn: "Wearing Course" },
+    { value: "binder_course", labelAr: "طبقة أساس (بايندر)", labelEn: "Binder Course" },
+    { value: "base_course", labelAr: "طبقة قاعدة", labelEn: "Base Course" },
+  ],
+  ASPH_MARSHALL_DENSITY: [
+    { value: "wearing_course", labelAr: "طبقة رابطة (ويرنج)", labelEn: "Wearing Course" },
+    { value: "binder_course", labelAr: "طبقة أساس (بايندر)", labelEn: "Binder Course" },
+    { value: "base_course", labelAr: "طبقة قاعدة", labelEn: "Base Course" },
+  ],
+  ASPH_CORE: [
+    { value: "wearing_course", labelAr: "طبقة رابطة (ويرنج)", labelEn: "Wearing Course" },
+    { value: "binder_course", labelAr: "طبقة أساس (بايندر)", labelEn: "Binder Course" },
+    { value: "base_course", labelAr: "طبقة قاعدة", labelEn: "Base Course" },
+  ],
+  ASPH_HOTBIN: [
+    { value: "wearing_course", labelAr: "طبقة رابطة (ويرنج)", labelEn: "Wearing Course" },
+    { value: "binder_course", labelAr: "طبقة أساس (بايندر)", labelEn: "Binder Course" },
+    { value: "base_course", labelAr: "طبقة قاعدة", labelEn: "Base Course" },
+  ],
+  ASPH_EXTRACTED_SIEVE: [
+    { value: "wearing_course", labelAr: "طبقة رابطة (ويرنج)", labelEn: "Wearing Course" },
+    { value: "binder_course", labelAr: "طبقة أساس (بايندر)", labelEn: "Binder Course" },
+  ],
+  CONC_MORTAR_SAND: [
+    { value: "plaster_sand", labelAr: "رمل لياسة", labelEn: "Plaster Sand" },
+    { value: "masonry_sand", labelAr: "رمل بناء", labelEn: "Masonry Sand" },
+  ],
+};
+
+const CATEGORIES = [
+  { value: "concrete", labelAr: "خرسانة", labelEn: "Concrete" },
+  { value: "soil", labelAr: "تربة", labelEn: "Soil" },
+  { value: "steel", labelAr: "حديد", labelEn: "Steel" },
+  { value: "asphalt", labelAr: "أسفلت", labelEn: "Asphalt" },
+  { value: "aggregates", labelAr: "ركام", labelEn: "Aggregates" },
+];
+
+// Tests that use casting date
+const CASTING_DATE_TESTS = ["CONC_CUBE", "CONC_FOAM", "CONC_FOAM_DENSITY", "CONC_BEAM_SMALL", "CONC_BEAM_LARGE"];
+
+// ─── Selected test item ───────────────────────────────────────────────────────
+interface SelectedTest {
+  testTypeId: number;
+  testTypeCode: string;
+  testTypeName: string;
+  formTemplate?: string;
+  testSubType?: string;
+  quantity: number;
+  unitPrice: number;
+}
+
+// Tests that support multi-subtype selection (each subtype = separate order item)
+const MULTI_SUBTYPE_TESTS = [
+  "CONC_BLOCK", "CONC_INTERLOCK", "CONC_MORTAR_SAND",
+  "SOIL_SIEVE",
+  "STEEL_REBAR", "STEEL_BEND", "STEEL_REBEND", "STEEL_STRUCTURAL", "STEEL_ANCHOR",
+  "AGG_SIEVE",
+];
+
+// Multi-subtype selection state: { [testTypeId]: { [subtypeValue]: quantity } }
+type MultiSubtypeState = Record<number, Record<string, number>>;
+
+const emptyForm = () => ({
+  contractId: "",
+  contractNumber: "",
+  contractName: "",
+  contractorName: "",
+  sectorKey: "",
+  sectorNameAr: "",
+  sectorNameEn: "",
+  sampleType: "" as string,
+  condition: "good" as "good" | "damaged" | "partial",
+  notes: "",
+  location: "",
+  castingDate: undefined as Date | undefined,
+  priority: "normal" as "low" | "normal" | "high" | "urgent",
+});
+
+export default function Reception() {
+  const { t, lang } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const { user } = useAuth();
+  const canEditSample = ["admin", "lab_manager", "reception"].includes(user?.role ?? "");
+  const [search, setSearch] = useState("");
+  const [sectorFilter, setSectorFilter] = useState<string>("all");
+  const [taskFilter, setTaskFilter] = useState<"all" | "new" | "incomplete" | "done">("all");
+  const [form, setForm] = useState(emptyForm());
+  const [selectedTests, setSelectedTests] = useState<SelectedTest[]>([]);
+  // For subtype selection per test
+  const [subtypeFor, setSubtypeFor] = useState<number | null>(null); // testTypeId being configured
+  // For multi-subtype tests (CONC_BLOCK): { testTypeId: { subtypeValue: quantity } }
+  const [multiSubtypes, setMultiSubtypes] = useState<MultiSubtypeState>({});
+  // Asphalt sample kind: 'hot_bin' = Hot Bin Aggregates, 'mix' = Trial Mix / Fresh Sample
+  const [asphaltKind, setAsphaltKind] = useState<"hot_bin" | "mix" | "">("")
+  // Hot Bin optional add-on tests: { AGG_SG: true/false, AGG_FLAKINESS_ELONGATION: true/false }
+  const [hotBinAddons, setHotBinAddons] = useState<Record<string, boolean>>({});
+  // Asphalt Mix course type (global for all mix tests)
+  const [asphaltMixCourse, setAsphaltMixCourse] = useState<string>("");
+  /** Reception: CONC_CUBE nominal face size (stored on sample) */
+  const [nominalCubeSize, setNominalCubeSize] = useState("150mm");
+  const [, setLocation] = useLocation();
+  // Edit order state
+  const [editOpen, setEditOpen] = useState(false);
+  const [editingOrder, setEditingOrder] = useState<{
+    id: number; orderCode: string; contractNumber: string; contractorName: string; location: string;
+    notes: string; priority: "low" | "normal" | "high" | "urgent"; castingDate: Date | undefined;
+    items: { id: number; testTypeName: string; testTypeCode: string; testSubType?: string | null; quantity: number }[];
+  } | null>(null);
+
+  const { data: orders, refetch } = trpc.orders.list.useQuery();
+  const { data: contracts = [] } = trpc.contracts.list.useQuery();
+  const { data: allTests = [] } = trpc.testTypes.list.useQuery();
+  const { data: sectors = [] } = trpc.sectors.list.useQuery();
+
+  // Codes for Hot Bin Aggregates tests only (ASPH_HOTBIN = required, AGG_SG + AGG_FLAKINESS_ELONGATION = optional add-ons)
+  const HOT_BIN_REQUIRED_CODE = "ASPH_HOTBIN";
+  const HOT_BIN_OPTIONAL_CODES = ["AGG_SG", "AGG_FLAKINESS_ELONGATION"];
+  const HOT_BIN_CODES = [HOT_BIN_REQUIRED_CODE, ...HOT_BIN_OPTIONAL_CODES];
+  // Codes for Asphalt Mix (Trial/Fresh) tests only
+  const ASPH_MIX_CODES = ["ASPH_MARSHALL", "ASPH_MARSHALL_DENSITY", "ASPH_CORE", "ASPH_EXTRACTED_SIEVE", "ASPH_ACWC", "ASPH_ACBC", "ASPH_DBM"];
+
+  /**
+   * Catalog link: rows in `test_types` use `category` (concrete | soil | steel | asphalt | aggregates).
+   * Reception sets `form.sampleType` to the same value when the user picks a category chip.
+   * Filter: show only tests where `test_types.category === form.sampleType`.
+   * Sub-types (diameter, course, sand type, …) are not in the DB; they come from SUBTYPES_BY_CODE[code].
+   * Technician routing uses `distribution.testType` (code) + TestRouter; reports use `formTemplate`.
+   */
+  const filteredTests = useMemo(() => {
+    if (!form.sampleType) return allTests;
+    const base = allTests.filter(tt => tt.category === form.sampleType);
+    if (form.sampleType === "asphalt") {
+      // Hot Bin: show only ASPH_HOTBIN (required); AGG_SG & AGG_FLAKINESS_ELONGATION shown as optional add-ons inside ASPH_HOTBIN card
+      if (asphaltKind === "hot_bin") return base.filter(tt => tt.code === HOT_BIN_REQUIRED_CODE);
+      if (asphaltKind === "mix") return base.filter(tt => !HOT_BIN_CODES.includes(tt.code ?? ""));
+      return []; // wait for user to pick kind
+    }
+    return base;
+  }, [allTests, form.sampleType, asphaltKind]);
+
+  const sectorLabel = (key: string) => {
+    const s = sectors.find(x => x.sectorKey === key);
+    if (s) return lang === "ar" ? s.nameAr : s.nameEn;
+    return key;
+  };
+
+  const createOrder = trpc.orders.create.useMutation({
+    onSuccess: (result) => {
+      toast.success(lang === "ar"
+        ? `تم إنشاء الأوردر ${result.order.orderCode} بنجاح (${result.items.length} اختبار)`
+        : `Order ${result.order.orderCode} created (${result.items.length} test(s))`);
+      setOpen(false);
+      setForm(emptyForm());
+      setSelectedTests([]);
+      setSubtypeFor(null);
+      setMultiSubtypes({});
+      setAsphaltKind("");
+      setHotBinAddons({});
+      setAsphaltMixCourse("");
+      setNominalCubeSize("150mm");
+      refetch();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const updateItemQty = trpc.orders.updateItemQty.useMutation();
+
+  const updateOrder = trpc.orders.update.useMutation({
+    onSuccess: () => {
+      toast.success(lang === "ar" ? "تم تحديث الأوردر بنجاح" : "Order updated successfully");
+      setEditOpen(false);
+      setEditingOrder(null);
+      refetch();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const handleEditOrder = (order: any) => {
+    setEditingOrder({
+      id: order.id,
+      orderCode: order.orderCode,
+      contractNumber: order.contractNumber ?? "",
+      contractorName: order.contractorName ?? "",
+      location: order.location ?? "",
+      notes: order.notes ?? "",
+      priority: order.priority ?? "normal",
+      castingDate: order.castingDate ? new Date(order.castingDate) : undefined,
+      items: (order.items ?? []).map((item: any) => ({
+        id: item.id,
+        testTypeName: item.testName ?? item.testTypeName ?? "",
+        testTypeCode: item.testTypeCode ?? "",
+        testSubType: item.testSubType ?? null,
+        quantity: item.quantity ?? 1,
+      })),
+    });
+    setEditOpen(true);
+  };
+
+  const handleContractChange = (contractId: string) => {
+    const contract = contracts.find(c => String(c.id) === contractId);
+    if (contract) {
+      const sectorKey = (contract as any).sectorKey ?? "";
+      const sectorNameAr = (contract as any).sectorNameAr ?? "";
+      const sectorNameEn = (contract as any).sectorNameEn ?? "";
+      setForm(f => ({
+        ...f,
+        contractId,
+        contractNumber: contract.contractNumber,
+        contractName: contract.contractName,
+        contractorName: (contract as any).contractorNameEn ?? "",
+        sectorKey: sectorKey || f.sectorKey,
+        sectorNameAr: sectorNameAr || f.sectorNameAr,
+        sectorNameEn: sectorNameEn || f.sectorNameEn,
+      }));
+    }
+  };
+
+  const handleSectorChange = (key: string) => {
+    const s = sectors.find(x => x.sectorKey === key);
+    setForm(f => ({
+      ...f,
+      sectorKey: key,
+      sectorNameAr: s?.nameAr ?? "",
+      sectorNameEn: s?.nameEn ?? "",
+    }));
+  };
+
+  const toggleTest = (tt: any) => {
+    const isMulti = MULTI_SUBTYPE_TESTS.includes(tt.code);
+    if (isMulti) {
+      // Toggle the whole test on/off; subtypes managed separately
+      const exists = selectedTests.some(s => s.testTypeId === tt.id);
+      if (exists) {
+        setSelectedTests(prev => prev.filter(s => s.testTypeId !== tt.id));
+        setMultiSubtypes(prev => { const n = { ...prev }; delete n[tt.id]; return n; });
+      } else {
+        // Add a placeholder entry so the test appears as "selected"
+        const placeholder: SelectedTest = {
+          testTypeId: tt.id,
+          testTypeCode: tt.code,
+          testTypeName: lang === "ar" && tt.nameAr ? tt.nameAr : tt.nameEn,
+          formTemplate: tt.formTemplate ?? undefined,
+          testSubType: "__multi__",
+          quantity: 0,
+          unitPrice: parseFloat(tt.unitPrice ?? "0"),
+        };
+        setSelectedTests(prev => [...prev, placeholder]);
+        setMultiSubtypes(prev => ({ ...prev, [tt.id]: {} }));
+      }
+      return;
+    }
+    const exists = selectedTests.find(s => s.testTypeId === tt.id);
+    if (exists) {
+      setSelectedTests(prev => prev.filter(s => s.testTypeId !== tt.id));
+      if (subtypeFor === tt.id) setSubtypeFor(null);
+      return;
+    }
+
+    // Auto-apply asphalt mix course when adding a mix test
+    if (form.sampleType === "asphalt" && asphaltKind === "mix" && asphaltMixCourse) {
+      const newMixTest: SelectedTest = {
+        testTypeId: tt.id,
+        testTypeCode: tt.code,
+        testTypeName: lang === "ar" && tt.nameAr ? tt.nameAr : tt.nameEn,
+        formTemplate: tt.formTemplate ?? undefined,
+        testSubType: asphaltMixCourse,
+        quantity: 1,
+        unitPrice: parseFloat(tt.unitPrice ?? "0"),
+      };
+      setSelectedTests(prev => [...prev, newMixTest]);
+      return;
+    }
+
+    const subTypes = SUBTYPES_BY_CODE[tt.code] ?? [];
+    const isCasting = CASTING_DATE_TESTS.includes(tt.code);
+    const newTest: SelectedTest = {
+      testTypeId: tt.id,
+      testTypeCode: tt.code,
+      testTypeName: lang === "ar" && tt.nameAr ? tt.nameAr : tt.nameEn,
+      formTemplate: tt.formTemplate ?? undefined,
+      testSubType: undefined,
+      quantity: 1,
+      unitPrice: parseFloat(tt.unitPrice ?? "0"),
+    };
+    setSelectedTests(prev => [...prev, newTest]);
+    // If test has subtypes (and not casting date), prompt for subtype
+    if (subTypes.length > 0 && !isCasting) {
+      setSubtypeFor(tt.id);
+    }
+  };
+
+  const toggleBlockSubtype = (testTypeId: number, subtypeValue: string, testTypeName: string, testTypeCode: string, formTemplate: string | undefined, unitPrice: number) => {
+    setMultiSubtypes(prev => {
+      const current = prev[testTypeId] ?? {};
+      if (current[subtypeValue] !== undefined) {
+        const updated = { ...current };
+        delete updated[subtypeValue];
+        return { ...prev, [testTypeId]: updated };
+      } else {
+        return { ...prev, [testTypeId]: { ...current, [subtypeValue]: 1 } };
+      }
+    });
+  };
+
+  const setBlockSubtypeQty = (testTypeId: number, subtypeValue: string, qty: number) => {
+    setMultiSubtypes(prev => ({
+      ...prev,
+      [testTypeId]: { ...(prev[testTypeId] ?? {}), [subtypeValue]: Math.max(1, qty) },
+    }));
+  };
+
+  const setTestSubtype = (testTypeId: number, subType: string) => {
+    setSelectedTests(prev => prev.map(s =>
+      s.testTypeId === testTypeId ? { ...s, testSubType: subType } : s
+    ));
+    setSubtypeFor(null);
+  };
+
+  const setTestQuantity = (testTypeId: number, qty: number) => {
+    setSelectedTests(prev => prev.map(s =>
+      s.testTypeId === testTypeId ? { ...s, quantity: qty } : s
+    ));
+  };
+
+  const isCastingRequired = selectedTests.some(t => CASTING_DATE_TESTS.includes(t.testTypeCode));
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.contractId) {
+      toast.error(lang === "ar" ? "يرجى اختيار عقد" : "Please select a contract");
+      return;
+    }
+    if (!form.sectorKey) {
+      toast.error(lang === "ar" ? "يرجى اختيار القطاع" : "Please select a sector");
+      return;
+    }
+    if (!form.sampleType) {
+      toast.error(lang === "ar" ? "يرجى اختيار فئة الاختبار" : "Please select a test category");
+      return;
+    }
+    if (selectedTests.length === 0) {
+      toast.error(lang === "ar" ? "يرجى اختيار اختبار واحد على الأقل" : "Please select at least one test");
+      return;
+    }
+    // Validate asphalt mix course selection
+    if (form.sampleType === "asphalt" && asphaltKind === "mix" && !asphaltMixCourse) {
+      toast.error(lang === "ar" ? "يرجى اختيار نوع طبقة الأسفلت (Wearing / Binder / Base Course)" : "Please select the Asphalt Mix Course (Wearing / Binder / Base Course)");
+      return;
+    }
+    if (isCastingRequired && !form.castingDate) {
+      toast.error(lang === "ar" ? "يرجى إدخال تاريخ الصب" : "Please enter casting date");
+      return;
+    }
+    // Convert castingDate (Date object) to ISO string yyyy-mm-dd
+    let castingDateISO: string | undefined = undefined;
+    if (form.castingDate) {
+      if (form.castingDate > new Date()) {
+        toast.error(lang === "ar" ? "تاريخ الصب لا يمكن أن يكون في المستقبل" : "Casting date cannot be in the future");
+        return;
+      }
+      castingDateISO = format(form.castingDate, "yyyy-MM-dd");
+    }
+
+    // Build final tests array: expand multi-subtype tests into separate items
+    const finalTests: SelectedTest[] = [];
+    for (const t of selectedTests) {
+      if (MULTI_SUBTYPE_TESTS.includes(t.testTypeCode) && t.testSubType === "__multi__") {
+        const subtypeMap = multiSubtypes[t.testTypeId] ?? {};
+        const entries = Object.entries(subtypeMap).filter(([, qty]) => qty > 0);
+        if (entries.length === 0) {
+          // Build a descriptive error message specific to the test type
+          const testLabel = t.testTypeName;
+          toast.error(
+            lang === "ar"
+              ? `يرجى تحديد نوع فرعي واحد على الأقل لـ: ${testLabel}`
+              : `Please select at least one sub-type for: ${testLabel}`
+          );
+          return;
+        }
+        for (const [subtypeValue, qty] of entries) {
+          const subLabel = SUBTYPES_BY_CODE[t.testTypeCode]?.find(s => s.value === subtypeValue);
+          finalTests.push({
+            ...t,
+            testSubType: subtypeValue,
+            testTypeName: subLabel ? (lang === "ar" ? `${t.testTypeName} - ${subLabel.labelAr}` : `${t.testTypeName} - ${subLabel.labelEn}`) : t.testTypeName,
+            quantity: qty,
+          });
+        }
+      } else {
+        finalTests.push(t);
+      }
+    }
+
+    createOrder.mutate({
+      contractId: form.contractId ? Number(form.contractId) : undefined,
+      contractNumber: form.contractNumber || undefined,
+      contractName: form.contractName || undefined,
+      contractorName: form.contractorName || undefined,
+      sampleType: form.sampleType,
+      sector: form.sectorKey,
+      sectorNameAr: form.sectorNameAr || undefined,
+      sectorNameEn: form.sectorNameEn || undefined,
+      condition: form.condition,
+      notes: form.notes || undefined,
+      location: form.location || undefined,
+      castingDate: castingDateISO || undefined,
+      priority: form.priority,
+      nominalCubeSize: finalTests.some(t => t.testTypeCode === "CONC_CUBE") ? nominalCubeSize : undefined,
+      tests: finalTests.map(t => ({
+        testTypeId: t.testTypeId,
+        testTypeCode: t.testTypeCode,
+        testTypeName: t.testTypeName,
+        formTemplate: t.formTemplate,
+        testSubType: t.testSubType,
+        quantity: t.quantity,
+        unitPrice: t.unitPrice,
+      })),
+    });
+  };
+
+  const NEW_STATUSES = ["pending"];
+  const INCOMPLETE_STATUSES = ["distributed", "in_progress", "reviewed"];
+  const DONE_STATUSES = ["completed", "qc_passed", "rejected"];
+
+  const filteredOrders = orders?.filter((o: any) => {
+    const matchSearch =
+      (o.orderCode ?? "").toLowerCase().includes(search.toLowerCase()) ||
+      (o.contractorName ?? "").toLowerCase().includes(search.toLowerCase()) ||
+      (o.contractNumber ?? "").toLowerCase().includes(search.toLowerCase());
+    const matchSector = sectorFilter === "all" || (o as any).sector === sectorFilter;
+    const matchTask =
+      taskFilter === "all" ? true :
+      taskFilter === "new" ? NEW_STATUSES.includes(o.status) :
+      taskFilter === "incomplete" ? INCOMPLETE_STATUSES.includes(o.status) :
+      DONE_STATUSES.includes(o.status);
+    return matchSearch && matchSector && matchTask;
+  }) ?? [];
+
+  const newCount = orders?.filter((o: any) => NEW_STATUSES.includes(o.status)).length ?? 0;
+  const incompleteCount = orders?.filter((o: any) => INCOMPLETE_STATUSES.includes(o.status)).length ?? 0;
+  const doneCount = orders?.filter((o: any) => DONE_STATUSES.includes(o.status)).length ?? 0;
+
+  const typeLabel = (type: string) => {
+    const cat = CATEGORIES.find(c => c.value === type);
+    if (cat) return lang === "ar" ? cat.labelAr : cat.labelEn;
+    return type;
+  };
+
+  const totalPrice = selectedTests.reduce((sum, t) => {
+    if (MULTI_SUBTYPE_TESTS.includes(t.testTypeCode) && t.testSubType === "__multi__") {
+      const subtypeMap = multiSubtypes[t.testTypeId] ?? {};
+      const subtypeTotal = Object.values(subtypeMap).reduce((s, qty) => s + (qty > 0 ? t.unitPrice * qty : 0), 0);
+      return sum + subtypeTotal;
+    }
+    return sum + t.unitPrice * t.quantity;
+  }, 0);
+
+  return (
+    <DashboardLayout>
+      <div className="space-y-5">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold">{t("reception.title")}</h1>
+            <p className="text-sm text-muted-foreground">{t("reception.subtitle")}</p>
+          </div>
+          <Dialog open={open} onOpenChange={(v) => {
+            setOpen(v);
+            if (!v) { setForm(emptyForm()); setSelectedTests([]); setSubtypeFor(null); setAsphaltKind(""); setHotBinAddons({}); }
+          }}>
+            <DialogTrigger asChild>
+              <Button size="sm" className="gap-1.5">
+                <Plus className="w-4 h-4" />
+                {lang === "ar" ? "إنشاء أوردر جديد" : "New Order"}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Package className="w-5 h-5" />
+                  {lang === "ar" ? "أوردر اختبار جديد" : "New Test Order"}
+                </DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+
+                {/* Contract */}
+                <div className="space-y-1.5">
+                  <Label>{t("tests.contractNumber")} <span className="text-red-500">*</span></Label>
+                  {contracts.length > 0 ? (
+                    <Select value={form.contractId} onValueChange={handleContractChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={lang === "ar" ? "اختر رقم العقد..." : "Select contract..."} />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-60">
+                        {contracts.map((c: any) => (
+                          <SelectItem key={c.id} value={String(c.id)}>
+                            <div className="flex items-center gap-2">
+                              <FileText className="w-3.5 h-3.5 text-muted-foreground" />
+                              <span className="font-mono text-xs font-semibold">{c.contractNumber}</span>
+                              <span className="text-xs text-muted-foreground truncate max-w-[180px]">{c.contractName}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <div className="p-3 bg-amber-50 border border-amber-200 rounded-md text-xs text-amber-700">
+                      {lang === "ar" ? "لا توجد عقود مسجلة. يرجى إضافة عقود أولاً." : "No contracts registered. Add contracts first."}
+                    </div>
+                  )}
+                </div>
+
+                {/* Auto-filled info */}
+                {form.contractId && (
+                  <div className="p-3 bg-muted/40 rounded-lg border border-dashed space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Lock className="w-3.5 h-3.5 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground font-medium">{t("reception.autoFilled")}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label className="text-xs text-muted-foreground">{t("reception.contractName")}</Label>
+                        <div className="px-3 py-2 bg-background rounded border text-sm text-muted-foreground truncate">{form.contractName || "—"}</div>
+                      </div>
+                      <div>
+                        <Label className="text-xs text-muted-foreground">{t("reception.contractorName")}</Label>
+                        <div className="px-3 py-2 bg-background rounded border text-sm text-muted-foreground">{form.contractorName || "—"}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Sector */}
+                <div className="space-y-1.5">
+                  <Label className="flex items-center gap-1.5">
+                    <Building2 className="w-3.5 h-3.5 text-muted-foreground" />
+                    {lang === "ar" ? "القطاع" : "Sector"} <span className="text-red-500">*</span>
+                  </Label>
+                  <Select value={form.sectorKey} onValueChange={handleSectorChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={lang === "ar" ? "اختر القطاع..." : "Select sector..."} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sectors.filter((s: any) => s.isActive).map((s: any) => (
+                        <SelectItem key={s.sectorKey} value={s.sectorKey}>
+                          {lang === "ar" ? s.nameAr : s.nameEn}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Test Category */}
+                <div className="space-y-1.5">
+                  <Label>{lang === "ar" ? "فئة الاختبار" : "Test Category"} <span className="text-red-500">*</span></Label>
+                  <div className="flex flex-wrap gap-2">
+                    {CATEGORIES.map(cat => (
+                      <button key={cat.value} type="button"
+                        onClick={() => {
+                          setForm(f => ({ ...f, sampleType: cat.value }));
+                          setSelectedTests([]);
+                          setSubtypeFor(null);
+                          setAsphaltKind("");
+                        }}
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all border ${form.sampleType === cat.value ? "bg-primary text-primary-foreground border-primary shadow" : "bg-background text-muted-foreground border-border hover:border-primary/50"}`}>
+                        {lang === "ar" ? cat.labelAr : cat.labelEn}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Asphalt Sample Kind Selector */}
+                {form.sampleType === "asphalt" && (
+                  <div className="space-y-1.5">
+                    <Label>{lang === "ar" ? "نوع عينة الأسفلت" : "Asphalt Sample Type"} <span className="text-red-500">*</span></Label>
+                    <div className="flex gap-2">
+                      <button type="button"
+                        onClick={() => { setAsphaltKind("hot_bin"); setSelectedTests([]); setMultiSubtypes({}); setHotBinAddons({}); setAsphaltMixCourse(""); }}
+                        className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+                          asphaltKind === "hot_bin" ? "bg-primary text-primary-foreground border-primary" : "bg-background text-muted-foreground border-border hover:border-primary/50"
+                        }`}>
+                        {lang === "ar" ? "ركام صندوق ساخن (Hot Bin)" : "Hot Bin Aggregates"}
+                      </button>
+                      <button type="button"
+                        onClick={() => { setAsphaltKind("mix"); setSelectedTests([]); setMultiSubtypes({}); setHotBinAddons({}); setAsphaltMixCourse(""); }}
+                        className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+                          asphaltKind === "mix" ? "bg-primary text-primary-foreground border-primary" : "bg-background text-muted-foreground border-border hover:border-primary/50"
+                        }`}>
+                        {lang === "ar" ? "خلطة أسفلتية (Trial/Fresh)" : "Asphalt Mix (Trial/Fresh)"}
+                      </button>
+                    </div>
+                    {asphaltKind === "" && (
+                      <p className="text-xs text-amber-700">
+                        {lang === "ar"
+                          ? "اختر نوع العينة أعلاه لعرض قائمة اختبارات الأسفلت."
+                          : "Choose a sample type above to load the asphalt test list."}
+                      </p>
+                    )}
+                  </div>
+                )}
+                {/* Asphalt Mix Course Selector */}
+                {form.sampleType === "asphalt" && asphaltKind === "mix" && (
+                  <div className="space-y-1.5">
+                    <Label>{lang === "ar" ? "نوع طبقة الأسفلت" : "Asphalt Mix Course"} <span className="text-red-500">*</span></Label>
+                    <div className="flex gap-2 flex-wrap">
+                      {[
+                        { value: "wearing_course", labelAr: "طبقة رابطة (ويرنج)", labelEn: "Wearing Course" },
+                        { value: "binder_course", labelAr: "طبقة أساس (بايندر)", labelEn: "Binder Course" },
+                        { value: "base_course", labelAr: "طبقة قاعدة", labelEn: "Base Course" },
+                      ].map(c => (
+                        <button key={c.value} type="button"
+                          onClick={() => {
+                            setAsphaltMixCourse(c.value);
+                            // Apply course to all already-selected tests
+                            setSelectedTests(prev => prev.map(t => ({ ...t, testSubType: c.value })));
+                          }}
+                          className={`flex-1 min-w-[100px] px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+                            asphaltMixCourse === c.value
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "bg-background text-muted-foreground border-border hover:border-primary/50"
+                          }`}>
+                          {lang === "ar" ? c.labelAr : c.labelEn}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {/* Tests Selection (checkboxes) */}
+                {form.sampleType && (form.sampleType !== "asphalt" || asphaltKind !== "") && (
+                  <div className="space-y-2">
+                    <Label className="flex items-center gap-1.5">
+                      <CheckSquare className="w-3.5 h-3.5 text-muted-foreground" />
+                      {lang === "ar" ? "الاختبارات المطلوبة" : "Required Tests"}
+                      <span className="text-red-500">*</span>
+                      {selectedTests.length > 0 && (
+                        <Badge variant="secondary" className="ms-1 text-xs">{selectedTests.length} {lang === "ar" ? "محدد" : "selected"}</Badge>
+                      )}
+                    </Label>
+                    <div className="border rounded-lg divide-y max-h-52 overflow-y-auto">
+                      {filteredTests.length === 0 ? (
+                        <div className="p-4 text-sm text-muted-foreground text-center space-y-1">
+                          <p>
+                            {allTests.length === 0
+                              ? (lang === "ar"
+                                  ? "لا توجد أنواع اختبارات في قاعدة البيانات. أضف الأنواع من صفحة إدارة أنواع الاختبارات (مسؤول)."
+                                  : "No test types in the database. Ask an admin to add them under Test Types management.")
+                              : (lang === "ar"
+                                  ? "لا توجد اختبارات مطابقة لهذا التصنيف أو المرشحات الحالية."
+                                  : "No tests match this category or current filters.")}
+                          </p>
+                        </div>
+                      ) : filteredTests.map((tt: any) => {
+                        const isSelected = selectedTests.some(s => s.testTypeId === tt.id);
+                        const selectedItem = selectedTests.find(s => s.testTypeId === tt.id);
+                        const subTypes = SUBTYPES_BY_CODE[tt.code] ?? [];
+                        const isCasting = CASTING_DATE_TESTS.includes(tt.code);
+                        return (
+                          <div key={tt.id} className={`p-3 transition-colors ${isSelected ? "bg-primary/5" : "hover:bg-muted/30"}`}>
+                            <div className="flex items-center gap-3">
+                              <Checkbox
+                                id={`test-${tt.id}`}
+                                checked={isSelected}
+                                onCheckedChange={() => toggleTest(tt)}
+                              />
+                              <label htmlFor={`test-${tt.id}`} className="flex-1 cursor-pointer">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-medium">
+                                    {lang === "ar" && tt.nameAr ? tt.nameAr : tt.nameEn}
+                                  </span>
+                                  <span className="text-xs font-semibold text-green-700">
+                                    {Number(tt.unitPrice).toFixed(0)} {lang === "ar" ? "درهم" : "AED"}
+                                  </span>
+                                </div>
+                                {tt.code && (
+                                  <span className="text-xs text-muted-foreground font-mono">{tt.code}</span>
+                                )}
+                              </label>
+                            </div>
+                            {/* Multi-subtype UI for CONC_BLOCK */}
+                            {isSelected && MULTI_SUBTYPE_TESTS.includes(tt.code) && (
+                              <div className="mt-2 ms-7 space-y-1.5">
+                                <p className="text-xs text-muted-foreground font-medium">
+                                  {lang === "ar" ? "حدد أنواع البلوكات والكميات:" : "Select block types and quantities:"}
+                                </p>
+                                {(SUBTYPES_BY_CODE[tt.code] ?? []).map(st => {
+                                  const isSubSelected = (multiSubtypes[tt.id] ?? {})[st.value] !== undefined;
+                                  const qty = (multiSubtypes[tt.id] ?? {})[st.value] ?? 1;
+                                  return (
+                                    <div key={st.value} className={`flex items-center gap-2 p-2 rounded-md border transition-colors ${isSubSelected ? "bg-primary/5 border-primary/30" : "border-border"}`}>
+                                      <Checkbox
+                                        id={`block-${tt.id}-${st.value}`}
+                                        checked={isSubSelected}
+                                        onCheckedChange={() => toggleBlockSubtype(tt.id, st.value, tt.testTypeName, tt.code, tt.formTemplate, parseFloat(tt.unitPrice ?? "0"))}
+                                      />
+                                      <label htmlFor={`block-${tt.id}-${st.value}`} className="flex-1 text-xs font-medium cursor-pointer">
+                                        {lang === "ar" ? st.labelAr : st.labelEn}
+                                      </label>
+                                      {isSubSelected && (
+                                        <div className="flex items-center gap-1">
+                                          <span className="text-xs text-muted-foreground">{lang === "ar" ? "عدد:" : "Qty:"}</span>
+                                          <Input
+                                            type="number" min={1} max={999}
+                                            value={qty}
+                                            onChange={e => setBlockSubtypeQty(tt.id, st.value, parseInt(e.target.value) || 1)}
+                                            className="h-6 w-16 text-center text-xs"
+                                          />
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                            {/* Subtype selector for regular tests */}
+                            {isSelected && subTypes.length > 0 && !isCasting && !MULTI_SUBTYPE_TESTS.includes(tt.code) && (
+                              <div className="mt-2 ms-7">
+                                {subtypeFor === tt.id ? (
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {subTypes.map(st => (
+                                      <button key={st.value} type="button"
+                                        onClick={() => setTestSubtype(tt.id, st.value)}
+                                        className="px-2.5 py-1 text-xs rounded-md border bg-background hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors">
+                                        {lang === "ar" ? st.labelAr : st.labelEn}
+                                      </button>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs text-muted-foreground">
+                                      {selectedItem?.testSubType
+                                        ? (subTypes.find(s => s.value === selectedItem.testSubType)?.[lang === "ar" ? "labelAr" : "labelEn"] ?? selectedItem.testSubType)
+                                        : (lang === "ar" ? "لم يُحدد النوع الفرعي" : "No subtype selected")}
+                                    </span>
+                                    <button type="button" onClick={() => setSubtypeFor(tt.id)}
+                                      className="text-xs text-primary underline">
+                                      {lang === "ar" ? "تغيير" : "Change"}
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            {/* Quantity for selected test — hidden for multi-subtype tests */}
+                            {isSelected && !MULTI_SUBTYPE_TESTS.includes(tt.code) && (
+                              <div className="mt-2 ms-7 flex items-center gap-2">
+                                <Label className="text-xs text-muted-foreground whitespace-nowrap">
+                                  {lang === "ar" ? "العدد:" : "Qty:"}
+                                </Label>
+                                <Input
+                                  type="number" min={1} max={999}
+                                  value={selectedItem?.quantity ?? 1}
+                                  onChange={e => setTestQuantity(tt.id, parseInt(e.target.value) || 1)}
+                                  className="h-7 w-20 text-center text-xs"
+                                />
+                              </div>
+                            )}
+                            {/* Hot Bin optional add-on tests (AGG_SG, AGG_FLAKINESS_ELONGATION) */}
+                            {isSelected && tt.code === HOT_BIN_REQUIRED_CODE && (() => {
+                              const addonTests = allTests.filter(at => HOT_BIN_OPTIONAL_CODES.includes(at.code ?? ""));
+                              if (addonTests.length === 0) return null;
+                              return (
+                                <div className="mt-2 ms-7 space-y-1.5">
+                                  <p className="text-xs text-muted-foreground font-medium">
+                                    {lang === "ar" ? "اختبارات إضافية (اختيارية)" : "Optional Add-on Tests"}
+                                  </p>
+                                  {addonTests.map((at: any) => {
+                                    const isAddonSelected = !!hotBinAddons[at.code];
+                                    const addonQty = selectedTests.find(s => s.testTypeId === at.id)?.quantity ?? 1;
+                                    return (
+                                      <div key={at.id} className={`flex items-center gap-2 p-2 rounded-md border transition-colors ${isAddonSelected ? "bg-blue-50 border-blue-200" : "border-border"}`}>
+                                        <Checkbox
+                                          id={`addon-${at.id}`}
+                                          checked={isAddonSelected}
+                                          onCheckedChange={(checked) => {
+                                            const enabled = !!checked;
+                                            setHotBinAddons(prev => ({ ...prev, [at.code]: enabled }));
+                                            if (enabled) {
+                                              const addonTest: SelectedTest = {
+                                                testTypeId: at.id,
+                                                testTypeCode: at.code,
+                                                testTypeName: lang === "ar" && at.nameAr ? at.nameAr : at.nameEn,
+                                                formTemplate: at.formTemplate ?? undefined,
+                                                testSubType: undefined,
+                                                quantity: 1,
+                                                unitPrice: parseFloat(at.unitPrice ?? "0"),
+                                              };
+                                              setSelectedTests(prev => [...prev.filter(s => s.testTypeId !== at.id), addonTest]);
+                                            } else {
+                                              setSelectedTests(prev => prev.filter(s => s.testTypeId !== at.id));
+                                            }
+                                          }}
+                                        />
+                                        <label htmlFor={`addon-${at.id}`} className="flex-1 text-xs cursor-pointer">
+                                          <span className="font-medium">{lang === "ar" && at.nameAr ? at.nameAr : at.nameEn}</span>
+                                          <span className="text-muted-foreground font-mono ms-1">({at.code})</span>
+                                        </label>
+                                        {isAddonSelected && (
+                                          <div className="flex items-center gap-1">
+                                            <button
+                                              type="button"
+                                              className="w-6 h-6 rounded border border-border flex items-center justify-center text-sm hover:bg-muted"
+                                              onClick={() => {
+                                                const newQty = Math.max(1, addonQty - 1);
+                                                setSelectedTests(prev => prev.map(s => s.testTypeId === at.id ? { ...s, quantity: newQty } : s));
+                                              }}
+                                            >−</button>
+                                            <span className="w-6 text-center text-xs font-mono">{addonQty}</span>
+                                            <button
+                                              type="button"
+                                              className="w-6 h-6 rounded border border-border flex items-center justify-center text-sm hover:bg-muted"
+                                              onClick={() => {
+                                                setSelectedTests(prev => prev.map(s => s.testTypeId === at.id ? { ...s, quantity: addonQty + 1 } : s));
+                                              }}
+                                            >+</button>
+                                          </div>
+                                        )}
+                                        <span className="text-xs font-semibold text-blue-700">
+                                          {Number(at.unitPrice).toFixed(0)} {lang === "ar" ? "درهم" : "AED"}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Casting Date - shown if any selected test requires it */}
+                {isCastingRequired && (
+                  <div className="space-y-1.5">
+                    <Label className="flex items-center gap-1">
+                      {lang === "ar" ? "تاريخ الصب" : "Date of Casting"}
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="outline" className={`w-full justify-start text-left font-normal ${!form.castingDate && "text-muted-foreground"}`}>
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {form.castingDate ? format(form.castingDate, "dd/MM/yyyy") : (lang === "ar" ? "اختر تاريخ الصب" : "Select casting date")}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={form.castingDate}
+                          onSelect={(d) => setForm(f => ({ ...f, castingDate: d }))}
+                          disabled={(date) => date > new Date()}
+                          captionLayout="dropdown"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    {form.castingDate && (
+                      <p className="text-xs text-muted-foreground">
+                        {lang === "ar" ? "العمر عند الاستقبال:" : "Age at reception:"}{" "}
+                        <span className="font-semibold text-primary">
+                          {Math.floor((Date.now() - form.castingDate.getTime()) / (1000 * 60 * 60 * 24))} {lang === "ar" ? "يوم" : "days"}
+                        </span>
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {selectedTests.some(t => t.testTypeCode === "CONC_CUBE") && (
+                  <div className="space-y-1.5">
+                    <Label>{lang === "ar" ? "الحجم الاسمي للمكعب" : "Nominal Cube Size"}</Label>
+                    <Select value={nominalCubeSize} onValueChange={setNominalCubeSize}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="150mm">150 mm</SelectItem>
+                        <SelectItem value="100mm">100 mm</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground">
+                      {lang === "ar"
+                        ? "يُستخدم لحساب مساحة الوجه وقوة الضغط في اختبار المكعبات."
+                        : "Used for bearing area and compressive strength on the cube test form."}
+                    </p>
+                  </div>
+                )}
+
+                {/* Condition + Priority */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label>{t("reception.condition")}</Label>
+                    <Select value={form.condition} onValueChange={(v) => setForm({ ...form, condition: v as any })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="good">{t("reception.good")}</SelectItem>
+                        <SelectItem value="damaged">{t("reception.damaged")}</SelectItem>
+                        <SelectItem value="partial">{t("reception.acceptable")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>{lang === "ar" ? "الأولوية" : "Priority"}</Label>
+                    <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v as any })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="low">{lang === "ar" ? "منخفضة" : "Low"}</SelectItem>
+                        <SelectItem value="normal">{lang === "ar" ? "عادية" : "Normal"}</SelectItem>
+                        <SelectItem value="high">{lang === "ar" ? "عالية" : "High"}</SelectItem>
+                        <SelectItem value="urgent">{lang === "ar" ? "عاجلة" : "Urgent"}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Location */}
+                <div className="space-y-1.5">
+                  <Label>{lang === "ar" ? "موقع العينة" : "Sample Location"}</Label>
+                  <Input
+                    placeholder={lang === "ar" ? "مثال: الطابق 3، عمود C2" : "e.g. Floor 3, Column C2"}
+                    value={form.location}
+                    onChange={(e) => setForm({ ...form, location: e.target.value })}
+                  />
+                </div>
+
+                {/* Notes */}
+                <div className="space-y-1.5">
+                  <Label>{t("common.notes")}</Label>
+                  <Textarea placeholder={lang === "ar" ? "ملاحظات إضافية..." : "Additional notes..."} rows={2} value={form.notes}
+                    onChange={(e) => setForm({ ...form, notes: e.target.value })} />
+                </div>
+
+                {/* Order Summary */}
+                {selectedTests.length > 0 && (
+                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg space-y-1">
+                    <p className="text-xs font-semibold text-green-800">
+                      {lang === "ar" ? "ملخص الأوردر:" : "Order Summary:"}
+                    </p>
+                    {selectedTests.map(t => {
+                      const isMulti = MULTI_SUBTYPE_TESTS.includes(t.testTypeCode) && t.testSubType === "__multi__";
+                      if (isMulti) {
+                        const subtypeMap = multiSubtypes[t.testTypeId] ?? {};
+                        const entries = Object.entries(subtypeMap).filter(([, qty]) => qty > 0);
+                        if (entries.length === 0) {
+                          return (
+                            <div key={t.testTypeId} className="flex items-center justify-between text-xs text-amber-600">
+                              <span>• {t.testTypeName} — {lang === "ar" ? "لم يُحدد نوع" : "no type selected"}</span>
+                              <span>0 {lang === "ar" ? "درهم" : "AED"}</span>
+                            </div>
+                          );
+                        }
+                        return entries.map(([subtypeValue, qty]) => {
+                          const subLabel = SUBTYPES_BY_CODE[t.testTypeCode]?.find(s => s.value === subtypeValue);
+                          const label = subLabel ? (lang === "ar" ? subLabel.labelAr : subLabel.labelEn) : subtypeValue;
+                          return (
+                            <div key={`${t.testTypeId}-${subtypeValue}`} className="flex items-center justify-between text-xs text-green-700">
+                              <span>• {t.testTypeName} ({label}) × {qty}</span>
+                              <span>{(t.unitPrice * qty).toFixed(0)} {lang === "ar" ? "درهم" : "AED"}</span>
+                            </div>
+                          );
+                        });
+                      }
+                      return (
+                        <div key={t.testTypeId} className="flex items-center justify-between text-xs text-green-700">
+                          <span>• {t.testTypeName} {t.testSubType ? `(${t.testSubType})` : ""} × {t.quantity}</span>
+                          <span>{(t.unitPrice * t.quantity).toFixed(0)} {lang === "ar" ? "درهم" : "AED"}</span>
+                        </div>
+                      );
+                    })}
+                    <div className="border-t border-green-300 pt-1 flex justify-between text-xs font-bold text-green-900">
+                      <span>{lang === "ar" ? "الإجمالي:" : "Total:"}</span>
+                      <span>{totalPrice.toFixed(2)} {lang === "ar" ? "درهم" : "AED"}</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex gap-2 pt-1">
+                  <Button type="submit" className="flex-1" disabled={createOrder.isPending || selectedTests.length === 0}>
+                    {createOrder.isPending
+                      ? (lang === "ar" ? "جاري الإنشاء..." : "Creating...")
+                      : selectedTests.length > 0
+                        ? (lang === "ar" ? `إنشاء أوردر (${selectedTests.length} اختبار)` : `Create Order (${selectedTests.length} test(s))`)
+                        : (lang === "ar" ? "اختر اختباراً أولاً" : "Select a test first")}
+                  </Button>
+                  <Button type="button" variant="outline" onClick={() => { setOpen(false); setForm(emptyForm()); setSelectedTests([]); setSubtypeFor(null); }}>
+                    {t("common.cancel")}
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        {/* Task Filter Buttons */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {[
+            { key: "all", labelAr: "الكل", labelEn: "All", count: orders?.length ?? 0, color: "#3b82f6" },
+            { key: "new", labelAr: "جديدة", labelEn: "New", count: newCount, color: "#ef4444" },
+            { key: "incomplete", labelAr: "قيد التنفيذ", labelEn: "In Progress", count: incompleteCount, color: "#f59e0b" },
+            { key: "done", labelAr: "مُنجزة", labelEn: "Done", count: doneCount, color: "#10b981" },
+          ].map(btn => (
+            <button key={btn.key}
+              onClick={() => setTaskFilter(btn.key as any)}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+              style={{
+                background: taskFilter === btn.key ? btn.color : "#fff",
+                border: `1.5px solid ${taskFilter === btn.key ? btn.color : "#e2e8f0"}`,
+                color: taskFilter === btn.key ? "#fff" : btn.color,
+                boxShadow: taskFilter === btn.key ? `0 2px 8px ${btn.color}30` : "none",
+              }}>
+              {lang === "ar" ? btn.labelAr : btn.labelEn}
+              <span className="px-1.5 py-0.5 rounded-full text-xs font-bold"
+                style={{ background: taskFilter === btn.key ? "rgba(255,255,255,0.25)" : "#f1f5f9", color: taskFilter === btn.key ? "#fff" : "#64748b" }}>
+                {btn.count}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* Search + Sector Filter */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="relative flex-1 min-w-[200px] max-w-sm">
+            <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input placeholder={lang === "ar" ? "بحث بالأوردر أو المقاول..." : "Search by order or contractor..."}
+              className="ps-9" value={search} onChange={(e) => setSearch(e.target.value)} />
+          </div>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-xs text-muted-foreground flex items-center gap-1">
+              <Building2 className="w-3.5 h-3.5" />
+              {lang === "ar" ? "القطاع:" : "Sector:"}
+            </span>
+            <button
+              onClick={() => setSectorFilter("all")}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-all border ${sectorFilter === "all" ? "bg-primary text-primary-foreground border-primary shadow-sm" : "bg-background text-muted-foreground border-border hover:border-primary/50"}`}>
+              {lang === "ar" ? "الكل" : "All"}
+            </button>
+            {sectors.filter((s: any) => s.isActive).map((sec: any) => (
+              <button key={sec.sectorKey}
+                onClick={() => setSectorFilter(sec.sectorKey)}
+                className={`px-3 py-1 rounded-full text-xs font-medium transition-all border ${sectorFilter === sec.sectorKey ? "bg-blue-600 text-white border-blue-600 shadow-sm" : "bg-background text-muted-foreground border-border hover:border-blue-400"}`}>
+                {lang === "ar" ? sec.nameAr : sec.nameEn}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Orders Table */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-semibold">
+              {lang === "ar" ? "الأوردرات" : "Orders"} ({filteredOrders.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            {filteredOrders.length === 0 ? (
+              <div className="p-10 text-center">
+                <Package className="w-10 h-10 mx-auto mb-3 text-muted-foreground opacity-30" />
+                <p className="text-sm text-muted-foreground">
+                  {lang === "ar" ? "لا توجد أوردرات" : "No orders found"}
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b bg-muted/30">
+                      <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{lang === "ar" ? "رقم الأوردر" : "Order #"}</th>
+                      <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{t("table.contractNo")}</th>
+                      <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{t("table.contractor")}</th>
+                      <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{lang === "ar" ? "نوع العينة" : "Type"}</th>
+                      <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{lang === "ar" ? "الاختبارات" : "Tests"}</th>
+                      <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{lang === "ar" ? "الأولوية" : "Priority"}</th>
+                      <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{t("table.status")}</th>
+                      <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{t("table.receivedAt")}</th>
+                      <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{t("table.actions")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredOrders.map((order: any) => (
+                      <tr key={order.id} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
+                        <td className="px-4 py-2.5 font-mono text-xs font-semibold text-primary">{order.orderCode}</td>
+                        <td className="px-4 py-2.5 text-xs font-mono text-muted-foreground">{order.contractNumber ?? "—"}</td>
+                        <td className="px-4 py-2.5 text-xs">{order.contractorName ?? "—"}</td>
+                        <td className="px-4 py-2.5 text-xs">{typeLabel(order.sampleType ?? "")}</td>
+                        <td className="px-4 py-2.5 text-xs">
+                          <Badge variant="outline" className="text-xs">
+                            {(order as any).itemCount ?? "—"} {lang === "ar" ? "اختبار" : "test(s)"}
+                          </Badge>
+                        </td>
+                        <td className="px-4 py-2.5 text-xs">
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            order.priority === "urgent" ? "bg-red-100 text-red-700" :
+                            order.priority === "high" ? "bg-orange-100 text-orange-700" :
+                            order.priority === "normal" ? "bg-blue-100 text-blue-700" :
+                            "bg-gray-100 text-gray-600"
+                          }`}>
+                            {order.priority === "urgent" ? (lang === "ar" ? "عاجل" : "Urgent") :
+                             order.priority === "high" ? (lang === "ar" ? "عالي" : "High") :
+                             order.priority === "normal" ? (lang === "ar" ? "عادي" : "Normal") :
+                             (lang === "ar" ? "منخفض" : "Low")}
+                          </span>
+                        </td>
+                        <td className="px-4 py-2.5"><StatusBadge status={order.status} /></td>
+                        <td className="px-4 py-2.5 text-xs text-muted-foreground">
+                          {new Date(order.createdAt).toLocaleDateString(lang === "ar" ? "ar-AE" : "en-AE")}
+                        </td>
+                        <td className="px-4 py-2.5">
+                          <div className="flex items-center gap-1">
+                            <Button size="sm" variant="ghost" className="h-7 px-2" title={lang === "ar" ? "عرض" : "View"}
+                              onClick={() => setLocation(`/order/${order.id}`)}>
+                              <Eye className="w-3.5 h-3.5" />
+                            </Button>
+                            <Button size="sm" variant="ghost" className="h-7 px-2" title={lang === "ar" ? "طباعة وصل الاستلام" : "Print Receipt"}
+                              onClick={() => window.open(`/print-receipt/${order.sampleId}`, "_blank")}>
+                              <Printer className="w-3.5 h-3.5" />
+                            </Button>
+                            {canEditSample && ["pending", "distributed"].includes(order.status) && (
+                              <Button size="sm" variant="ghost" className="h-7 px-2 text-blue-600 hover:text-blue-700" title={lang === "ar" ? "تعديل" : "Edit"}
+                                onClick={() => handleEditOrder(order)}>
+                                <Pencil className="w-3.5 h-3.5" />
+                              </Button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* ─── Edit Order Dialog ─────────────────────────────────────────────── */}
+      <Dialog open={editOpen} onOpenChange={(v) => { setEditOpen(v); if (!v) setEditingOrder(null); }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{lang === "ar" ? `تعديل الأوردر ${editingOrder?.orderCode ?? ""}` : `Edit Order ${editingOrder?.orderCode ?? ""}`}</DialogTitle>
+          </DialogHeader>
+          {editingOrder && (
+            <div className="space-y-4 py-2">
+              <div className="space-y-1.5">
+                <Label>{lang === "ar" ? "رقم العقد" : "Contract No."}</Label>
+                <Input value={editingOrder.contractNumber} readOnly className="bg-muted text-muted-foreground cursor-default" />
+              </div>
+              <div className="space-y-1.5">
+                <Label>{lang === "ar" ? "اسم المقاول" : "Contractor Name"}</Label>
+                <Input value={editingOrder.contractorName} onChange={e => setEditingOrder(o => o ? { ...o, contractorName: e.target.value } : o)} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>{lang === "ar" ? "الموقع" : "Location"}</Label>
+                <Input value={editingOrder.location} onChange={e => setEditingOrder(o => o ? { ...o, location: e.target.value } : o)} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>{lang === "ar" ? "تاريخ الصب" : "Casting Date"}</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className={`w-full justify-start text-left font-normal ${!editingOrder.castingDate && "text-muted-foreground"}`}>
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {editingOrder.castingDate ? format(editingOrder.castingDate, "dd/MM/yyyy") : (lang === "ar" ? "اختر تاريخ" : "Select date")}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={editingOrder.castingDate}
+                      onSelect={(d) => setEditingOrder(o => o ? { ...o, castingDate: d } : o)}
+                      disabled={(date) => date > new Date()}
+                      captionLayout="dropdown"
+                    />
+                    {editingOrder.castingDate && (
+                      <div className="p-2 border-t">
+                        <Button variant="ghost" size="sm" className="w-full text-muted-foreground" onClick={() => setEditingOrder(o => o ? { ...o, castingDate: undefined } : o)}>
+                          {lang === "ar" ? "مسح التاريخ" : "Clear date"}
+                        </Button>
+                      </div>
+                    )}
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="space-y-1.5">
+                <Label>{lang === "ar" ? "الأولوية" : "Priority"}</Label>
+                <Select value={editingOrder.priority} onValueChange={(v) => setEditingOrder(o => o ? { ...o, priority: v as any } : o)}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">{lang === "ar" ? "منخفض" : "Low"}</SelectItem>
+                    <SelectItem value="normal">{lang === "ar" ? "عادي" : "Normal"}</SelectItem>
+                    <SelectItem value="high">{lang === "ar" ? "عالي" : "High"}</SelectItem>
+                    <SelectItem value="urgent">{lang === "ar" ? "عاجل" : "Urgent"}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label>{lang === "ar" ? "ملاحظات" : "Notes"}</Label>
+                <Textarea value={editingOrder.notes} onChange={e => setEditingOrder(o => o ? { ...o, notes: e.target.value } : o)} rows={3} />
+              </div>
+              {/* QTY per test */}
+              {editingOrder.items.length > 0 && (
+                <div className="space-y-1.5">
+                  <Label>{lang === "ar" ? "كمية كل اختبار" : "Test Quantities (QTY)"}</Label>
+                  <div className="border rounded-md divide-y">
+                    {editingOrder.items.map((item) => (
+                      <div key={item.id} className="flex items-center justify-between px-3 py-2">
+                        <span className="text-sm flex-1">
+                          {item.testTypeName}
+                          {item.testSubType && item.testSubType !== "__multi__" && (
+                            <span className="ml-1 text-xs text-muted-foreground">({item.testSubType})</span>
+                          )}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <Button size="sm" variant="outline" className="h-6 w-6 p-0"
+                            onClick={() => {
+                              const newQty = Math.max(1, item.quantity - 1);
+                              setEditingOrder(o => o ? { ...o, items: o.items.map(i => i.id === item.id ? { ...i, quantity: newQty } : i) } : o);
+                              updateItemQty.mutate({ itemId: item.id, quantity: newQty });
+                            }}>−</Button>
+                          <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+                          <Button size="sm" variant="outline" className="h-6 w-6 p-0"
+                            onClick={() => {
+                              const newQty = item.quantity + 1;
+                              setEditingOrder(o => o ? { ...o, items: o.items.map(i => i.id === item.id ? { ...i, quantity: newQty } : i) } : o);
+                              updateItemQty.mutate({ itemId: item.id, quantity: newQty });
+                            }}>+</Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="flex gap-2 pt-2">
+                <Button className="flex-1" disabled={updateOrder.isPending}
+                  onClick={() => updateOrder.mutate({
+                    orderId: editingOrder.id,
+                    contractorName: editingOrder.contractorName,
+                    location: editingOrder.location,
+                    notes: editingOrder.notes,
+                    priority: editingOrder.priority,
+                    castingDate: editingOrder.castingDate ? format(editingOrder.castingDate, "yyyy-MM-dd") : null,
+                  })}>
+                  {updateOrder.isPending ? (lang === "ar" ? "جاري الحفظ..." : "Saving...") : (lang === "ar" ? "حفظ التعديلات" : "Save Changes")}
+                </Button>
+                <Button variant="outline" onClick={() => { setEditOpen(false); setEditingOrder(null); }}>
+                  {lang === "ar" ? "إلغاء" : "Cancel"}
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </DashboardLayout>
+  );
+}

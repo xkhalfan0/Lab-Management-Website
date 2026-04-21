@@ -1,0 +1,9 @@
+{
+  "query": "\nUPDATE users SET passwordHash = '$2b$10$J1spgl.2Awf41YsYOyrr6eJtCidNOFCPz2TF8sEMoEeSdBeQGbWoe' WHERE username = 'reception';\nUPDATE users SET passwordHash = '$2b$10$./Kk775NyS.svLeeXRnrCORt9esJmlLYWyF4duRgkOx114L9CB1Ku' WHERE username = 'supervisor';\nUPDATE users SET passwordHash = '$2b$10$ja.62A1Og7xSC2VHcFoevei32Jw0Fkl69NyBz7TlZHEzrwJXhV4Ga' WHERE username = 'tech';\nUPDATE users SET passwordHash = '$2b$10$oh9OafzheKzs447/KEJk8uZ5bCQOameyt/1V3EYnkozvcrcdWhVsm' WHERE username = 'qcc';\nUPDATE users SET passwordHash = '$2b$10$MZGDycwXcBrmstqUqFPUT./ify0O5uikhXhlAyzMLiWx5OhmQ7NQW' WHERE username = 'accountant';\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nUPDATE users SET passwordHash = '$2b$10$J1spgl.2Awf41YsYOyrr6eJtCidNOFCPz2TF8sEMoEeSdBeQGbWoe' WHERE username = 'reception';\nUPDATE users SET passwordHash = '$2b$10$./Kk775NyS.svLeeXRnrCORt9esJmlLYWyF4duRgkOx114L9CB1Ku' WHERE username = 'supervisor';\nUPDATE users SET passwordHash = '$2b$10$ja.62A1Og7xSC2VHcFoevei32Jw0Fkl69NyBz7TlZHEzrwJXhV4Ga' WHERE username = 'tech';\nUPDATE users SET passwordHash = '$2b$10$oh9OafzheKzs447/KEJk8uZ5bCQOameyt/1V3EYnkozvcrcdWhVsm' WHERE username = 'qcc';\nUPDATE users SET passwordHash = '$2b$10$MZGDycwXcBrmstqUqFPUT./ify0O5uikhXhlAyzMLiWx5OhmQ7NQW' WHERE username = 'accountant';\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2481
+}

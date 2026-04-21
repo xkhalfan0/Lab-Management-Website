@@ -1,0 +1,52 @@
+{
+  "query": "SELECT id, username, name, role FROM users ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, username, name, role FROM users ORDER BY id;",
+  "rows": [
+    {
+      "id": "1",
+      "username": "admin",
+      "name": "kh al",
+      "role": "admin"
+    },
+    {
+      "id": "990792",
+      "username": "استقبال",
+      "name": "موظف الاستقبال",
+      "role": "reception"
+    },
+    {
+      "id": "990793",
+      "username": "توزيع",
+      "name": "موظف التوزيع",
+      "role": "sample_manager"
+    },
+    {
+      "id": "990794",
+      "username": "فني",
+      "name": "فني المختبر",
+      "role": "technician"
+    },
+    {
+      "id": "990795",
+      "username": "مشرف",
+      "name": "مشرف المختبر",
+      "role": "lab_manager"
+    },
+    {
+      "id": "990796",
+      "username": "جودة",
+      "name": "مراقب الجودة",
+      "role": "qc_inspector"
+    },
+    {
+      "id": "990797",
+      "username": "محاسب",
+      "name": "محاسب المختبر",
+      "role": "accountant"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tusername\tname\trole\n1\tadmin\tkh al\tadmin\n990792\tاستقبال\tموظف الاستقبال\treception\n990793\tتوزيع\tموظف التوزيع\tsample_manager\n990794\tفني\tفني المختبر\ttechnician\n990795\tمشرف\tمشرف المختبر\tlab_manager\n990796\tجودة\tمراقب الجودة\tqc_inspector\n990797\tمحاسب\tمحاسب المختبر\taccountant\n",
+  "stderr": "",
+  "execution_time_ms": 1590
+}

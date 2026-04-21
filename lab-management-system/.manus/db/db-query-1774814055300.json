@@ -1,0 +1,70 @@
+{
+  "query": "\nSELECT id, nameAr, contractorCode FROM contractors ORDER BY id;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nSELECT id, nameAr, contractorCode FROM contractors ORDER BY id;\n",
+  "rows": [
+    {
+      "id": "50001",
+      "nameAr": "شركة الإنشاءات المتحدة",
+      "contractorCode": "CON-T001"
+    },
+    {
+      "id": "60001",
+      "nameAr": "شركة نايل بن حرمل للمقاولات",
+      "contractorCode": "CONT-83459"
+    },
+    {
+      "id": "120001",
+      "nameAr": "شركة الراشد للطرق",
+      "contractorCode": "CON-R001"
+    },
+    {
+      "id": "120002",
+      "nameAr": "شركة الخليج للجسور",
+      "contractorCode": "CON-R002"
+    },
+    {
+      "id": "120003",
+      "nameAr": "شركة المباني الوطنية",
+      "contractorCode": "CON-B001"
+    },
+    {
+      "id": "120004",
+      "nameAr": "مؤسسة الإنشاءات الحديثة",
+      "contractorCode": "CON-B002"
+    },
+    {
+      "id": "120005",
+      "nameAr": "شركة أساتذة البنية التحتية",
+      "contractorCode": "CON-I001"
+    },
+    {
+      "id": "120006",
+      "nameAr": "شركة التعمير للبنية التحتية",
+      "contractorCode": "CON-I002"
+    },
+    {
+      "id": "120007",
+      "nameAr": "مجموعة البناء الصناعي",
+      "contractorCode": "CON-IN001"
+    },
+    {
+      "id": "120008",
+      "nameAr": "شركة الأعمال الثقيلة",
+      "contractorCode": "CON-IN002"
+    },
+    {
+      "id": "120009",
+      "nameAr": "شركة الإسكان للتطوير",
+      "contractorCode": "CON-H001"
+    },
+    {
+      "id": "120010",
+      "nameAr": "مؤسسة الإسكان المستقبلي",
+      "contractorCode": "CON-H002"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tnameAr\tcontractorCode\n50001\tشركة الإنشاءات المتحدة\tCON-T001\n60001\tشركة نايل بن حرمل للمقاولات\tCONT-83459\n120001\tشركة الراشد للطرق\tCON-R001\n120002\tشركة الخليج للجسور\tCON-R002\n120003\tشركة المباني الوطنية\tCON-B001\n120004\tمؤسسة الإنشاءات الحديثة\tCON-B002\n120005\tشركة أساتذة البنية التحتية\tCON-I001\n120006\tشركة التعمير للبنية التحتية\tCON-I002\n120007\tمجموعة البناء الصناعي\tCON-IN001\n120008\tشركة الأعمال الثقيلة\tCON-IN002\n120009\tشركة الإسكان للتطوير\tCON-H001\n120010\tمؤسسة الإسكان المستقبلي\tCON-H002\n",
+  "stderr": "",
+  "execution_time_ms": 1575
+}

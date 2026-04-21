@@ -1,0 +1,74 @@
+{
+  "query": "SELECT id, sampleCode, sampleType, status, contractorName, sector FROM samples ORDER BY id DESC LIMIT 15;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, sampleCode, sampleType, status, contractorName, sector FROM samples ORDER BY id DESC LIMIT 15;",
+  "rows": [
+    {
+      "id": "70008",
+      "sampleCode": "LAB-2026-T008",
+      "sampleType": "soil",
+      "status": "received",
+      "contractorName": "شركة الإنشاءات المتحدة",
+      "sector": "sector_1"
+    },
+    {
+      "id": "70007",
+      "sampleCode": "LAB-2026-T007",
+      "sampleType": "concrete",
+      "status": "distributed",
+      "contractorName": "شركة الإنشاءات المتحدة",
+      "sector": "sector_1"
+    },
+    {
+      "id": "70006",
+      "sampleCode": "LAB-2026-T006",
+      "sampleType": "asphalt",
+      "status": "processed",
+      "contractorName": "شركة الإنشاءات المتحدة",
+      "sector": "sector_1"
+    },
+    {
+      "id": "70005",
+      "sampleCode": "LAB-2026-T005",
+      "sampleType": "aggregates",
+      "status": "reviewed",
+      "contractorName": "شركة الإنشاءات المتحدة",
+      "sector": "sector_1"
+    },
+    {
+      "id": "70004",
+      "sampleCode": "LAB-2026-T004",
+      "sampleType": "steel",
+      "status": "qc_passed",
+      "contractorName": "شركة الإنشاءات المتحدة",
+      "sector": "sector_1"
+    },
+    {
+      "id": "70003",
+      "sampleCode": "LAB-2026-T003",
+      "sampleType": "soil",
+      "status": "qc_passed",
+      "contractorName": "شركة الإنشاءات المتحدة",
+      "sector": "sector_1"
+    },
+    {
+      "id": "70002",
+      "sampleCode": "LAB-2026-T002",
+      "sampleType": "concrete",
+      "status": "qc_failed",
+      "contractorName": "شركة الإنشاءات المتحدة",
+      "sector": "sector_1"
+    },
+    {
+      "id": "70001",
+      "sampleCode": "LAB-2026-T001",
+      "sampleType": "concrete",
+      "status": "qc_passed",
+      "contractorName": "شركة الإنشاءات المتحدة",
+      "sector": "sector_1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tsampleCode\tsampleType\tstatus\tcontractorName\tsector\n70008\tLAB-2026-T008\tsoil\treceived\tشركة الإنشاءات المتحدة\tsector_1\n70007\tLAB-2026-T007\tconcrete\tdistributed\tشركة الإنشاءات المتحدة\tsector_1\n70006\tLAB-2026-T006\tasphalt\tprocessed\tشركة الإنشاءات المتحدة\tsector_1\n70005\tLAB-2026-T005\taggregates\treviewed\tشركة الإنشاءات المتحدة\tsector_1\n70004\tLAB-2026-T004\tsteel\tqc_passed\tشركة الإنشاءات المتحدة\tsector_1\n70003\tLAB-2026-T003\tsoil\tqc_passed\tشركة الإنشاءات المتحدة\tsector_1\n70002\tLAB-2026-T002\tconcrete\tqc_failed\tشركة الإنشاءات المتحدة\tsector_1\n70001\tLAB-2026-T001\tconcrete\tqc_passed\tشركة الإنشاءات المتحدة\tsector_1\n",
+  "stderr": "",
+  "execution_time_ms": 2822
+}

@@ -1,0 +1,595 @@
+{
+  "query": "SELECT id, code, nameEn, nameAr, category, unit, unitPrice FROM test_types ORDER BY category, code;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, code, nameEn, nameAr, category, unit, unitPrice FROM test_types ORDER BY category, code;",
+  "rows": [
+    {
+      "id": "30040",
+      "code": "CEM_SETTING_TIME",
+      "nameEn": "OPC Cement - Setting Time (Initial & Final)",
+      "nameAr": "أسمنت OPC - زمن الشك الابتدائي والنهائي",
+      "category": "concrete",
+      "unit": "min",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "30011",
+      "code": "CONC_BEAM_LARGE",
+      "nameEn": "Compressive Strength of Concrete Beams (15x15x75)",
+      "nameAr": "مقاومة الانحناء لكمرات الخرسانة 15×15×75",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "30010",
+      "code": "CONC_BEAM_SMALL",
+      "nameEn": "Compressive Strength of Concrete Beams (10x10x50)",
+      "nameAr": "مقاومة الانحناء لكمرات الخرسانة 10×10×50",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "30004",
+      "code": "CONC_BLOCK_HOLLOW",
+      "nameEn": "Compressive Strength of Hollow Blocks (20cm)",
+      "nameAr": "مقاومة ضغط البلوك المجوف 20سم",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "180.00"
+    },
+    {
+      "id": "30003",
+      "code": "CONC_BLOCK_SOLID",
+      "nameEn": "Compressive Strength of Solid Blocks (10cm)",
+      "nameAr": "مقاومة ضغط البلوك الصلب 10سم",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "180.00"
+    },
+    {
+      "id": "30005",
+      "code": "CONC_BLOCK_THERMAL",
+      "nameEn": "Compressive Strength of Thermal Blocks (25cm)",
+      "nameAr": "مقاومة ضغط البلوك الحراري 25سم",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "180.00"
+    },
+    {
+      "id": "30002",
+      "code": "CONC_CORE",
+      "nameEn": "Compressive Strength of Concrete Cores",
+      "nameAr": "مقاومة ضغط كور الخرسانة",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "30001",
+      "code": "CONC_CUBE",
+      "nameEn": "Compressive Strength of Concrete Cubes",
+      "nameAr": "مقاومة ضغط مكعبات الخرسانة",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "90005",
+      "code": "CONC_FOAM_CUBE",
+      "nameEn": "Foamed Concrete Compressive Strength",
+      "nameAr": "مقاومة ضغط الخرسانة الرغوية",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90006",
+      "code": "CONC_FOAM_DENSITY",
+      "nameEn": "Foamed Concrete Fresh Density",
+      "nameAr": "كثافة الخرسانة الرغوية الطازجة",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "30006",
+      "code": "CONC_INTERLOCK_6",
+      "nameEn": "Compressive Strength of Interlocking Tiles (6cm)",
+      "nameAr": "مقاومة ضغط الإنترلوكينج 6سم",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "160.00"
+    },
+    {
+      "id": "30007",
+      "code": "CONC_INTERLOCK_8",
+      "nameEn": "Compressive Strength of Interlocking Tiles (8cm)",
+      "nameAr": "مقاومة ضغط الإنترلوكينج 8سم",
+      "category": "concrete",
+      "unit": "N/mm²",
+      "unitPrice": "160.00"
+    },
+    {
+      "id": "30009",
+      "code": "CONC_MIX_GRAD",
+      "nameEn": "Concrete Mix Aggregate Gradation",
+      "nameAr": "تدرج ركام الخلطة الخرسانية",
+      "category": "concrete",
+      "unit": "%",
+      "unitPrice": "250.00"
+    },
+    {
+      "id": "30008",
+      "code": "CONC_MORTAR_SAND",
+      "nameEn": "Sieve Analysis of Sand for Mortar/Plaster",
+      "nameAr": "تحليل منخل رمل الملاط والبلاستر",
+      "category": "concrete",
+      "unit": "%",
+      "unitPrice": "120.00"
+    },
+    {
+      "id": "30013",
+      "code": "SOIL_ATTERBERG",
+      "nameEn": "Atterberg Limits (LL, PL, PI)",
+      "nameAr": "حدود أتربرج (حد السيولة والليونة ومؤشر اللدونة)",
+      "category": "soil",
+      "unit": "%",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "30015",
+      "code": "SOIL_CBR",
+      "nameEn": "California Bearing Ratio (CBR)",
+      "nameAr": "نسبة تحمل كاليفورنيا CBR",
+      "category": "soil",
+      "unit": "%",
+      "unitPrice": "400.00"
+    },
+    {
+      "id": "30016",
+      "code": "SOIL_FIELD_DENSITY",
+      "nameEn": "Field Density Test (Sand Replacement)",
+      "nameAr": "اختبار الكثافة الحقلية (طريقة الرمل)",
+      "category": "soil",
+      "unit": "Mg/m³",
+      "unitPrice": "120.00"
+    },
+    {
+      "id": "30014",
+      "code": "SOIL_PROCTOR",
+      "nameEn": "Proctor Compaction Test (Modified)",
+      "nameAr": "اختبار الدمك بروكتور المعدل",
+      "category": "soil",
+      "unit": "Mg/m³",
+      "unitPrice": "350.00"
+    },
+    {
+      "id": "30012",
+      "code": "SOIL_SIEVE",
+      "nameEn": "Sieve Analysis of Soil",
+      "nameAr": "تحليل منخل التربة",
+      "category": "soil",
+      "unit": "%",
+      "unitPrice": "130.00"
+    },
+    {
+      "id": "30027",
+      "code": "STEEL_ANCHOR_88",
+      "nameEn": "Tensile Test - Anchor Bolts (BS EN ISO 898-1 Grade 8.8)",
+      "nameAr": "اختبار شد أنكر بولت (BS EN ISO 898-1 Grade 8.8)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "350.00"
+    },
+    {
+      "id": "90009",
+      "code": "STEEL_ANCHOR_M12",
+      "nameEn": "Anchor Bolt Pull-out Test M12",
+      "nameAr": "اختبار سحب أنكر بولت M12",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90010",
+      "code": "STEEL_ANCHOR_M16",
+      "nameEn": "Anchor Bolt Pull-out Test M16",
+      "nameAr": "اختبار سحب أنكر بولت M16",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90011",
+      "code": "STEEL_ANCHOR_M20",
+      "nameEn": "Anchor Bolt Pull-out Test M20",
+      "nameAr": "اختبار سحب أنكر بولت M20",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90012",
+      "code": "STEEL_ANCHOR_M24",
+      "nameEn": "Anchor Bolt Pull-out Test M24",
+      "nameAr": "اختبار سحب أنكر بولت M24",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90013",
+      "code": "STEEL_ANCHOR_M30",
+      "nameEn": "Anchor Bolt Pull-out Test M30",
+      "nameAr": "اختبار سحب أنكر بولت M30",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "60002",
+      "code": "STEEL_BEND_ASTM",
+      "nameEn": "Bend & Rebend Test (ASTM A615)",
+      "nameAr": "اختبار الانحناء والانحناء العكسي (ASTM A615)",
+      "category": "steel",
+      "unit": "Pass/Fail",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "60001",
+      "code": "STEEL_BEND_BS4449",
+      "nameEn": "Bend & Rebend Test (BS 4449)",
+      "nameAr": "اختبار الانحناء والانحناء العكسي (BS 4449)",
+      "category": "steel",
+      "unit": "Pass/Fail",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "30023",
+      "code": "STEEL_PIPE_A53",
+      "nameEn": "Tensile Test - Steel Pipes (ASTM A53 Grade B)",
+      "nameAr": "اختبار شد أنابيب الصلب (ASTM A53 Grade B)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "280.00"
+    },
+    {
+      "id": "30018",
+      "code": "STEEL_REBAR_A615",
+      "nameEn": "Tensile Test - Rebar (ASTM A615 Grade 60)",
+      "nameAr": "اختبار شد حديد التسليح (ASTM A615 Grade 60)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "300.00"
+    },
+    {
+      "id": "30017",
+      "code": "STEEL_REBAR_BS4449",
+      "nameEn": "Tensile Test - Deformed Rebar (BS 4449-2005 Grade B500B)",
+      "nameAr": "اختبار شد حديد التسليح المضلع (BS 4449-2005 Grade B500B)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "300.00"
+    },
+    {
+      "id": "30019",
+      "code": "STEEL_STRUCT_A36",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A36)",
+      "nameAr": "اختبار شد الصلب الإنشائي (ASTM A36)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "280.00"
+    },
+    {
+      "id": "30021",
+      "code": "STEEL_STRUCT_A500",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A500 Grade B)",
+      "nameAr": "اختبار شد الصلب الإنشائي (ASTM A500 Grade B)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "280.00"
+    },
+    {
+      "id": "30022",
+      "code": "STEEL_STRUCT_A501",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A501 Grade A)",
+      "nameAr": "اختبار شد الصلب الإنشائي (ASTM A501 Grade A)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "280.00"
+    },
+    {
+      "id": "30020",
+      "code": "STEEL_STRUCT_A572",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A572 Grade 50)",
+      "nameAr": "اختبار شد الصلب الإنشائي (ASTM A572 Grade 50)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "280.00"
+    },
+    {
+      "id": "30024",
+      "code": "STEEL_STRUCT_A653",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A653 Grade 340)",
+      "nameAr": "اختبار شد الصلب الإنشائي (ASTM A653 Grade 340)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "280.00"
+    },
+    {
+      "id": "30025",
+      "code": "STEEL_STRUCT_S275",
+      "nameEn": "Tensile Test - Structural Steel (BS EN 10025 S275 JR)",
+      "nameAr": "اختبار شد الصلب الإنشائي (BS EN 10025 S275 JR)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "280.00"
+    },
+    {
+      "id": "30026",
+      "code": "STEEL_STRUCT_S355",
+      "nameEn": "Tensile Test - Structural Steel (BS EN 10025 S355 JR)",
+      "nameAr": "اختبار شد الصلب الإنشائي (BS EN 10025 S355 JR)",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "280.00"
+    },
+    {
+      "id": "90008",
+      "code": "STEEL_STRUCTURAL",
+      "nameEn": "Structural Steel Tensile Test",
+      "nameAr": "اختبار شد الصلب الإنشائي",
+      "category": "steel",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "30035",
+      "code": "ASPH_ACBC",
+      "nameEn": "Hot Mix Asphalt - ACBC (Bitumen + Gradation + Marshall)",
+      "nameAr": "خلطة أسفلت ACBC (بيتومين + تدرج + مارشال)",
+      "category": "asphalt",
+      "unit": "N",
+      "unitPrice": "600.00"
+    },
+    {
+      "id": "30034",
+      "code": "ASPH_ACWC",
+      "nameEn": "Hot Mix Asphalt - ACWC (Bitumen + Gradation + Marshall)",
+      "nameAr": "خلطة أسفلت ACWC (بيتومين + تدرج + مارشال)",
+      "category": "asphalt",
+      "unit": "N",
+      "unitPrice": "600.00"
+    },
+    {
+      "id": "60004",
+      "code": "ASPH_BITUMEN_EXTRACT",
+      "nameEn": "Bitumen Content by Extraction",
+      "nameAr": "محتوى البيتومين بالاستخلاص",
+      "category": "asphalt",
+      "unit": "%",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "30037",
+      "code": "ASPH_CORE",
+      "nameEn": "Asphalt Core - Density & Compaction",
+      "nameAr": "كور الأسفلت - الكثافة ونسبة الدمك",
+      "category": "asphalt",
+      "unit": "%",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "90015",
+      "code": "ASPH_EXTRACTED_SIEVE_ACBC",
+      "nameEn": "Extracted Aggregate Sieve Analysis (ACBC)",
+      "nameAr": "تحليل منخل الركام المستخلص (ACBC)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90014",
+      "code": "ASPH_EXTRACTED_SIEVE_ACWC",
+      "nameEn": "Extracted Aggregate Sieve Analysis (ACWC)",
+      "nameAr": "تحليل منخل الركام المستخلص (ACWC)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90016",
+      "code": "ASPH_EXTRACTED_SIEVE_DBM",
+      "nameEn": "Extracted Aggregate Sieve Analysis (DBM)",
+      "nameAr": "تحليل منخل الركام المستخلص (DBM)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "30036",
+      "code": "ASPH_HOTBIN",
+      "nameEn": "Hot Bin Gradation",
+      "nameAr": "تدرج الخلطة الساخنة (Hot Bin)",
+      "category": "asphalt",
+      "unit": "%",
+      "unitPrice": "250.00"
+    },
+    {
+      "id": "90004",
+      "code": "ASPH_HOTBIN_ACBC",
+      "nameEn": "Hot Bin Gradation - ACBC",
+      "nameAr": "تدرج الحار - طبقة أساس ACBC",
+      "category": "asphalt",
+      "unit": "%",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "90003",
+      "code": "ASPH_HOTBIN_ACWC",
+      "nameEn": "Hot Bin Gradation - ACWC",
+      "nameAr": "تدرج الحار - طبقة رابطة ACWC",
+      "category": "asphalt",
+      "unit": "%",
+      "unitPrice": "100.00"
+    },
+    {
+      "id": "30039",
+      "code": "ASPH_PRIME_MC70",
+      "nameEn": "Rate of Spray - Prime Coat (MC-70)",
+      "nameAr": "معدل رش طبقة التنشيط (MC-70)",
+      "category": "asphalt",
+      "unit": "L/m²",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "90019",
+      "code": "ASPH_SPRAY_CRS1",
+      "nameEn": "Tack Coat Spray Rate (CRS-1)",
+      "nameAr": "معدل رش طبقة التعلق (CRS-1)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90022",
+      "code": "ASPH_SPRAY_MC250",
+      "nameEn": "Prime Coat Spray Rate (MC-250)",
+      "nameAr": "معدل رش طبقة التأسيس (MC-250)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90020",
+      "code": "ASPH_SPRAY_MC30",
+      "nameEn": "Prime Coat Spray Rate (MC-30)",
+      "nameAr": "معدل رش طبقة التأسيس (MC-30)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90021",
+      "code": "ASPH_SPRAY_MC70",
+      "nameEn": "Prime Coat Spray Rate (MC-70)",
+      "nameAr": "معدل رش طبقة التأسيس (MC-70)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90017",
+      "code": "ASPH_SPRAY_SS1",
+      "nameEn": "Tack Coat Spray Rate (SS-1)",
+      "nameAr": "معدل رش طبقة التعلق (SS-1)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "90018",
+      "code": "ASPH_SPRAY_SS1H",
+      "nameEn": "Tack Coat Spray Rate (SS-1h)",
+      "nameAr": "معدل رش طبقة التعلق (SS-1h)",
+      "category": "asphalt",
+      "unit": "N/mm²",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "30038",
+      "code": "ASPH_TACK_SS1H",
+      "nameEn": "Rate of Spray - Tack Coat (SS1H)",
+      "nameAr": "معدل رش طبقة الربط (SS1H)",
+      "category": "asphalt",
+      "unit": "L/m²",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "60005",
+      "code": "AGG_CRUSHING",
+      "nameEn": "Aggregate Crushing Value (ACV)",
+      "nameAr": "قيمة سحق الركام (ACV)",
+      "category": "aggregates",
+      "unit": "%",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "30033",
+      "code": "AGG_ELONGATION",
+      "nameEn": "Elongation Index",
+      "nameAr": "مؤشر الاستطالة",
+      "category": "aggregates",
+      "unit": "%",
+      "unitPrice": "140.00"
+    },
+    {
+      "id": "30032",
+      "code": "AGG_FLAKINESS",
+      "nameEn": "Flakiness Index",
+      "nameAr": "مؤشر التفلطح",
+      "category": "aggregates",
+      "unit": "%",
+      "unitPrice": "140.00"
+    },
+    {
+      "id": "60006",
+      "code": "AGG_IMPACT",
+      "nameEn": "Aggregate Impact Value (AIV)",
+      "nameAr": "قيمة صدم الركام (AIV)",
+      "category": "aggregates",
+      "unit": "%",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "60007",
+      "code": "AGG_LA_ABRASION",
+      "nameEn": "Los Angeles Abrasion Test",
+      "nameAr": "اختبار تآكل لوس أنجلوس",
+      "category": "aggregates",
+      "unit": "%",
+      "unitPrice": "0.00"
+    },
+    {
+      "id": "30030",
+      "code": "AGG_SG_COARSE",
+      "nameEn": "Specific Gravity & Water Absorption - Coarse",
+      "nameAr": "الكثافة النوعية وامتصاص الماء - ركام خشن",
+      "category": "aggregates",
+      "unit": "Mg/m³",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "30031",
+      "code": "AGG_SG_FINE",
+      "nameEn": "Specific Gravity & Water Absorption - Fine",
+      "nameAr": "الكثافة النوعية وامتصاص الماء - ركام ناعم",
+      "category": "aggregates",
+      "unit": "Mg/m³",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "30028",
+      "code": "AGG_SIEVE_COARSE",
+      "nameEn": "Sieve Analysis of Coarse Aggregates",
+      "nameAr": "تحليل منخل الركام الخشن",
+      "category": "aggregates",
+      "unit": "%",
+      "unitPrice": "130.00"
+    },
+    {
+      "id": "30029",
+      "code": "AGG_SIEVE_FINE",
+      "nameEn": "Sieve Analysis of Fine Aggregates",
+      "nameAr": "تحليل منخل الركام الناعم",
+      "category": "aggregates",
+      "unit": "%",
+      "unitPrice": "130.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcode\tnameEn\tnameAr\tcategory\tunit\tunitPrice\n30040\tCEM_SETTING_TIME\tOPC Cement - Setting Time (Initial & Final)\tأسمنت OPC - زمن الشك الابتدائي والنهائي\tconcrete\tmin\t200.00\n30011\tCONC_BEAM_LARGE\tCompressive Strength of Concrete Beams (15x15x75)\tمقاومة الانحناء لكمرات الخرسانة 15×15×75\tconcrete\tN/mm²\t200.00\n30010\tCONC_BEAM_SMALL\tCompressive Strength of Concrete Beams (10x10x50)\tمقاومة الانحناء لكمرات الخرسانة 10×10×50\tconcrete\tN/mm²\t200.00\n30004\tCONC_BLOCK_HOLLOW\tCompressive Strength of Hollow Blocks (20cm)\tمقاومة ضغط البلوك المجوف 20سم\tconcrete\tN/mm²\t180.00\n30003\tCONC_BLOCK_SOLID\tCompressive Strength of Solid Blocks (10cm)\tمقاومة ضغط البلوك الصلب 10سم\tconcrete\tN/mm²\t180.00\n30005\tCONC_BLOCK_THERMAL\tCompressive Strength of Thermal Blocks (25cm)\tمقاومة ضغط البلوك الحراري 25سم\tconcrete\tN/mm²\t180.00\n30002\tCONC_CORE\tCompressive Strength of Concrete Cores\tمقاومة ضغط كور الخرسانة\tconcrete\tN/mm²\t200.00\n30001\tCONC_CUBE\tCompressive Strength of Concrete Cubes\tمقاومة ضغط مكعبات الخرسانة\tconcrete\tN/mm²\t150.00\n90005\tCONC_FOAM_CUBE\tFoamed Concrete Compressive Strength\tمقاومة ضغط الخرسانة الرغوية\tconcrete\tN/mm²\t0.00\n90006\tCONC_FOAM_DENSITY\tFoamed Concrete Fresh Density\tكثافة الخرسانة الرغوية الطازجة\tconcrete\tN/mm²\t0.00\n30006\tCONC_INTERLOCK_6\tCompressive Strength of Interlocking Tiles (6cm)\tمقاومة ضغط الإنترلوكينج 6سم\tconcrete\tN/mm²\t160.00\n30007\tCONC_INTERLOCK_8\tCompressive Strength of Interlocking Tiles (8cm)\tمقاومة ضغط الإنترلوكينج 8سم\tconcrete\tN/mm²\t160.00\n30009\tCONC_MIX_GRAD\tConcrete Mix Aggregate Gradation\tتدرج ركام الخلطة الخرسانية\tconcrete\t%\t250.00\n30008\tCONC_MORTAR_SAND\tSieve Analysis of Sand for Mortar/Plaster\tتحليل منخل رمل الملاط والبلاستر\tconcrete\t%\t120.00\n30013\tSOIL_ATTERBERG\tAtterberg Limits (LL, PL, PI)\tحدود أتربرج (حد السيولة والليونة ومؤشر اللدونة)\tsoil\t%\t150.00\n30015\tSOIL_CBR\tCalifornia Bearing Ratio (CBR)\tنسبة تحمل كاليفورنيا CBR\tsoil\t%\t400.00\n30016\tSOIL_FIELD_DENSITY\tField Density Test (Sand Replacement)\tاختبار الكثافة الحقلية (طريقة الرمل)\tsoil\tMg/m³\t120.00\n30014\tSOIL_PROCTOR\tProctor Compaction Test (Modified)\tاختبار الدمك بروكتور المعدل\tsoil\tMg/m³\t350.00\n30012\tSOIL_SIEVE\tSieve Analysis of Soil\tتحليل منخل التربة\tsoil\t%\t130.00\n30027\tSTEEL_ANCHOR_88\tTensile Test - Anchor Bolts (BS EN ISO 898-1 Grade 8.8)\tاختبار شد أنكر بولت (BS EN ISO 898-1 Grade 8.8)\tsteel\tN/mm²\t350.00\n90009\tSTEEL_ANCHOR_M12\tAnchor Bolt Pull-out Test M12\tاختبار سحب أنكر بولت M12\tsteel\tN/mm²\t0.00\n90010\tSTEEL_ANCHOR_M16\tAnchor Bolt Pull-out Test M16\tاختبار سحب أنكر بولت M16\tsteel\tN/mm²\t0.00\n90011\tSTEEL_ANCHOR_M20\tAnchor Bolt Pull-out Test M20\tاختبار سحب أنكر بولت M20\tsteel\tN/mm²\t0.00\n90012\tSTEEL_ANCHOR_M24\tAnchor Bolt Pull-out Test M24\tاختبار سحب أنكر بولت M24\tsteel\tN/mm²\t0.00\n90013\tSTEEL_ANCHOR_M30\tAnchor Bolt Pull-out Test M30\tاختبار سحب أنكر بولت M30\tsteel\tN/mm²\t0.00\n60002\tSTEEL_BEND_ASTM\tBend & Rebend Test (ASTM A615)\tاختبار الانحناء والانحناء العكسي (ASTM A615)\tsteel\tPass/Fail\t0.00\n60001\tSTEEL_BEND_BS4449\tBend & Rebend Test (BS 4449)\tاختبار الانحناء والانحناء العكسي (BS 4449)\tsteel\tPass/Fail\t0.00\n30023\tSTEEL_PIPE_A53\tTensile Test - Steel Pipes (ASTM A53 Grade B)\tاختبار شد أنابيب الصلب (ASTM A53 Grade B)\tsteel\tN/mm²\t280.00\n30018\tSTEEL_REBAR_A615\tTensile Test - Rebar (ASTM A615 Grade 60)\tاختبار شد حديد التسليح (ASTM A615 Grade 60)\tsteel\tN/mm²\t300.00\n30017\tSTEEL_REBAR_BS4449\tTensile Test - Deformed Rebar (BS 4449-2005 Grade B500B)\tاختبار شد حديد التسليح المضلع (BS 4449-2005 Grade B500B)\tsteel\tN/mm²\t300.00\n30019\tSTEEL_STRUCT_A36\tTensile Test - Structural Steel (ASTM A36)\tاختبار شد الصلب الإنشائي (ASTM A36)\tsteel\tN/mm²\t280.00\n30021\tSTEEL_STRUCT_A500\tTensile Test - Structural Steel (ASTM A500 Grade B)\tاختبار شد الصلب الإنشائي (ASTM A500 Grade B)\tsteel\tN/mm²\t280.00\n30022\tSTEEL_STRUCT_A501\tTensile Test - Structural Steel (ASTM A501 Grade A)\tاختبار شد الصلب الإنشائي (ASTM A501 Grade A)\tsteel\tN/mm²\t280.00\n30020\tSTEEL_STRUCT_A572\tTensile Test - Structural Steel (ASTM A572 Grade 50)\tاختبار شد الصلب الإنشائي (ASTM A572 Grade 50)\tsteel\tN/mm²\t280.00\n30024\tSTEEL_STRUCT_A653\tTensile Test - Structural Steel (ASTM A653 Grade 340)\tاختبار شد الصلب الإنشائي (ASTM A653 Grade 340)\tsteel\tN/mm²\t280.00\n30025\tSTEEL_STRUCT_S275\tTensile Test - Structural Steel (BS EN 10025 S275 JR)\tاختبار شد الصلب الإنشائي (BS EN 10025 S275 JR)\tsteel\tN/mm²\t280.00\n30026\tSTEEL_STRUCT_S355\tTensile Test - Structural Steel (BS EN 10025 S355 JR)\tاختبار شد الصلب الإنشائي (BS EN 10025 S355 JR)\tsteel\tN/mm²\t280.00\n90008\tSTEEL_STRUCTURAL\tStructural Steel Tensile Test\tاختبار شد الصلب الإنشائي\tsteel\tN/mm²\t0.00\n30035\tASPH_ACBC\tHot Mix Asphalt - ACBC (Bitumen + Gradation + Marshall)\tخلطة أسفلت ACBC (بيتومين + تدرج + مارشال)\tasphalt\tN\t600.00\n30034\tASPH_ACWC\tHot Mix Asphalt - ACWC (Bitumen + Gradation + Marshall)\tخلطة أسفلت ACWC (بيتومين + تدرج + مارشال)\tasphalt\tN\t600.00\n60004\tASPH_BITUMEN_EXTRACT\tBitumen Content by Extraction\tمحتوى البيتومين بالاستخلاص\tasphalt\t%\t0.00\n30037\tASPH_CORE\tAsphalt Core - Density & Compaction\tكور الأسفلت - الكثافة ونسبة الدمك\tasphalt\t%\t200.00\n90015\tASPH_EXTRACTED_SIEVE_ACBC\tExtracted Aggregate Sieve Analysis (ACBC)\tتحليل منخل الركام المستخلص (ACBC)\tasphalt\tN/mm²\t0.00\n90014\tASPH_EXTRACTED_SIEVE_ACWC\tExtracted Aggregate Sieve Analysis (ACWC)\tتحليل منخل الركام المستخلص (ACWC)\tasphalt\tN/mm²\t0.00\n90016\tASPH_EXTRACTED_SIEVE_DBM\tExtracted Aggregate Sieve Analysis (DBM)\tتحليل منخل الركام المستخلص (DBM)\tasphalt\tN/mm²\t0.00\n30036\tASPH_HOTBIN\tHot Bin Gradation\tتدرج الخلطة الساخنة (Hot Bin)\tasphalt\t%\t250.00\n90004\tASPH_HOTBIN_ACBC\tHot Bin Gradation - ACBC\tتدرج الحار - طبقة أساس ACBC\tasphalt\t%\t100.00\n90003\tASPH_HOTBIN_ACWC\tHot Bin Gradation - ACWC\tتدرج الحار - طبقة رابطة ACWC\tasphalt\t%\t100.00\n30039\tASPH_PRIME_MC70\tRate of Spray - Prime Coat (MC-70)\tمعدل رش طبقة التنشيط (MC-70)\tasphalt\tL/m²\t150.00\n90019\tASPH_SPRAY_CRS1\tTack Coat Spray Rate (CRS-1)\tمعدل رش طبقة التعلق (CRS-1)\tasphalt\tN/mm²\t0.00\n90022\tASPH_SPRAY_MC250\tPrime Coat Spray Rate (MC-250)\tمعدل رش طبقة التأسيس (MC-250)\tasphalt\tN/mm²\t0.00\n90020\tASPH_SPRAY_MC30\tPrime Coat Spray Rate (MC-30)\tمعدل رش طبقة التأسيس (MC-30)\tasphalt\tN/mm²\t0.00\n90021\tASPH_SPRAY_MC70\tPrime Coat Spray Rate (MC-70)\tمعدل رش طبقة التأسيس (MC-70)\tasphalt\tN/mm²\t0.00\n90017\tASPH_SPRAY_SS1\tTack Coat Spray Rate (SS-1)\tمعدل رش طبقة التعلق (SS-1)\tasphalt\tN/mm²\t0.00\n90018\tASPH_SPRAY_SS1H\tTack Coat Spray Rate (SS-1h)\tمعدل رش طبقة التعلق (SS-1h)\tasphalt\tN/mm²\t0.00\n30038\tASPH_TACK_SS1H\tRate of Spray - Tack Coat (SS1H)\tمعدل رش طبقة الربط (SS1H)\tasphalt\tL/m²\t150.00\n60005\tAGG_CRUSHING\tAggregate Crushing Value (ACV)\tقيمة سحق الركام (ACV)\taggregates\t%\t0.00\n30033\tAGG_ELONGATION\tElongation Index\tمؤشر الاستطالة\taggregates\t%\t140.00\n30032\tAGG_FLAKINESS\tFlakiness Index\tمؤشر التفلطح\taggregates\t%\t140.00\n60006\tAGG_IMPACT\tAggregate Impact Value (AIV)\tقيمة صدم الركام (AIV)\taggregates\t%\t0.00\n60007\tAGG_LA_ABRASION\tLos Angeles Abrasion Test\tاختبار تآكل لوس أنجلوس\taggregates\t%\t0.00\n30030\tAGG_SG_COARSE\tSpecific Gravity & Water Absorption - Coarse\tالكثافة النوعية وامتصاص الماء - ركام خشن\taggregates\tMg/m³\t150.00\n30031\tAGG_SG_FINE\tSpecific Gravity & Water Absorption - Fine\tالكثافة النوعية وامتصاص الماء - ركام ناعم\taggregates\tMg/m³\t150.00\n30028\tAGG_SIEVE_COARSE\tSieve Analysis of Coarse Aggregates\tتحليل منخل الركام الخشن\taggregates\t%\t130.00\n30029\tAGG_SIEVE_FINE\tSieve Analysis of Fine Aggregates\tتحليل منخل الركام الناعم\taggregates\t%\t130.00\n",
+  "stderr": "",
+  "execution_time_ms": 1520
+}

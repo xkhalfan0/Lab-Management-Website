@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO users (openId, username, passwordHash, name, role, permissions)\nVALUES (\n  CONCAT('local_accountant_', UNIX_TIMESTAMP()),\n  'accountant1',\n  '$2b$10$MZMReUzw1Texv/9JwA69auMsk57SRwVAPDIk.epNpCcJDMn4YdbZO',\n  'محاسب المختبر',\n  'accountant',\n  '{\"certificates\":\"edit\"}'\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute INSERT INTO users (openId, username, passwordHash, name, role, permissions)\nVALUES (\n  CONCAT('local_accountant_', UNIX_TIMESTAMP()),\n  'accountant1',\n  '$2b$10$MZMReUzw1Texv/9JwA69auMsk57SRwVAPDIk.epNpCcJDMn4YdbZO',\n  'محاسب المختبر',\n  'accountant',\n  '{\"certificates\":\"edit\"}'\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1622
+}

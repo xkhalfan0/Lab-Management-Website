@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE sector_accounts SET passwordHash = '$2b$10$fePX5gF3tz/s6wi0vjow6.SoQTnu1IOLZZl6s8g32oOB.H3Qr.qES' WHERE username IN ('sector1','sector2','sector3','sector4','sector5');",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute UPDATE sector_accounts SET passwordHash = '$2b$10$fePX5gF3tz/s6wi0vjow6.SoQTnu1IOLZZl6s8g32oOB.H3Qr.qES' WHERE username IN ('sector1','sector2','sector3','sector4','sector5');",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1521
+}

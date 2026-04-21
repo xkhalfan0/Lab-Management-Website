@@ -1,0 +1,45 @@
+{
+  "query": "SELECT id, sectorKey, nameAr, nameEn, username FROM sector_accounts LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, sectorKey, nameAr, nameEn, username FROM sector_accounts LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "sectorKey": "sector_1",
+      "nameAr": "قطاع/1",
+      "nameEn": "Sector/1",
+      "username": "sector1"
+    },
+    {
+      "id": "2",
+      "sectorKey": "sector_2",
+      "nameAr": "قطاع/2",
+      "nameEn": "Sector/2",
+      "username": "sector2"
+    },
+    {
+      "id": "3",
+      "sectorKey": "sector_3",
+      "nameAr": "قطاع/3",
+      "nameEn": "Sector/3",
+      "username": "sector3"
+    },
+    {
+      "id": "4",
+      "sectorKey": "sector_4",
+      "nameAr": "قطاع/4",
+      "nameEn": "Sector/4",
+      "username": "sector4"
+    },
+    {
+      "id": "5",
+      "sectorKey": "sector_5",
+      "nameAr": "قطاع/5",
+      "nameEn": "Sector/5",
+      "username": "sector5"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tsectorKey\tnameAr\tnameEn\tusername\n1\tsector_1\tقطاع/1\tSector/1\tsector1\n2\tsector_2\tقطاع/2\tSector/2\tsector2\n3\tsector_3\tقطاع/3\tSector/3\tsector3\n4\tsector_4\tقطاع/4\tSector/4\tsector4\n5\tsector_5\tقطاع/5\tSector/5\tsector5\n",
+  "stderr": "",
+  "execution_time_ms": 1575
+}

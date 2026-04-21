@@ -1,0 +1,40 @@
+{
+  "query": "SELECT id, name, role, permissions FROM users WHERE role != 'admin';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, name, role, permissions FROM users WHERE role != 'admin';",
+  "rows": [
+    {
+      "id": "30009",
+      "name": "Ahmed Ali",
+      "role": "reception",
+      "permissions": "NULL"
+    },
+    {
+      "id": "60007",
+      "name": "ahmed",
+      "role": "lab_manager",
+      "permissions": "NULL"
+    },
+    {
+      "id": "60011",
+      "name": "ahh",
+      "role": "technician",
+      "permissions": "NULL"
+    },
+    {
+      "id": "60015",
+      "name": "aaaaa",
+      "role": "sample_manager",
+      "permissions": "NULL"
+    },
+    {
+      "id": "60019",
+      "name": "qwe",
+      "role": "qc_inspector",
+      "permissions": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\trole\tpermissions\n30009\tAhmed Ali\treception\tNULL\n60007\tahmed\tlab_manager\tNULL\n60011\tahh\ttechnician\tNULL\n60015\taaaaa\tsample_manager\tNULL\n60019\tqwe\tqc_inspector\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 1548
+}

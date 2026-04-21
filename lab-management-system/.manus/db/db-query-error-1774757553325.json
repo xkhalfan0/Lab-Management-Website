@@ -1,0 +1,9 @@
+{
+  "query": "INSERT IGNORE INTO test_results (id, distributionId, sampleId, technicianId, rawValues, unit, average, stdDeviation, minValue, maxValue, complianceStatus, status, processedAt, createdAt, updatedAt)\nVALUES (90001, 80001, 70001, 990794, '[32.5, 33.1, 31.8]', 'MPa', 32.467, 0.533, 31.800, 33.100, 'pass', 'approved', DATE_SUB(NOW(), INTERVAL 32 DAY), DATE_SUB(NOW(), INTERVAL 33 DAY), NOW());",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute INSERT IGNORE INTO test_results (id, distributionId, sampleId, technicianId, rawValues, unit, average, stdDeviation, minValue, maxValue, complianceStatus, status, processedAt, createdAt, updatedAt)\nVALUES (90001, 80001, 70001, 990794, '[32.5, 33.1, 31.8]', 'MPa', 32.467, 0.533, 31.800, 33.100, 'pass', 'approved', DATE_SUB(NOW(), INTERVAL 32 DAY), DATE_SUB(NOW(), INTERVAL 33 DAY), NOW());",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your TiDB version for the right syntax to use line 1 column 135 near \"maxValue, complianceStatus, status, processedAt, createdAt, updatedAt)",
+    "VALUES (90001, 80001, 70001, 990794, '[32.5, 33.1, 31.8]', 'MPa', 32.467, 0.533, 31.800, 33.100, 'pass', 'approved', DATE_SUB(NOW(), INTERVAL 32 DAY), DATE_SUB(NOW(), INTERVAL 33 DAY), NOW())\""
+  ]
+}

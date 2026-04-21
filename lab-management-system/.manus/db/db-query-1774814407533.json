@@ -1,0 +1,199 @@
+{
+  "query": "\nSELECT ct.id, ct.contractNumber, ct.contractName, ct.sectorKey, co.nameAr as contractorName \nFROM contracts ct \nLEFT JOIN contractors co ON ct.contractorId = co.id \nORDER BY ct.sectorKey, ct.id \nLIMIT 30;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nSELECT ct.id, ct.contractNumber, ct.contractName, ct.sectorKey, co.nameAr as contractorName \nFROM contracts ct \nLEFT JOIN contractors co ON ct.contractorId = co.id \nORDER BY ct.sectorKey, ct.id \nLIMIT 30;\n",
+  "rows": [
+    {
+      "id": "30001",
+      "contractNumber": "DOI-22222-C001",
+      "contractName": "إنشاء سكن",
+      "sectorKey": "NULL",
+      "contractorName": "شركة نايل بن حرمل للمقاولات"
+    },
+    {
+      "id": "40001",
+      "contractNumber": "DOI-2025-T001",
+      "contractName": "مشروع تطوير البنية التحتية - الدفعة الأولى",
+      "sectorKey": "sector_1",
+      "contractorName": "شركة الإنشاءات المتحدة"
+    },
+    {
+      "id": "90001",
+      "contractNumber": "RB-2025-001",
+      "contractName": "مشروع تطوير الطريق الدائري الشمالي",
+      "sectorKey": "sector_1",
+      "contractorName": "شركة الراشد للطرق"
+    },
+    {
+      "id": "90002",
+      "contractNumber": "RB-2025-002",
+      "contractName": "إنشاء جسر وادي الرمح",
+      "sectorKey": "sector_1",
+      "contractorName": "شركة الخليج للجسور"
+    },
+    {
+      "id": "90003",
+      "contractNumber": "RB-2025-003",
+      "contractName": "صيانة وتأهيل الطريق الساحلي",
+      "sectorKey": "sector_1",
+      "contractorName": "شركة الراشد للطرق"
+    },
+    {
+      "id": "90004",
+      "contractNumber": "RB-2025-004",
+      "contractName": "إنشاء تقاطع مروري مع جسر علوي",
+      "sectorKey": "sector_1",
+      "contractorName": "شركة الخليج للجسور"
+    },
+    {
+      "id": "90005",
+      "contractNumber": "RB-2025-005",
+      "contractName": "رصف وتطوير الطرق الداخلية",
+      "sectorKey": "sector_1",
+      "contractorName": "شركة الراشد للطرق"
+    },
+    {
+      "id": "90006",
+      "contractNumber": "GB-2025-001",
+      "contractName": "إنشاء مبنى البلدية الجديد",
+      "sectorKey": "sector_2",
+      "contractorName": "شركة المباني الوطنية"
+    },
+    {
+      "id": "90007",
+      "contractNumber": "GB-2025-002",
+      "contractName": "توسعة مجمع المحاكم",
+      "sectorKey": "sector_2",
+      "contractorName": "مؤسسة الإنشاءات الحديثة"
+    },
+    {
+      "id": "90008",
+      "contractNumber": "GB-2025-003",
+      "contractName": "إنشاء مركز صحي متكامل",
+      "sectorKey": "sector_2",
+      "contractorName": "شركة المباني الوطنية"
+    },
+    {
+      "id": "90009",
+      "contractNumber": "GB-2025-004",
+      "contractName": "تجديد وصيانة مبنى الأمانة",
+      "sectorKey": "sector_2",
+      "contractorName": "مؤسسة الإنشاءات الحديثة"
+    },
+    {
+      "id": "90010",
+      "contractNumber": "GB-2025-005",
+      "contractName": "إنشاء مدرسة ثانوية نموذجية",
+      "sectorKey": "sector_2",
+      "contractorName": "شركة المباني الوطنية"
+    },
+    {
+      "id": "90011",
+      "contractNumber": "INF-2025-001",
+      "contractName": "مشروع شبكة الصرف الصحي المرحلة الثانية",
+      "sectorKey": "sector_3",
+      "contractorName": "شركة أساتذة البنية التحتية"
+    },
+    {
+      "id": "90012",
+      "contractNumber": "INF-2025-002",
+      "contractName": "تطوير محطة ضخ المياه الرئيسية",
+      "sectorKey": "sector_3",
+      "contractorName": "شركة التعمير للبنية التحتية"
+    },
+    {
+      "id": "90013",
+      "contractNumber": "INF-2025-003",
+      "contractName": "مد خطوط المياه للمناطق الجديدة",
+      "sectorKey": "sector_3",
+      "contractorName": "شركة أساتذة البنية التحتية"
+    },
+    {
+      "id": "90014",
+      "contractNumber": "INF-2025-004",
+      "contractName": "إنشاء محطة معالجة مياه الصرف",
+      "sectorKey": "sector_3",
+      "contractorName": "شركة التعمير للبنية التحتية"
+    },
+    {
+      "id": "90015",
+      "contractNumber": "INF-2025-005",
+      "contractName": "تأهيل شبكة الكهرباء المنطقة الشرقية",
+      "sectorKey": "sector_3",
+      "contractorName": "شركة أساتذة البنية التحتية"
+    },
+    {
+      "id": "90016",
+      "contractNumber": "IND-2025-001",
+      "contractName": "إنشاء مستودعات المنطقة الصناعية",
+      "sectorKey": "sector_4",
+      "contractorName": "مجموعة البناء الصناعي"
+    },
+    {
+      "id": "90017",
+      "contractNumber": "IND-2025-002",
+      "contractName": "تطوير البنية التحتية للمنطقة الصناعية",
+      "sectorKey": "sector_4",
+      "contractorName": "شركة الأعمال الثقيلة"
+    },
+    {
+      "id": "90018",
+      "contractNumber": "IND-2025-003",
+      "contractName": "إنشاء مصنع معالجة النفايات الصناعية",
+      "sectorKey": "sector_4",
+      "contractorName": "مجموعة البناء الصناعي"
+    },
+    {
+      "id": "90019",
+      "contractNumber": "IND-2025-004",
+      "contractName": "توسعة منشآت الطاقة الشمسية",
+      "sectorKey": "sector_4",
+      "contractorName": "شركة الأعمال الثقيلة"
+    },
+    {
+      "id": "90020",
+      "contractNumber": "IND-2025-005",
+      "contractName": "إنشاء مركز لوجستي متكامل",
+      "sectorKey": "sector_4",
+      "contractorName": "مجموعة البناء الصناعي"
+    },
+    {
+      "id": "90021",
+      "contractNumber": "HSG-2025-001",
+      "contractName": "مشروع الإسكان الاجتماعي المرحلة الأولى",
+      "sectorKey": "sector_5",
+      "contractorName": "شركة الإسكان للتطوير"
+    },
+    {
+      "id": "90022",
+      "contractNumber": "HSG-2025-002",
+      "contractName": "تطوير حي الورود السكني",
+      "sectorKey": "sector_5",
+      "contractorName": "مؤسسة الإسكان المستقبلي"
+    },
+    {
+      "id": "90023",
+      "contractNumber": "HSG-2025-003",
+      "contractName": "إنشاء أبراج سكنية متعددة الطوابق",
+      "sectorKey": "sector_5",
+      "contractorName": "شركة الإسكان للتطوير"
+    },
+    {
+      "id": "90024",
+      "contractNumber": "HSG-2025-004",
+      "contractName": "مشروع فيلات الضاحية الجديدة",
+      "sectorKey": "sector_5",
+      "contractorName": "مؤسسة الإسكان المستقبلي"
+    },
+    {
+      "id": "90025",
+      "contractNumber": "HSG-2025-005",
+      "contractName": "تطوير المرافق والخدمات في الأحياء الجديدة",
+      "sectorKey": "sector_5",
+      "contractorName": "شركة الإسكان للتطوير"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcontractNumber\tcontractName\tsectorKey\tcontractorName\n30001\tDOI-22222-C001\tإنشاء سكن\tNULL\tشركة نايل بن حرمل للمقاولات\n40001\tDOI-2025-T001\tمشروع تطوير البنية التحتية - الدفعة الأولى\tsector_1\tشركة الإنشاءات المتحدة\n90001\tRB-2025-001\tمشروع تطوير الطريق الدائري الشمالي\tsector_1\tشركة الراشد للطرق\n90002\tRB-2025-002\tإنشاء جسر وادي الرمح\tsector_1\tشركة الخليج للجسور\n90003\tRB-2025-003\tصيانة وتأهيل الطريق الساحلي\tsector_1\tشركة الراشد للطرق\n90004\tRB-2025-004\tإنشاء تقاطع مروري مع جسر علوي\tsector_1\tشركة الخليج للجسور\n90005\tRB-2025-005\tرصف وتطوير الطرق الداخلية\tsector_1\tشركة الراشد للطرق\n90006\tGB-2025-001\tإنشاء مبنى البلدية الجديد\tsector_2\tشركة المباني الوطنية\n90007\tGB-2025-002\tتوسعة مجمع المحاكم\tsector_2\tمؤسسة الإنشاءات الحديثة\n90008\tGB-2025-003\tإنشاء مركز صحي متكامل\tsector_2\tشركة المباني الوطنية\n90009\tGB-2025-004\tتجديد وصيانة مبنى الأمانة\tsector_2\tمؤسسة الإنشاءات الحديثة\n90010\tGB-2025-005\tإنشاء مدرسة ثانوية نموذجية\tsector_2\tشركة المباني الوطنية\n90011\tINF-2025-001\tمشروع شبكة الصرف الصحي المرحلة الثانية\tsector_3\tشركة أساتذة البنية التحتية\n90012\tINF-2025-002\tتطوير محطة ضخ المياه الرئيسية\tsector_3\tشركة التعمير للبنية التحتية\n90013\tINF-2025-003\tمد خطوط المياه للمناطق الجديدة\tsector_3\tشركة أساتذة البنية التحتية\n90014\tINF-2025-004\tإنشاء محطة معالجة مياه الصرف\tsector_3\tشركة التعمير للبنية التحتية\n90015\tINF-2025-005\tتأهيل شبكة الكهرباء المنطقة الشرقية\tsector_3\tشركة أساتذة البنية التحتية\n90016\tIND-2025-001\tإنشاء مستودعات المنطقة الصناعية\tsector_4\tمجموعة البناء الصناعي\n90017\tIND-2025-002\tتطوير البنية التحتية للمنطقة الصناعية\tsector_4\tشركة الأعمال الثقيلة\n90018\tIND-2025-003\tإنشاء مصنع معالجة النفايات الصناعية\tsector_4\tمجموعة البناء الصناعي\n90019\tIND-2025-004\tتوسعة منشآت الطاقة الشمسية\tsector_4\tشركة الأعمال الثقيلة\n90020\tIND-2025-005\tإنشاء مركز لوجستي متكامل\tsector_4\tمجموعة البناء الصناعي\n90021\tHSG-2025-001\tمشروع الإسكان الاجتماعي المرحلة الأولى\tsector_5\tشركة الإسكان للتطوير\n90022\tHSG-2025-002\tتطوير حي الورود السكني\tsector_5\tمؤسسة الإسكان المستقبلي\n90023\tHSG-2025-003\tإنشاء أبراج سكنية متعددة الطوابق\tsector_5\tشركة الإسكان للتطوير\n90024\tHSG-2025-004\tمشروع فيلات الضاحية الجديدة\tsector_5\tمؤسسة الإسكان المستقبلي\n90025\tHSG-2025-005\tتطوير المرافق والخدمات في الأحياء الجديدة\tsector_5\tشركة الإسكان للتطوير\n",
+  "stderr": "",
+  "execution_time_ms": 1552
+}

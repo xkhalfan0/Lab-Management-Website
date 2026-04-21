@@ -1,0 +1,94 @@
+{
+  "query": "SELECT id, code, nameAr, nameEn, category FROM test_types WHERE category IN ('aggregates', 'asphalt') ORDER BY category, code;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, code, nameAr, nameEn, category FROM test_types WHERE category IN ('aggregates', 'asphalt') ORDER BY category, code;",
+  "rows": [
+    {
+      "id": "4002",
+      "code": "ASPH_BITUMEN_EXTRACT",
+      "nameAr": "استخلاص البيتيومين",
+      "nameEn": "Bitumen Extraction",
+      "category": "asphalt"
+    },
+    {
+      "id": "4006",
+      "code": "ASPH_CORE",
+      "nameAr": "اختبار العينات القلبية للاسفلت",
+      "nameEn": "Density and Percentage of Compaction of Asphalt Core specimens",
+      "category": "asphalt"
+    },
+    {
+      "id": "4003",
+      "code": "ASPH_EXTRACTED_SIEVE",
+      "nameAr": "تحليل بالمناخل للركام بعد الاستخلاص",
+      "nameEn": "Sieve analysis of Extracted Aggregates",
+      "category": "asphalt"
+    },
+    {
+      "id": "4001",
+      "code": "ASPH_HOTBIN",
+      "nameAr": "التحليل بالمناخل للخلطة التصميمية",
+      "nameEn": "Asphalt Trial mix & Hotbin Aggregates - Grading",
+      "category": "asphalt"
+    },
+    {
+      "id": "4004",
+      "code": "ASPH_MARSHALL",
+      "nameAr": "قياس الثباتية والهبوط والفراغات لعينات مارشال",
+      "nameEn": "Stability, Flow & Voids Percentage of Marshall Specimens",
+      "category": "asphalt"
+    },
+    {
+      "id": "4005",
+      "code": "ASPH_MARSHALL_DENSITY",
+      "nameAr": "قياس الكثافة الاجمالية لعينات مارشال",
+      "nameEn": "Marshall Density for Asphalt Samples",
+      "category": "asphalt"
+    },
+    {
+      "id": "5004",
+      "code": "AGG_CRUSHING",
+      "nameAr": "اختبار معامل التهشيم للركام",
+      "nameEn": "Aggregate Crushing Value",
+      "category": "aggregates"
+    },
+    {
+      "id": "5003",
+      "code": "AGG_FLAKINESS_ELONGATION",
+      "nameAr": "اختبار معاملي الاسطبالة والترقق",
+      "nameEn": "Flakiness & Elongation Index of Aggregtes",
+      "category": "aggregates"
+    },
+    {
+      "id": "5005",
+      "code": "AGG_IMPACT",
+      "nameAr": "اختبار معامل الصدم للركام",
+      "nameEn": "Aggregate Impact Value",
+      "category": "aggregates"
+    },
+    {
+      "id": "5006",
+      "code": "AGG_LA",
+      "nameAr": "اختبار لوس انجلوس للبري للركام",
+      "nameEn": "Los Angeles Abrasion Test",
+      "category": "aggregates"
+    },
+    {
+      "id": "5002",
+      "code": "AGG_SG",
+      "nameAr": "اختبار الكثافة النوعية ونسبة الامتصاص",
+      "nameEn": "Specific Gravity & Absorption of Coarse & Fine Aggregates",
+      "category": "aggregates"
+    },
+    {
+      "id": "5001",
+      "code": "AGG_SIEVE",
+      "nameAr": "تحليل بالمناخل لركام الخرسانة (بالغسيل)",
+      "nameEn": "Seive Analysis Concrete Aggregates",
+      "category": "aggregates"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcode\tnameAr\tnameEn\tcategory\n4002\tASPH_BITUMEN_EXTRACT\tاستخلاص البيتيومين\tBitumen Extraction\tasphalt\n4006\tASPH_CORE\tاختبار العينات القلبية للاسفلت\tDensity and Percentage of Compaction of Asphalt Core specimens\tasphalt\n4003\tASPH_EXTRACTED_SIEVE\tتحليل بالمناخل للركام بعد الاستخلاص\tSieve analysis of Extracted Aggregates\tasphalt\n4001\tASPH_HOTBIN\tالتحليل بالمناخل للخلطة التصميمية\tAsphalt Trial mix & Hotbin Aggregates - Grading\tasphalt\n4004\tASPH_MARSHALL\tقياس الثباتية والهبوط والفراغات لعينات مارشال\tStability, Flow & Voids Percentage of Marshall Specimens\tasphalt\n4005\tASPH_MARSHALL_DENSITY\tقياس الكثافة الاجمالية لعينات مارشال\tMarshall Density for Asphalt Samples\tasphalt\n5004\tAGG_CRUSHING\tاختبار معامل التهشيم للركام\tAggregate Crushing Value\taggregates\n5003\tAGG_FLAKINESS_ELONGATION\tاختبار معاملي الاسطبالة والترقق\tFlakiness & Elongation Index of Aggregtes\taggregates\n5005\tAGG_IMPACT\tاختبار معامل الصدم للركام\tAggregate Impact Value\taggregates\n5006\tAGG_LA\tاختبار لوس انجلوس للبري للركام\tLos Angeles Abrasion Test\taggregates\n5002\tAGG_SG\tاختبار الكثافة النوعية ونسبة الامتصاص\tSpecific Gravity & Absorption of Coarse & Fine Aggregates\taggregates\n5001\tAGG_SIEVE\tتحليل بالمناخل لركام الخرسانة (بالغسيل)\tSeive Analysis Concrete Aggregates\taggregates\n",
+  "stderr": "",
+  "execution_time_ms": 1631
+}

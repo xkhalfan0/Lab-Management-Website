@@ -1,0 +1,9 @@
+{
+  "query": "\nUPDATE sector_accounts SET passwordHash = '$2b$10$nmXWFIpswSMhIK3SmaBo0O80/hQUuE9s2anjbciA/N.r3Xi0pmhNe' WHERE username = 'sector_roads';\nUPDATE sector_accounts SET passwordHash = '$2b$10$GoHY7g6nLzH98xjKZEse6eDng0Y13CrQ3xvAynG90mabZjZyDg2zy' WHERE username = 'sector_buildings';\nUPDATE sector_accounts SET passwordHash = '$2b$10$NwO1KLS41rv5q2YEEyZK8ump4hhR4eIjYbMRdwew/kUxYpiTEs2Pi' WHERE username = 'sector_infra';\nUPDATE sector_accounts SET passwordHash = '$2b$10$W1/EO8mluBBEVRBP9b0QZ.PZKY9jwZxNpPqXPZ9duD2qBJTMQleX.' WHERE username = 'sector_industrial';\nUPDATE sector_accounts SET passwordHash = '$2b$10$LU/Ji6TxpTQAS5sH4Cc8KeVprnwRF7uw24udiz7m.iLGSMv8f8gWe' WHERE username = 'sector_housing';\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nUPDATE sector_accounts SET passwordHash = '$2b$10$nmXWFIpswSMhIK3SmaBo0O80/hQUuE9s2anjbciA/N.r3Xi0pmhNe' WHERE username = 'sector_roads';\nUPDATE sector_accounts SET passwordHash = '$2b$10$GoHY7g6nLzH98xjKZEse6eDng0Y13CrQ3xvAynG90mabZjZyDg2zy' WHERE username = 'sector_buildings';\nUPDATE sector_accounts SET passwordHash = '$2b$10$NwO1KLS41rv5q2YEEyZK8ump4hhR4eIjYbMRdwew/kUxYpiTEs2Pi' WHERE username = 'sector_infra';\nUPDATE sector_accounts SET passwordHash = '$2b$10$W1/EO8mluBBEVRBP9b0QZ.PZKY9jwZxNpPqXPZ9duD2qBJTMQleX.' WHERE username = 'sector_industrial';\nUPDATE sector_accounts SET passwordHash = '$2b$10$LU/Ji6TxpTQAS5sH4Cc8KeVprnwRF7uw24udiz7m.iLGSMv8f8gWe' WHERE username = 'sector_housing';\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2432
+}

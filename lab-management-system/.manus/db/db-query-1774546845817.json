@@ -1,0 +1,108 @@
+{
+  "query": "SELECT id, code, nameAr, category, unitPrice FROM test_types ORDER BY category, id LIMIT 50;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, code, nameAr, category, unitPrice FROM test_types ORDER BY category, id LIMIT 50;",
+  "rows": [
+    {
+      "id": "30001",
+      "code": "CONC_CUBE",
+      "nameAr": "مقاومة ضغط مكعبات الخرسانة",
+      "category": "concrete",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "30002",
+      "code": "CONC_CORE",
+      "nameAr": "مقاومة ضغط كور الخرسانة",
+      "category": "concrete",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "30008",
+      "code": "CONC_MORTAR_SAND",
+      "nameAr": "تحليل منخل رمل الملاط والبلاستر",
+      "category": "concrete",
+      "unitPrice": "120.00"
+    },
+    {
+      "id": "30010",
+      "code": "CONC_BEAM_SMALL",
+      "nameAr": "مقاومة الانحناء لكمرات الخرسانة 10×10×50",
+      "category": "concrete",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "30011",
+      "code": "CONC_BEAM_LARGE",
+      "nameAr": "مقاومة الانحناء لكمرات الخرسانة 15×15×75",
+      "category": "concrete",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "30040",
+      "code": "CEM_SETTING_TIME",
+      "nameAr": "أسمنت OPC - زمن الشك الابتدائي والنهائي",
+      "category": "concrete",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "30012",
+      "code": "SOIL_SIEVE",
+      "nameAr": "تحليل منخل التربة",
+      "category": "soil",
+      "unitPrice": "130.00"
+    },
+    {
+      "id": "30013",
+      "code": "SOIL_ATTERBERG",
+      "nameAr": "حدود أتربرج (حد السيولة والليونة ومؤشر اللدونة)",
+      "category": "soil",
+      "unitPrice": "150.00"
+    },
+    {
+      "id": "30014",
+      "code": "SOIL_PROCTOR",
+      "nameAr": "اختبار الدمك بروكتور المعدل",
+      "category": "soil",
+      "unitPrice": "350.00"
+    },
+    {
+      "id": "30015",
+      "code": "SOIL_CBR",
+      "nameAr": "نسبة تحمل كاليفورنيا CBR",
+      "category": "soil",
+      "unitPrice": "400.00"
+    },
+    {
+      "id": "30016",
+      "code": "SOIL_FIELD_DENSITY",
+      "nameAr": "اختبار الكثافة الحقلية (طريقة الرمل)",
+      "category": "soil",
+      "unitPrice": "120.00"
+    },
+    {
+      "id": "30036",
+      "code": "ASPH_HOTBIN",
+      "nameAr": "تدرج الخلطة الساخنة (Hot Bin)",
+      "category": "asphalt",
+      "unitPrice": "250.00"
+    },
+    {
+      "id": "30037",
+      "code": "ASPH_CORE",
+      "nameAr": "كور الأسفلت - الكثافة ونسبة الدمك",
+      "category": "asphalt",
+      "unitPrice": "200.00"
+    },
+    {
+      "id": "60004",
+      "code": "ASPH_BITUMEN_EXTRACT",
+      "nameAr": "محتوى البيتومين بالاستخلاص",
+      "category": "asphalt",
+      "unitPrice": "0.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tcode\tnameAr\tcategory\tunitPrice\n30001\tCONC_CUBE\tمقاومة ضغط مكعبات الخرسانة\tconcrete\t150.00\n30002\tCONC_CORE\tمقاومة ضغط كور الخرسانة\tconcrete\t200.00\n30008\tCONC_MORTAR_SAND\tتحليل منخل رمل الملاط والبلاستر\tconcrete\t120.00\n30010\tCONC_BEAM_SMALL\tمقاومة الانحناء لكمرات الخرسانة 10×10×50\tconcrete\t200.00\n30011\tCONC_BEAM_LARGE\tمقاومة الانحناء لكمرات الخرسانة 15×15×75\tconcrete\t200.00\n30040\tCEM_SETTING_TIME\tأسمنت OPC - زمن الشك الابتدائي والنهائي\tconcrete\t200.00\n30012\tSOIL_SIEVE\tتحليل منخل التربة\tsoil\t130.00\n30013\tSOIL_ATTERBERG\tحدود أتربرج (حد السيولة والليونة ومؤشر اللدونة)\tsoil\t150.00\n30014\tSOIL_PROCTOR\tاختبار الدمك بروكتور المعدل\tsoil\t350.00\n30015\tSOIL_CBR\tنسبة تحمل كاليفورنيا CBR\tsoil\t400.00\n30016\tSOIL_FIELD_DENSITY\tاختبار الكثافة الحقلية (طريقة الرمل)\tsoil\t120.00\n30036\tASPH_HOTBIN\tتدرج الخلطة الساخنة (Hot Bin)\tasphalt\t250.00\n30037\tASPH_CORE\tكور الأسفلت - الكثافة ونسبة الدمك\tasphalt\t200.00\n60004\tASPH_BITUMEN_EXTRACT\tمحتوى البيتومين بالاستخلاص\tasphalt\t0.00\n",
+  "stderr": "",
+  "execution_time_ms": 1614
+}

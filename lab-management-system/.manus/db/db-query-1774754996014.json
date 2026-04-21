@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE contracts ADD COLUMN sectorKey VARCHAR(32) NULL AFTER contractorId;\nALTER TABLE contracts ADD COLUMN sectorNameAr VARCHAR(128) NULL AFTER sectorKey;\nALTER TABLE contracts ADD COLUMN sectorNameEn VARCHAR(128) NULL AFTER sectorNameAr;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute ALTER TABLE contracts ADD COLUMN sectorKey VARCHAR(32) NULL AFTER contractorId;\nALTER TABLE contracts ADD COLUMN sectorNameAr VARCHAR(128) NULL AFTER sectorKey;\nALTER TABLE contracts ADD COLUMN sectorNameEn VARCHAR(128) NULL AFTER sectorNameAr;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 4288
+}

@@ -1,0 +1,59 @@
+{
+  "query": "SELECT d.id, d.sampleId, d.testType, d.status, s.sampleCode FROM distributions d JOIN samples s ON d.sampleId = s.id LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT d.id, d.sampleId, d.testType, d.status, s.sampleCode FROM distributions d JOIN samples s ON d.sampleId = s.id LIMIT 10;",
+  "rows": [
+    {
+      "id": "80001",
+      "sampleId": "70001",
+      "testType": "CONC_CUBE",
+      "status": "completed",
+      "sampleCode": "LAB-2026-T001"
+    },
+    {
+      "id": "80002",
+      "sampleId": "70002",
+      "testType": "CONC_CUBE",
+      "status": "completed",
+      "sampleCode": "LAB-2026-T002"
+    },
+    {
+      "id": "80003",
+      "sampleId": "70003",
+      "testType": "SOIL_PROCTOR",
+      "status": "completed",
+      "sampleCode": "LAB-2026-T003"
+    },
+    {
+      "id": "80004",
+      "sampleId": "70004",
+      "testType": "STEEL_REBAR",
+      "status": "completed",
+      "sampleCode": "LAB-2026-T004"
+    },
+    {
+      "id": "80005",
+      "sampleId": "70005",
+      "testType": "AGG_SIEVE",
+      "status": "completed",
+      "sampleCode": "LAB-2026-T005"
+    },
+    {
+      "id": "80006",
+      "sampleId": "70006",
+      "testType": "ASPH_MARSHALL",
+      "status": "completed",
+      "sampleCode": "LAB-2026-T006"
+    },
+    {
+      "id": "80007",
+      "sampleId": "70007",
+      "testType": "CONC_BLOCK",
+      "status": "in_progress",
+      "sampleCode": "LAB-2026-T007"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tsampleId\ttestType\tstatus\tsampleCode\n80001\t70001\tCONC_CUBE\tcompleted\tLAB-2026-T001\n80002\t70002\tCONC_CUBE\tcompleted\tLAB-2026-T002\n80003\t70003\tSOIL_PROCTOR\tcompleted\tLAB-2026-T003\n80004\t70004\tSTEEL_REBAR\tcompleted\tLAB-2026-T004\n80005\t70005\tAGG_SIEVE\tcompleted\tLAB-2026-T005\n80006\t70006\tASPH_MARSHALL\tcompleted\tLAB-2026-T006\n80007\t70007\tCONC_BLOCK\tin_progress\tLAB-2026-T007\n",
+  "stderr": "",
+  "execution_time_ms": 1614
+}

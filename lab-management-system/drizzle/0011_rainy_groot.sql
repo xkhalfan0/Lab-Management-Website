@@ -1,0 +1,1 @@
+ALTER TABLE `samples` ADD `sector` enum('sector_1','sector_2','sector_3','sector_4','sector_5') DEFAULT 'sector_1' NOT NULL;

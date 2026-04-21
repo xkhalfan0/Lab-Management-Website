@@ -1,0 +1,9 @@
+{
+  "query": "\nINSERT IGNORE INTO test_types (category, nameEn, nameAr, code, unitPrice, unit, standardRef, formTemplate, sortOrder, isActive)\nVALUES\n  ('concrete', 'Flexural Strength - Concrete Beam 100×100×500mm', 'مقاومة الانحناء - كمرة خرسانة 100×100×500مم', 'CONC_BEAM_SMALL', 120.00, 'MPa', 'ASTM C78', 'concrete_beam', 15, 1),\n  ('concrete', 'Flexural Strength - Concrete Beam 150×150×750mm', 'مقاومة الانحناء - كمرة خرسانة 150×150×750مم', 'CONC_BEAM_LARGE', 150.00, 'MPa', 'ASTM C78', 'concrete_beam', 16, 1),\n  ('asphalt', 'Hot Bin Gradation - ACWC', 'تدرج الحار - طبقة رابطة ACWC', 'ASPH_HOTBIN_ACWC', 100.00, '%', 'BS EN 13108-1', 'asphalt_hotbin', 25, 1),\n  ('asphalt', 'Hot Bin Gradation - ACBC', 'تدرج الحار - طبقة أساس ACBC', 'ASPH_HOTBIN_ACBC', 100.00, '%', 'BS EN 13108-1', 'asphalt_hotbin', 26, 1);\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nINSERT IGNORE INTO test_types (category, nameEn, nameAr, code, unitPrice, unit, standardRef, formTemplate, sortOrder, isActive)\nVALUES\n  ('concrete', 'Flexural Strength - Concrete Beam 100×100×500mm', 'مقاومة الانحناء - كمرة خرسانة 100×100×500مم', 'CONC_BEAM_SMALL', 120.00, 'MPa', 'ASTM C78', 'concrete_beam', 15, 1),\n  ('concrete', 'Flexural Strength - Concrete Beam 150×150×750mm', 'مقاومة الانحناء - كمرة خرسانة 150×150×750مم', 'CONC_BEAM_LARGE', 150.00, 'MPa', 'ASTM C78', 'concrete_beam', 16, 1),\n  ('asphalt', 'Hot Bin Gradation - ACWC', 'تدرج الحار - طبقة رابطة ACWC', 'ASPH_HOTBIN_ACWC', 100.00, '%', 'BS EN 13108-1', 'asphalt_hotbin', 25, 1),\n  ('asphalt', 'Hot Bin Gradation - ACBC', 'تدرج الحار - طبقة أساس ACBC', 'ASPH_HOTBIN_ACBC', 100.00, '%', 'BS EN 13108-1', 'asphalt_hotbin', 26, 1);\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1556
+}

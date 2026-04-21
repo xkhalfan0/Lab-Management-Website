@@ -1,0 +1,91 @@
+{
+  "query": "SELECT id, contractNumber, contractName, sectorKey FROM contracts LIMIT 10;\nSELECT id, sectorKey, nameAr, nameEn FROM sectors LIMIT 10;\nSELECT COUNT(*) as total FROM samples;\nSELECT id, sampleCode, sampleType, status FROM samples ORDER BY id DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, contractNumber, contractName, sectorKey FROM contracts LIMIT 10;\nSELECT id, sectorKey, nameAr, nameEn FROM sectors LIMIT 10;\nSELECT COUNT(*) as total FROM samples;\nSELECT id, sampleCode, sampleType, status FROM samples ORDER BY id DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "30001",
+      "contractNumber": "DOI-22222-C001",
+      "contractName": "إنشاء سكن",
+      "sectorKey": "NULL"
+    },
+    {
+      "id": "id",
+      "contractNumber": "sectorKey",
+      "contractName": "nameAr",
+      "sectorKey": "nameEn"
+    },
+    {
+      "id": "1",
+      "contractNumber": "sector_1",
+      "contractName": "القطاع الأول",
+      "sectorKey": "Sector 1"
+    },
+    {
+      "id": "2",
+      "contractNumber": "sector_2",
+      "contractName": "القطاع الثاني",
+      "sectorKey": "Sector 2"
+    },
+    {
+      "id": "3",
+      "contractNumber": "sector_3",
+      "contractName": "القطاع الثالث",
+      "sectorKey": "Sector 3"
+    },
+    {
+      "id": "4",
+      "contractNumber": "sector_4",
+      "contractName": "القطاع الرابع",
+      "sectorKey": "Sector 4"
+    },
+    {
+      "id": "5",
+      "contractNumber": "sector_5",
+      "contractName": "القطاع الخامس",
+      "sectorKey": "Sector 5"
+    },
+    {
+      "id": "id",
+      "contractNumber": "sampleCode",
+      "contractName": "sampleType",
+      "sectorKey": "status"
+    },
+    {
+      "id": "360006",
+      "contractNumber": "LAB-2026-0006",
+      "contractName": "asphalt",
+      "sectorKey": "processed"
+    },
+    {
+      "id": "360005",
+      "contractNumber": "LAB-2026-0005",
+      "contractName": "soil",
+      "sectorKey": "processed"
+    },
+    {
+      "id": "360004",
+      "contractNumber": "LAB-2026-0004",
+      "contractName": "soil",
+      "sectorKey": "distributed"
+    },
+    {
+      "id": "360003",
+      "contractNumber": "LAB-2026-0003",
+      "contractName": "concrete",
+      "sectorKey": "distributed"
+    },
+    {
+      "id": "360002",
+      "contractNumber": "LAB-2026-0002",
+      "contractName": "concrete",
+      "sectorKey": "distributed"
+    }
+  ],
+  "messages": [
+    "total",
+    "6"
+  ],
+  "stdout": "id\tcontractNumber\tcontractName\tsectorKey\n30001\tDOI-22222-C001\tإنشاء سكن\tNULL\nid\tsectorKey\tnameAr\tnameEn\n1\tsector_1\tالقطاع الأول\tSector 1\n2\tsector_2\tالقطاع الثاني\tSector 2\n3\tsector_3\tالقطاع الثالث\tSector 3\n4\tsector_4\tالقطاع الرابع\tSector 4\n5\tsector_5\tالقطاع الخامس\tSector 5\ntotal\n6\nid\tsampleCode\tsampleType\tstatus\n360006\tLAB-2026-0006\tasphalt\tprocessed\n360005\tLAB-2026-0005\tsoil\tprocessed\n360004\tLAB-2026-0004\tsoil\tdistributed\n360003\tLAB-2026-0003\tconcrete\tdistributed\n360002\tLAB-2026-0002\tconcrete\tdistributed\n",
+  "stderr": "",
+  "execution_time_ms": 2312
+}

@@ -1,0 +1,35 @@
+{
+  "query": "SELECT category, COUNT(*) as count, SUM(unitPrice) as total_price FROM test_types GROUP BY category ORDER BY category;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT category, COUNT(*) as count, SUM(unitPrice) as total_price FROM test_types GROUP BY category ORDER BY category;",
+  "rows": [
+    {
+      "category": "concrete",
+      "count": "12",
+      "total_price": "2180.00"
+    },
+    {
+      "category": "soil",
+      "count": "5",
+      "total_price": "1150.00"
+    },
+    {
+      "category": "steel",
+      "count": "11",
+      "total_price": "3190.00"
+    },
+    {
+      "category": "asphalt",
+      "count": "6",
+      "total_price": "1950.00"
+    },
+    {
+      "category": "aggregates",
+      "count": "6",
+      "total_price": "840.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "category\tcount\ttotal_price\nconcrete\t12\t2180.00\nsoil\t5\t1150.00\nsteel\t11\t3190.00\nasphalt\t6\t1950.00\naggregates\t6\t840.00\n",
+  "stderr": "",
+  "execution_time_ms": 1638
+}

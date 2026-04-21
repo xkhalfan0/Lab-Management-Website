@@ -1,0 +1,9 @@
+{
+  "query": "\nUPDATE users SET username = 'reception' WHERE openId = 'local-reception-001';\nUPDATE users SET username = 'distribution' WHERE openId = 'local-distribution-001';\nUPDATE users SET username = 'tech' WHERE openId = 'local-tech-001';\nUPDATE users SET username = 'supervisor' WHERE openId = 'local-supervisor-001';\nUPDATE users SET username = 'qc' WHERE openId = 'local-qc-001';\nUPDATE users SET username = 'accountant' WHERE openId = 'local-accountant-001';\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nUPDATE users SET username = 'reception' WHERE openId = 'local-reception-001';\nUPDATE users SET username = 'distribution' WHERE openId = 'local-distribution-001';\nUPDATE users SET username = 'tech' WHERE openId = 'local-tech-001';\nUPDATE users SET username = 'supervisor' WHERE openId = 'local-supervisor-001';\nUPDATE users SET username = 'qc' WHERE openId = 'local-qc-001';\nUPDATE users SET username = 'accountant' WHERE openId = 'local-accountant-001';\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2747
+}

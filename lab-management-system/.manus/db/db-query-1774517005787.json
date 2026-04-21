@@ -1,0 +1,125 @@
+{
+  "query": "SELECT code, nameEn, category FROM test_types WHERE category IN ('steel', 'asphalt', 'aggregates') ORDER BY category, code;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT code, nameEn, category FROM test_types WHERE category IN ('steel', 'asphalt', 'aggregates') ORDER BY category, code;",
+  "rows": [
+    {
+      "code": "STEEL_ANCHOR_88",
+      "nameEn": "Tensile Test - Anchor Bolts (BS EN ISO 898-1 Grade 8.8)",
+      "category": "steel"
+    },
+    {
+      "code": "STEEL_PIPE_A53",
+      "nameEn": "Tensile Test - Steel Pipes (ASTM A53 Grade B)",
+      "category": "steel"
+    },
+    {
+      "code": "STEEL_REBAR_A615",
+      "nameEn": "Tensile Test - Rebar (ASTM A615 Grade 60)",
+      "category": "steel"
+    },
+    {
+      "code": "STEEL_REBAR_BS4449",
+      "nameEn": "Tensile Test - Deformed Rebar (BS 4449-2005 Grade B500B)",
+      "category": "steel"
+    },
+    {
+      "code": "STEEL_STRUCT_A36",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A36)",
+      "category": "steel"
+    },
+    {
+      "code": "STEEL_STRUCT_A500",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A500 Grade B)",
+      "category": "steel"
+    },
+    {
+      "code": "STEEL_STRUCT_A501",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A501 Grade A)",
+      "category": "steel"
+    },
+    {
+      "code": "STEEL_STRUCT_A572",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A572 Grade 50)",
+      "category": "steel"
+    },
+    {
+      "code": "STEEL_STRUCT_A653",
+      "nameEn": "Tensile Test - Structural Steel (ASTM A653 Grade 340)",
+      "category": "steel"
+    },
+    {
+      "code": "STEEL_STRUCT_S275",
+      "nameEn": "Tensile Test - Structural Steel (BS EN 10025 S275 JR)",
+      "category": "steel"
+    },
+    {
+      "code": "STEEL_STRUCT_S355",
+      "nameEn": "Tensile Test - Structural Steel (BS EN 10025 S355 JR)",
+      "category": "steel"
+    },
+    {
+      "code": "ASPH_ACBC",
+      "nameEn": "Hot Mix Asphalt - ACBC (Bitumen + Gradation + Marshall)",
+      "category": "asphalt"
+    },
+    {
+      "code": "ASPH_ACWC",
+      "nameEn": "Hot Mix Asphalt - ACWC (Bitumen + Gradation + Marshall)",
+      "category": "asphalt"
+    },
+    {
+      "code": "ASPH_CORE",
+      "nameEn": "Asphalt Core - Density & Compaction",
+      "category": "asphalt"
+    },
+    {
+      "code": "ASPH_HOTBIN",
+      "nameEn": "Hot Bin Gradation",
+      "category": "asphalt"
+    },
+    {
+      "code": "ASPH_PRIME_MC70",
+      "nameEn": "Rate of Spray - Prime Coat (MC-70)",
+      "category": "asphalt"
+    },
+    {
+      "code": "ASPH_TACK_SS1H",
+      "nameEn": "Rate of Spray - Tack Coat (SS1H)",
+      "category": "asphalt"
+    },
+    {
+      "code": "AGG_ELONGATION",
+      "nameEn": "Elongation Index",
+      "category": "aggregates"
+    },
+    {
+      "code": "AGG_FLAKINESS",
+      "nameEn": "Flakiness Index",
+      "category": "aggregates"
+    },
+    {
+      "code": "AGG_SG_COARSE",
+      "nameEn": "Specific Gravity & Water Absorption - Coarse",
+      "category": "aggregates"
+    },
+    {
+      "code": "AGG_SG_FINE",
+      "nameEn": "Specific Gravity & Water Absorption - Fine",
+      "category": "aggregates"
+    },
+    {
+      "code": "AGG_SIEVE_COARSE",
+      "nameEn": "Sieve Analysis of Coarse Aggregates",
+      "category": "aggregates"
+    },
+    {
+      "code": "AGG_SIEVE_FINE",
+      "nameEn": "Sieve Analysis of Fine Aggregates",
+      "category": "aggregates"
+    }
+  ],
+  "messages": [],
+  "stdout": "code\tnameEn\tcategory\nSTEEL_ANCHOR_88\tTensile Test - Anchor Bolts (BS EN ISO 898-1 Grade 8.8)\tsteel\nSTEEL_PIPE_A53\tTensile Test - Steel Pipes (ASTM A53 Grade B)\tsteel\nSTEEL_REBAR_A615\tTensile Test - Rebar (ASTM A615 Grade 60)\tsteel\nSTEEL_REBAR_BS4449\tTensile Test - Deformed Rebar (BS 4449-2005 Grade B500B)\tsteel\nSTEEL_STRUCT_A36\tTensile Test - Structural Steel (ASTM A36)\tsteel\nSTEEL_STRUCT_A500\tTensile Test - Structural Steel (ASTM A500 Grade B)\tsteel\nSTEEL_STRUCT_A501\tTensile Test - Structural Steel (ASTM A501 Grade A)\tsteel\nSTEEL_STRUCT_A572\tTensile Test - Structural Steel (ASTM A572 Grade 50)\tsteel\nSTEEL_STRUCT_A653\tTensile Test - Structural Steel (ASTM A653 Grade 340)\tsteel\nSTEEL_STRUCT_S275\tTensile Test - Structural Steel (BS EN 10025 S275 JR)\tsteel\nSTEEL_STRUCT_S355\tTensile Test - Structural Steel (BS EN 10025 S355 JR)\tsteel\nASPH_ACBC\tHot Mix Asphalt - ACBC (Bitumen + Gradation + Marshall)\tasphalt\nASPH_ACWC\tHot Mix Asphalt - ACWC (Bitumen + Gradation + Marshall)\tasphalt\nASPH_CORE\tAsphalt Core - Density & Compaction\tasphalt\nASPH_HOTBIN\tHot Bin Gradation\tasphalt\nASPH_PRIME_MC70\tRate of Spray - Prime Coat (MC-70)\tasphalt\nASPH_TACK_SS1H\tRate of Spray - Tack Coat (SS1H)\tasphalt\nAGG_ELONGATION\tElongation Index\taggregates\nAGG_FLAKINESS\tFlakiness Index\taggregates\nAGG_SG_COARSE\tSpecific Gravity & Water Absorption - Coarse\taggregates\nAGG_SG_FINE\tSpecific Gravity & Water Absorption - Fine\taggregates\nAGG_SIEVE_COARSE\tSieve Analysis of Coarse Aggregates\taggregates\nAGG_SIEVE_FINE\tSieve Analysis of Fine Aggregates\taggregates\n",
+  "stderr": "",
+  "execution_time_ms": 1548
+}

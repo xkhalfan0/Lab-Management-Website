@@ -1,0 +1,78 @@
+{
+  "query": "\nSELECT * FROM sectors;\nSELECT id, nameEn, nameAr, contractorCode FROM contractors;\nSELECT id, contractNumber, contractName, contractorId, sectorKey FROM contracts;\nDESCRIBE sector_accounts;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute \nSELECT * FROM sectors;\nSELECT id, nameEn, nameAr, contractorCode FROM contractors;\nSELECT id, contractNumber, contractName, contractorId, sectorKey FROM contracts;\nDESCRIBE sector_accounts;\n",
+  "rows": [
+    {
+      "id": "1",
+      "sectorKey": "sector_1",
+      "nameAr": "القطاع الأول",
+      "nameEn": "Sector 1",
+      "description": "NULL",
+      "isActive": "1",
+      "createdAt": "2026-03-29 03:30:02",
+      "updatedAt": "2026-03-29 03:30:02"
+    },
+    {
+      "id": "2",
+      "sectorKey": "sector_2",
+      "nameAr": "القطاع الثاني",
+      "nameEn": "Sector 2",
+      "description": "NULL",
+      "isActive": "1",
+      "createdAt": "2026-03-29 03:30:02",
+      "updatedAt": "2026-03-29 03:30:02"
+    },
+    {
+      "id": "3",
+      "sectorKey": "sector_3",
+      "nameAr": "القطاع الثالث",
+      "nameEn": "Sector 3",
+      "description": "NULL",
+      "isActive": "1",
+      "createdAt": "2026-03-29 03:30:02",
+      "updatedAt": "2026-03-29 03:30:02"
+    },
+    {
+      "id": "4",
+      "sectorKey": "sector_4",
+      "nameAr": "القطاع الرابع",
+      "nameEn": "Sector 4",
+      "description": "NULL",
+      "isActive": "1",
+      "createdAt": "2026-03-29 03:30:02",
+      "updatedAt": "2026-03-29 03:30:02"
+    },
+    {
+      "id": "5",
+      "sectorKey": "sector_5",
+      "nameAr": "القطاع الخامس",
+      "nameEn": "Sector 5",
+      "description": "NULL",
+      "isActive": "1",
+      "createdAt": "2026-03-29 03:30:02",
+      "updatedAt": "2026-03-29 03:30:02"
+    }
+  ],
+  "messages": [
+    "id\tnameEn\tnameAr\tcontractorCode",
+    "50001\tUnited Construction Co.\tشركة الإنشاءات المتحدة\tCON-T001",
+    "60001\tNael bin Harmal co\tشركة نايل بن حرمل للمقاولات\tCONT-83459",
+    "id\tcontractNumber\tcontractName\tcontractorId\tsectorKey",
+    "30001\tDOI-22222-C001\tإنشاء سكن\t60001\tNULL",
+    "40001\tDOI-2025-T001\tمشروع تطوير البنية التحتية - الدفعة الأولى\t50001\tsector_1",
+    "Field\tType\tNull\tKey\tDefault\tExtra",
+    "id\tint\tNO\tPRI\tNULL\tauto_increment",
+    "sectorKey\tenum('sector_1','sector_2','sector_3','sector_4','sector_5')\tNO\tUNI\tNULL\t",
+    "nameAr\tvarchar(128)\tNO\t\tNULL\t",
+    "nameEn\tvarchar(128)\tNO\t\tNULL\t",
+    "username\tvarchar(64)\tNO\tUNI\tNULL\t",
+    "passwordHash\tvarchar(256)\tNO\t\tNULL\t",
+    "isActive\ttinyint(1)\tNO\t\t1\t",
+    "lastLoginAt\ttimestamp\tYES\t\tNULL\t",
+    "createdAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\t",
+    "updatedAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\tDEFAULT_GENERATED on update CURRENT_TIMESTAMP"
+  ],
+  "stdout": "id\tsectorKey\tnameAr\tnameEn\tdescription\tisActive\tcreatedAt\tupdatedAt\n1\tsector_1\tالقطاع الأول\tSector 1\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02\n2\tsector_2\tالقطاع الثاني\tSector 2\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02\n3\tsector_3\tالقطاع الثالث\tSector 3\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02\n4\tsector_4\tالقطاع الرابع\tSector 4\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02\n5\tsector_5\tالقطاع الخامس\tSector 5\tNULL\t1\t2026-03-29 03:30:02\t2026-03-29 03:30:02\nid\tnameEn\tnameAr\tcontractorCode\n50001\tUnited Construction Co.\tشركة الإنشاءات المتحدة\tCON-T001\n60001\tNael bin Harmal co\tشركة نايل بن حرمل للمقاولات\tCONT-83459\nid\tcontractNumber\tcontractName\tcontractorId\tsectorKey\n30001\tDOI-22222-C001\tإنشاء سكن\t60001\tNULL\n40001\tDOI-2025-T001\tمشروع تطوير البنية التحتية - الدفعة الأولى\t50001\tsector_1\nField\tType\tNull\tKey\tDefault\tExtra\nid\tint\tNO\tPRI\tNULL\tauto_increment\nsectorKey\tenum('sector_1','sector_2','sector_3','sector_4','sector_5')\tNO\tUNI\tNULL\t\nnameAr\tvarchar(128)\tNO\t\tNULL\t\nnameEn\tvarchar(128)\tNO\t\tNULL\t\nusername\tvarchar(64)\tNO\tUNI\tNULL\t\npasswordHash\tvarchar(256)\tNO\t\tNULL\t\nisActive\ttinyint(1)\tNO\t\t1\t\nlastLoginAt\ttimestamp\tYES\t\tNULL\t\ncreatedAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\t\nupdatedAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\tDEFAULT_GENERATED on update CURRENT_TIMESTAMP\n",
+  "stderr": "",
+  "execution_time_ms": 2230
+}

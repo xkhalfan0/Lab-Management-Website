@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO users (username, passwordHash, name, role, permissions, created_at, updated_at)\nVALUES (\n  'accountant1',\n  '$2b$10$MZMReUzw1Texv/9JwA69auMsk57SRwVAPDIk.epNpCcJDMn4YdbZO',\n  'محاسب المختبر',\n  'accountant',\n  '{\"certificates\":\"edit\"}',\n  NOW(),\n  NOW()\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute INSERT INTO users (username, passwordHash, name, role, permissions, created_at, updated_at)\nVALUES (\n  'accountant1',\n  '$2b$10$MZMReUzw1Texv/9JwA69auMsk57SRwVAPDIk.epNpCcJDMn4YdbZO',\n  'محاسب المختبر',\n  'accountant',\n  '{\"certificates\":\"edit\"}',\n  NOW(),\n  NOW()\n);",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'created_at' in 'field list'"
+  ]
+}

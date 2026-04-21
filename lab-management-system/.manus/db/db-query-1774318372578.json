@@ -1,0 +1,22 @@
+{
+  "query": "SELECT id, requestCode, status, qcReviewedById FROM clearance_requests LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 377JW8jvRBid6gE.e90905f81c0c --database LsEH5DDGJizNggnY9JVscW --execute SELECT id, requestCode, status, qcReviewedById FROM clearance_requests LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "requestCode": "CLR-2026-001",
+      "status": "inventory_ready",
+      "qcReviewedById": "NULL"
+    },
+    {
+      "id": "2",
+      "requestCode": "CLR-2026-002",
+      "status": "inventory_ready",
+      "qcReviewedById": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\trequestCode\tstatus\tqcReviewedById\n1\tCLR-2026-001\tinventory_ready\tNULL\n2\tCLR-2026-002\tinventory_ready\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 1647
+}

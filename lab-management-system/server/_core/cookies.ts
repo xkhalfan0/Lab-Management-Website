@@ -16,7 +16,7 @@ function isSecureRequest(req: Request) {
 export function getSessionCookieOptions(
   req: Request
 ): Pick<CookieOptions, "domain" | "httpOnly" | "path" | "sameSite" | "secure"> {
-  const secure = isSecureRequest(req);
+  const secure = isSecureRequest(req) || process.env.NODE_ENV === "production";
   // SameSite=None requires Secure=true. On http://localhost, secure is false — browsers
   // reject None+insecure cookies, so the session is never stored. Use Lax for HTTP (dev).
   return {

@@ -15,11 +15,11 @@ import { createContract, createContractor, createSector, getDb, getSectorByKey }
 const SEED_TAG = "CON-SEED-2026";
 
 const SECTOR_DEFS = [
-  { sectorKey: "sector_north", nameEn: "North Region", nameAr: "القطاع الشمالي" },
-  { sectorKey: "sector_south", nameEn: "South Region", nameAr: "القطاع الجنوبي" },
-  { sectorKey: "sector_central", nameEn: "Central Region", nameAr: "القطاع المركزي" },
-  { sectorKey: "sector_east", nameEn: "East Region", nameAr: "القطاع الشرقي" },
-  { sectorKey: "sector_west", nameEn: "West Region", nameAr: "القطاع الغربي" },
+  { sectorKey: "sector_1", nameEn: "Roads & Bridges Sector", nameAr: "قطاع الطرق والجسور" },
+  { sectorKey: "sector_2", nameEn: "Government Buildings Sector", nameAr: "قطاع المباني الحكومية" },
+  { sectorKey: "sector_3", nameEn: "Infrastructure Sector", nameAr: "قطاع البنية التحتية" },
+  { sectorKey: "sector_4", nameEn: "Industrial Projects Sector", nameAr: "قطاع المشاريع الصناعية" },
+  { sectorKey: "sector_5", nameEn: "Housing & Development Sector", nameAr: "قطاع الإسكان والتطوير" },
 ] as const;
 
 const CONTRACTOR_DEFS = [

@@ -449,7 +449,8 @@ function TestSection({ item, distWithResult, lang, index }: {
 
 // ─── Main Report Page ─────────────────────────────────────────────────────────
 export default function OrderReport() {
-  const { orderId } = useParams<{ orderId: string }>();
+  const params = useParams<{ orderId?: string; id?: string }>();
+  const orderId = params.orderId ?? params.id;
   const { lang, setLang } = useLanguage();
   const isAr = lang === "ar";
   const printRef = useRef<HTMLDivElement>(null);

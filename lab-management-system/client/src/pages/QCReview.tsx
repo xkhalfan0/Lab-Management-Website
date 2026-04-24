@@ -37,9 +37,9 @@ function getClearanceTaskState(req: any): "new" | "incomplete" | "completed" {
 }
 
 function getSampleTaskState(sample: any): "new" | "incomplete" | "completed" {
-  if (sample.status !== "approved") return "completed";
-  if ((sample as any).managerReadAt) return "incomplete"; // reuse managerReadAt as proxy for "seen"
-  return "new";
+  if (sample.status === "approved") return "new";
+  if (sample.status === "revision_requested") return "incomplete";
+  return "completed";
 }
 
 function TaskStateBadge({ state, lang }: { state: "new" | "incomplete" | "completed"; lang: string }) {
@@ -479,7 +479,7 @@ export default function QCReview() {
 
   // All samples that have been approved (ready for QC) or already QC'd
   const qcSamples = samples?.filter((s) =>
-    ["approved", "qc_passed", "qc_failed", "clearance_issued", "rejected"].includes(s.status)
+    ["approved", "revision_requested", "qc_passed", "qc_failed", "clearance_issued", "rejected"].includes(s.status)
   ) ?? [];
 
   const newCount = qcSamples.filter(s => getSampleTaskState(s) === "new").length;

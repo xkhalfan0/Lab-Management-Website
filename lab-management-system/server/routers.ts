@@ -2809,6 +2809,7 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
       .input(z.object({
         orderId: z.number(),
         technicianId: z.number(),
+        priority: z.enum(["low", "normal", "high", "urgent"]).optional(),
         notes: z.string().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
@@ -2816,6 +2817,10 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
         const order = await getLabOrderById(input.orderId);
         if (!order) throw new TRPCError({ code: "NOT_FOUND" });
         if (order.status !== "pending") throw new TRPCError({ code: "BAD_REQUEST", message: "Order already distributed" });
+        const distPriority = input.priority ?? order.priority;
+        if (input.priority && input.priority !== order.priority) {
+          await updateLabOrderFields(input.orderId, { priority: input.priority });
+        }
         const items = await getLabOrderItems(input.orderId);
         // Create a distribution for each order item
         for (const item of items) {
@@ -2831,7 +2836,7 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
             quantity: item.quantity,
             unitPrice: item.unitPrice ?? "0",
             totalCost: String(item.quantity * parseFloat(item.unitPrice ?? "0")),
-            priority: order.priority,
+            priority: distPriority,
             notes: input.notes ?? null,
             status: "pending",
           });

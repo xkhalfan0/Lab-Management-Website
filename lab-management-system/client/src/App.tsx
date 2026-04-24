@@ -217,7 +217,12 @@ function Router() {
       </Route>
       <Route path="/test-report/:distributionId" component={SpecializedTestReport} />
       <Route path="/batch-report/:batchId" component={BatchBlockReport} />
-      <Route path="/order-report/:orderId" component={OrderReport} />
+      <Route path="/order-report/:orderId">
+        {() => <ProtectedRoute component={OrderReport} path="/order-report/:orderId" />}
+      </Route>
+      <Route path="/order/:id">
+        {() => <ProtectedRoute component={OrderReport} path="/order/:id" />}
+      </Route>
 
       <Route path="/notifications">
         {() => <ProtectedRoute component={Notifications} path="/notifications" />}

@@ -955,12 +955,17 @@ function renderConcreteBeam(fd: any, isAr: boolean, castingDateMs?: number | nul
   );
 }
 
-function renderGeneric(fd: any) {
+function renderGeneric(fd: any, isAr: boolean) {
   return (
-    <div className="text-xs">
-      <pre className="bg-gray-50 border rounded p-4 overflow-auto text-xs font-mono whitespace-pre-wrap">
-        {JSON.stringify(fd, null, 2)}
-      </pre>
+    <div className="text-xs border border-amber-200 bg-amber-50 rounded p-4 text-amber-900">
+      <p className="font-semibold mb-1">
+        {isAr ? "تنسيق التقرير غير متاح لهذا النوع بعد" : "Formatted report is not available for this test type yet"}
+      </p>
+      <p className="text-[11px] text-amber-800">
+        {isAr
+          ? "تم حفظ النتائج بنجاح، لكن عرض التقرير التفصيلي يحتاج إضافة قالب عرض مخصص."
+          : "Results are saved successfully, but detailed rendering requires a dedicated report template."}
+      </p>
     </div>
   );
 }
@@ -1086,7 +1091,7 @@ function renderFormData(formTemplate: string, formData: any, isAr: boolean, cast
     case "cement_setting_time": return renderCementSettingTime(formData, isAr);
     case "concrete_foam": return renderConcreteFoam(formData, isAr);
     case "interlock": return renderInterlock(formData, isAr);
-    default: return renderGeneric(formData);
+    default: return renderGeneric(formData, isAr);
   }
 }
 
@@ -1415,22 +1420,29 @@ function BatchResultsSection({
   distId: number;
   isAr: boolean;
 }) {
-  // Fetch specialized test results for all distributions in the batch
-  const results = batchDists.map((d) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { data } = trpc.specializedTests.getByDistribution.useQuery(
-      { distributionId: d.id },
-      { enabled: !!d.id }
-    );
-    return { dist: d, result: data };
-  });
+  const batchId = batchDists[0]?.batchDistributionId as string | undefined;
+  const { data: batchResults } = trpc.specializedTests.getByBatch.useQuery(
+    { batchId: batchId ?? "" },
+    { enabled: !!batchId }
+  );
+
+  const resultByDistributionId = new Map<number, any>();
+  for (const row of batchResults ?? []) {
+    const tests = (row as any)?.testResults ?? [];
+    for (const tr of tests) {
+      if (typeof tr?.distributionId === "number") {
+        resultByDistributionId.set(tr.distributionId, tr);
+      }
+    }
+  }
 
   return (
     <div className="mb-5 space-y-6">
       <h3 className="text-xs font-bold text-gray-700 uppercase border-b border-gray-300 pb-1 mb-3">
         {isAr ? "النتائج التفصيلية — دفعة متعددة الأنواع" : "Detailed Results — Multi-Type Batch"}
       </h3>
-      {results.map(({ dist, result }, idx) => {
+      {batchDists.map((dist, idx) => {
+        const result = resultByDistributionId.get(dist.id);
         const testLabel = isAr
           ? (dist.testNameAr ?? dist.testName ?? dist.testType)
           : (dist.testNameEn ?? dist.testName ?? dist.testType);

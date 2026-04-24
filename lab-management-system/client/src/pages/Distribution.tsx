@@ -124,6 +124,7 @@ export default function Distribution() {
     distributeOrder.mutate({
       orderId: selectedOrder.id,
       technicianId: parseInt(form.technicianId),
+      priority: form.priority,
       notes: form.notes || undefined,
     });
   };
@@ -225,10 +226,10 @@ export default function Distribution() {
                             </div>
                           </td>
                           <td className="px-4 py-2.5 text-xs">
-                            {order.location ? (
+                            {order.sector ? (
                               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                                 <Building2 className="w-3 h-3" />
-                                {order.location}
+                                {sectorLabel(order.sector, lang)}
                               </span>
                             ) : "—"}
                           </td>

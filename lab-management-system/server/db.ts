@@ -991,10 +991,11 @@ export async function markAllSectorNotificationsRead(sectorId: number) {
 }
 
 // ─── Test Types ────────────────────────────────────────────────────────────────
+/** Full catalog (including inactive). Use for admin UI, pricing lookups, and reports. Reception uses getTestTypesByCategory or filters isActive client-side. */
 export async function getAllTestTypes() {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(testTypes).where(eq(testTypes.isActive, true)).orderBy(testTypes.sortOrder);
+  return db.select().from(testTypes).orderBy(testTypes.sortOrder);
 }
 
 export async function getTestTypesByCategory(category: typeof testTypes.$inferSelect.category) {

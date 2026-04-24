@@ -246,8 +246,9 @@ export default function Reception() {
    * Technician routing uses `distribution.testType` (code) + TestRouter; reports use `formTemplate`.
    */
   const filteredTests = useMemo(() => {
-    if (!form.sampleType) return allTests;
-    const base = allTests.filter(tt => tt.category === form.sampleType);
+    const active = allTests.filter(tt => tt.isActive);
+    if (!form.sampleType) return active;
+    const base = active.filter(tt => tt.category === form.sampleType);
     if (form.sampleType === "asphalt") {
       // Hot Bin: show only ASPH_HOTBIN (required); AGG_SG & AGG_FLAKINESS_ELONGATION shown as optional add-ons inside ASPH_HOTBIN card
       if (asphaltKind === "hot_bin") return base.filter(tt => tt.code === HOT_BIN_REQUIRED_CODE);
@@ -759,7 +760,7 @@ export default function Reception() {
                       {filteredTests.length === 0 ? (
                         <div className="p-4 text-sm text-muted-foreground text-center space-y-1">
                           <p>
-                            {allTests.length === 0
+                            {allTests.filter(t => t.isActive).length === 0
                               ? (lang === "ar"
                                   ? "لا توجد أنواع اختبارات في قاعدة البيانات. أضف الأنواع من صفحة إدارة أنواع الاختبارات (مسؤول)."
                                   : "No test types in the database. Ask an admin to add them under Test Types management.")
@@ -874,7 +875,7 @@ export default function Reception() {
                             )}
                             {/* Hot Bin optional add-on tests (AGG_SG, AGG_FLAKINESS_ELONGATION) */}
                             {isSelected && tt.code === HOT_BIN_REQUIRED_CODE && (() => {
-                              const addonTests = allTests.filter(at => HOT_BIN_OPTIONAL_CODES.includes(at.code ?? ""));
+                              const addonTests = allTests.filter(at => HOT_BIN_OPTIONAL_CODES.includes(at.code ?? "") && at.isActive);
                               if (addonTests.length === 0) return null;
                               return (
                                 <div className="mt-2 ms-7 space-y-1.5">

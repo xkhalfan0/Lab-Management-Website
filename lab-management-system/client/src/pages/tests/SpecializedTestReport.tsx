@@ -137,14 +137,42 @@ function renderConcreteCore(fd: any, isAr: boolean, castingDateMs?: number | nul
 function renderConcreteBlocks(fd: any, isAr: boolean) {
   const blocks = (fd.blocks ?? []).filter((b: any) => b.strengthMpa != null && Number(b.strengthMpa) > 0);
   const spec = fd.blockSpec ?? {};
+  const BLOCK_CF_BY_THICKNESS: Record<number, number> = { 100: 0.80, 150: 0.86, 200: 1.00, 250: 1.05 };
+  const inferThicknessMm = (b: any): number | undefined => {
+    const fromWidth = Number(b.widthMm);
+    if (Number.isFinite(fromWidth) && fromWidth > 0) return fromWidth;
+    const sizeText = String(spec.size ?? "");
+    const m = sizeText.match(/400[×x](\d+)[×x]200/i);
+    if (m) return Number(m[1]);
+    const blockSize = String(spec.blockSize ?? "");
+    const cm = blockSize.match(/(\d+)\s*cm/i);
+    if (cm) return Number(cm[1]) * 10;
+    return undefined;
+  };
+  const getBlockCf = (b: any): number => {
+    const existing = Number(b.correctionFactor);
+    if (Number.isFinite(existing) && existing > 0) return existing;
+    const th = inferThicknessMm(b);
+    return BLOCK_CF_BY_THICKNESS[th ?? 0] ?? 1.0;
+  };
+  const getCorrectedStrength = (b: any): number | null => {
+    const direct = Number(b.correctedStrengthMpa);
+    if (Number.isFinite(direct)) return direct;
+    const raw = Number(b.strengthMpa);
+    if (!Number.isFinite(raw)) return null;
+    return raw * getBlockCf(b);
+  };
+  const avgCorrectedStrength = blocks.length > 0
+    ? blocks.reduce((sum: number, b: any) => sum + (getCorrectedStrength(b) ?? 0), 0) / blocks.length
+    : Number(fd.avgStrength ?? 0);
   const fmtS = (v: any) => {
     const n = Number(v);
     if (isNaN(n) || v === "" || v == null) return "—";
     return (Math.round(n * 10) / 10).toFixed(1);
   };
   const headers = isAr
-    ? ["المرجع", "التاريخ", "الطول", "العرض", "الوزن (غ)", "الحمل (كن)", "المساحة", "القوة", "النتيجة"]
-    : ["Block Ref", "Date Tested", "L (mm)", "W (mm)", "Weight (g)", "Load (kN)", "Gross Area (mm²)", "Strength (N/mm²)", "Result"];
+    ? ["المرجع", "التاريخ", "الطول", "العرض", "الوزن (غ)", "الحمل (كن)", "المساحة", "القوة", "CF", "القوة المصححة", "النتيجة"]
+    : ["Block Ref", "Date Tested", "L (mm)", "W (mm)", "Weight (g)", "Load (kN)", "Gross Area (mm²)", "Strength (N/mm²)", "CF", "Corrected Strength (N/mm²)", "Result"];
   return (
     <div className="text-xs space-y-3">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -159,6 +187,10 @@ function renderConcreteBlocks(fd: any, isAr: boolean) {
         <div className="bg-amber-50 border border-amber-200 rounded p-2">
           <p className="text-amber-700 font-semibold">{isAr ? "المقاومة المطلوبة" : "Required Strength"}</p>
           <p className="font-bold">{spec.requiredStrength != null ? `${spec.requiredStrength} N/mm²` : "—"}</p>
+        </div>
+        <div className="bg-gray-50 border rounded p-2">
+          <p className="text-gray-500 font-semibold">{isAr ? "المعيار" : "Standard"}</p>
+          <p className="font-bold">BS EN 772-1</p>
         </div>
         {fd.manufacturer && (
           <div className="bg-gray-50 border rounded p-2">
@@ -197,6 +229,8 @@ function renderConcreteBlocks(fd: any, isAr: boolean) {
                 <td className="border border-gray-300 px-1 py-1 text-center">{b.loadKN != null ? fmt(b.loadKN, 1) : "—"}</td>
                 <td className="border border-gray-300 px-1 py-1 text-center">{b.grossAreaMm2 ?? "—"}</td>
                 <td className="border border-gray-300 px-1 py-1 text-center font-semibold">{fmtS(b.strengthMpa)}</td>
+                <td className="border border-gray-300 px-1 py-1 text-center text-blue-700">{fmtS(getBlockCf(b))}</td>
+                <td className="border border-gray-300 px-1 py-1 text-center font-bold">{fmtS(getCorrectedStrength(b))}</td>
                 <td className={`border border-gray-300 px-1 py-1 text-center font-bold ${b.result === "pass" ? "text-green-700" : "text-red-600"}`}>
                   {b.result === "pass" ? (isAr ? "مطابق" : "PASS") : b.result === "fail" ? (isAr ? "راسب" : "FAIL") : "—"}
                 </td>
@@ -206,7 +240,10 @@ function renderConcreteBlocks(fd: any, isAr: boolean) {
         </table>
       )}
       <div className="flex flex-wrap gap-3 justify-end text-xs">
-        <span className="font-semibold">{isAr ? "متوسط القوة:" : "Average Strength:"} {fmtS(fd.avgStrength)} N/mm²</span>
+        <span className="font-semibold">
+          {isAr ? "متوسط القوة المصححة:" : "Average Corrected Strength:"} {fmtS(avgCorrectedStrength)} N/mm²
+          {" "}/ {isAr ? "المطلوب:" : "Required:"} {fmtS(spec.requiredStrength)} N/mm²
+        </span>
         <span className={`font-bold px-2 py-1 rounded border ${fd.overallResult === "pass" ? "bg-green-50 border-green-200 text-green-800" : "bg-red-50 border-red-200 text-red-800"}`}>
           {isAr ? "النتيجة الكلية:" : "Overall:"} {fd.overallResult === "pass" ? (isAr ? "مطابق" : "PASS") : fd.overallResult === "fail" ? (isAr ? "راسب" : "FAIL") : "—"}
         </span>
@@ -662,7 +699,7 @@ function renderInterlock(fd: any, isAr: boolean) {
   const spec = fd.spec ?? {};
   const avgStrength = fd.avgStrength ?? 0;
   const overallResult = fd.overallResult ?? "pending";
-  const THICKNESS_FACTOR_RPT: Record<number, number> = { 60: 1.06, 80: 1.18, 100: 1.24 };
+  const THICKNESS_FACTOR_RPT: Record<number, number> = { 60: 0.80, 80: 1.00, 100: 1.20 };
   const defaultTf = THICKNESS_FACTOR_RPT[spec.thickness] ?? 1.0;
   const headers = isAr
     ? ["رقم البلوكة", "السماكة (مم)", "الحمل (كن)", "المساحة (مم²)", "المقاومة (N/mm²)", "CF", "المقاومة المصححة (N/mm²)", "النتيجة"]

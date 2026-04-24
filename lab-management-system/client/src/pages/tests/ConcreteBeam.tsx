@@ -129,6 +129,7 @@ export default function ConcreteBeam() {
   const [specifiedStrength, setSpecifiedStrength] = useState(4.48); // MPa — Specified Flexural Strength
   const [requiredAge, setRequiredAge] = useState(90); // days — per ASTM C 78
   const [castDate, setCastDate] = useState("");
+  const [allowCastDateOverride, setAllowCastDateOverride] = useState(false);
   const [testDate, setTestDate] = useState("");
   const [sampleLocation, setSampleLocation] = useState("");
   const [notes, setNotes] = useState("");
@@ -178,7 +179,7 @@ export default function ConcreteBeam() {
   const saveMut = trpc.specializedTests.save.useMutation({
     onSuccess: (_, vars) => {
       if (vars.status === "submitted") {
-        toast.success("Beam test results submitted successfully");
+        toast.success(ar ? "تم إرسال نتائج اختبار الكمرات بنجاح" : "Beam test results submitted successfully");
         setSubmitted(true);
       } else {
         toast.success(ar ? "تم حفظ المسودة" : "Draft saved");
@@ -189,7 +190,7 @@ export default function ConcreteBeam() {
 
   const handleSave = async (status: "draft" | "submitted") => {
     if (status === "submitted" && validRows.length === 0) {
-      toast.error("Enter at least one valid beam result");
+      toast.error(ar ? "أدخل نتيجة كمرة صحيحة واحدة على الأقل" : "Enter at least one valid beam result");
       return;
     }
     setSaving(true);
@@ -233,26 +234,38 @@ export default function ConcreteBeam() {
 
   const addRow = () => setRows(prev => [...prev, newRow(prev.length, beamSize)]);
   const removeRow = (id: string) => setRows(prev => prev.filter(r => r.id !== id));
+  const beamLabel = (k: BeamSize) => {
+    const v = BEAM_SIZES[k];
+    if (!ar) return v.label;
+    return k === "small" ? "100×100×500 مم (البحر = 300 مم)" : "150×150×750 مم (البحر = 450 مم)";
+  };
 
   return (
     <DashboardLayout>
-      <div className="max-w-5xl mx-auto p-6 space-y-6">
+      <div dir={ar ? "rtl" : "ltr"} className="max-w-5xl mx-auto p-6 space-y-6">
 
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <FlaskConical className="text-blue-600" size={22} />
-              <h1 className="text-xl font-bold text-slate-800">Flexural Strength Test — Concrete Beam</h1>
+              <h1 className="text-xl font-bold text-slate-800">
+                {ar ? "اختبار مقاومة الانعطاف — كمرات الخرسانة" : "Flexural Strength Test — Concrete Beam"}
+              </h1>
             </div>
             <p className="text-sm text-slate-500">
-              ASTM C78 — Third-Point Loading &nbsp;|&nbsp; Distribution: {dist?.distributionCode ?? `#${distId}`}
+              ASTM C78 — {ar ? "تحميل عند الثلثين" : "Third-Point Loading"} &nbsp;|&nbsp; {ar ? "أمر التوزيع:" : "Distribution:"} {dist?.distributionCode ?? `#${distId}`}
             </p>
           </div>
           {submitted && (
-            <Button variant="outline" size="sm" onClick={() => window.print()}>
-              <Printer size={14} className="mr-1" /> Print Report
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={() => setLocation("/technician")}>
+                {ar ? "العودة للوحة التحكم" : "Back to Dashboard"}
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => window.print()}>
+                <Printer size={14} className="mr-1" /> {ar ? "طباعة التقرير" : "Print Report"}
+              </Button>
+            </div>
           )}
         </div>
 
@@ -262,15 +275,19 @@ export default function ConcreteBeam() {
             <div className="flex items-start gap-2 text-sm text-blue-800">
               <Info size={16} className="mt-0.5 shrink-0" />
               <div>
-                <p className="font-semibold mb-1">ASTM C78 — Third-Point Loading Formula</p>
+                <p className="font-semibold mb-1">{ar ? "ASTM C78 — معادلة التحميل عند الثلثين" : "ASTM C78 — Third-Point Loading Formula"}</p>
                 <p className="font-mono text-xs bg-blue-100 rounded px-2 py-1 inline-block mb-1">
-                  MOR = P × L / (b × d²) &nbsp;[fracture in middle third]
+                  MOR = P × L / (b × d²) &nbsp;{ar ? "[الكسر في الثلث الأوسط]" : "[fracture in middle third]"}
                 </p>
                 <br />
                 <p className="font-mono text-xs bg-blue-100 rounded px-2 py-1 inline-block">
-                  MOR = 3 × P × a / (b × d²) &nbsp;[fracture within 5% of span outside middle third]
+                  MOR = 3 × P × a / (b × d²) &nbsp;{ar ? "[الكسر خارج الثلث الأوسط ضمن 5% من البحر]" : "[fracture within 5% of span outside middle third]"}
                 </p>
-                <p className="mt-1 text-xs">P = Load (N), L = Span (mm), b = Width (mm), d = Depth (mm), a = Distance to nearest support (mm)</p>
+                <p className="mt-1 text-xs">
+                  {ar
+                    ? "P = الحمل (نيوتن)، L = البحر (مم)، b = العرض (مم)، d = العمق (مم)، a = المسافة لأقرب مسند (مم)"
+                    : "P = Load (N), L = Span (mm), b = Width (mm), d = Depth (mm), a = Distance to nearest support (mm)"}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -279,26 +296,30 @@ export default function ConcreteBeam() {
         {/* Test Parameters */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base">Test Parameters</CardTitle>
+            <CardTitle className="text-base">{ar ? "معلمات الاختبار" : "Test Parameters"}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="space-y-1.5">
-                <Label>Cast Date</Label>
-                <Input type="date" value={castDate} onChange={e => setCastDate(e.target.value)} />
+                <Label>{ar ? "تاريخ الصب" : "Cast Date"}</Label>
+                <Input type="date" value={castDate} readOnly={!allowCastDateOverride} onChange={e => setCastDate(e.target.value)} />
+                <Button type="button" variant="ghost" size="sm" className="h-7 px-0 text-xs"
+                  onClick={() => setAllowCastDateOverride(v => !v)}>
+                  {allowCastDateOverride ? (ar ? "إلغاء التعديل اليدوي" : "Use auto-filled date") : (ar ? "تعديل يدوي" : "Override")}
+                </Button>
               </div>
               <div className="space-y-1.5">
-                <Label>Date Tested</Label>
+                <Label>{ar ? "تاريخ الاختبار" : "Date Tested"}</Label>
                 <Input type="date" value={testDate} onChange={e => setTestDate(e.target.value)} />
               </div>
               <div className="space-y-1.5">
-                <Label>Age (days)</Label>
+                <Label>{ar ? "العمر (يوم)" : "Age (days)"}</Label>
                 <div className="h-9 flex items-center px-3 rounded-md border bg-slate-50 text-sm font-semibold text-slate-700">
-                  {ageDays !== null && ageDays >= 0 ? `${ageDays} days` : "—"}
+                  {ageDays !== null && ageDays >= 0 ? `${ageDays} ${ar ? "يوم" : "days"}` : "—"}
                 </div>
               </div>
               <div className="space-y-1.5 col-span-2">
-                <Label>Beam Size</Label>
+                <Label>{ar ? "مقاس الكمرة" : "Beam Size"}</Label>
                 <Select value={beamSize} onValueChange={(v) => {
                   const sz = v as BeamSize;
                   setBeamSize(sz);
@@ -307,45 +328,45 @@ export default function ConcreteBeam() {
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {Object.entries(BEAM_SIZES).map(([k, v]) => (
-                      <SelectItem key={k} value={k}>{v.label}</SelectItem>
+                      <SelectItem key={k} value={k}>{beamLabel(k as BeamSize)}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label>Specified Flexural Strength (MPa)</Label>
+                <Label>{ar ? "مقاومة الانعطاف المحددة (MPa)" : "Specified Flexural Strength (MPa)"}</Label>
                 <Input type="number" step="0.01" value={specifiedStrength}
                   onChange={e => setSpecifiedStrength(parseFloat(e.target.value) || 0)} />
-                <p className="text-xs text-slate-400">ASTM C 78 default: 4.48 MPa</p>
+                <p className="text-xs text-slate-400">{ar ? "القيمة الافتراضية ASTM C78: ‏4.48 MPa" : "ASTM C 78 default: 4.48 MPa"}</p>
               </div>
               <div className="space-y-1.5">
-                <Label>Min. MOR Acceptance (MPa)</Label>
+                <Label>{ar ? "الحد الأدنى المقبول لـ MOR (MPa)" : "Min. MOR Acceptance (MPa)"}</Label>
                 <Input type="number" step="0.01" value={minMOR}
                   onChange={e => setMinMOR(parseFloat(e.target.value) || 0)} />
-                <p className="text-xs text-slate-400">Default = Specified Strength</p>
+                <p className="text-xs text-slate-400">{ar ? "الافتراضي = المقاومة المحددة" : "Default = Specified Strength"}</p>
               </div>
               <div className="space-y-1.5">
-                <Label>Required Age (days)</Label>
+                <Label>{ar ? "العمر المطلوب (يوم)" : "Required Age (days)"}</Label>
                 <Input type="number" value={requiredAge}
                   onChange={e => setRequiredAge(parseInt(e.target.value) || 90)} />
-                <p className="text-xs text-slate-400">ASTM C 78 default: 90 days</p>
+                <p className="text-xs text-slate-400">{ar ? "القيمة الافتراضية ASTM C78: ‏90 يوم" : "ASTM C 78 default: 90 days"}</p>
               </div>
               <div className="space-y-1.5 col-span-2 md:col-span-4">
-                <Label>Sample Location</Label>
+                <Label>{ar ? "موقع العينة" : "Sample Location"}</Label>
                 <Input
                   value={sampleLocation}
                   onChange={e => setSampleLocation(e.target.value)}
-                  placeholder="e.g. Span 3, north edge (from reception if available)"
+                  placeholder={ar ? "مثال: البحر 3، الحافة الشمالية (من الاستقبال إن وُجد)" : "e.g. Span 3, north edge (from reception if available)"}
                 />
               </div>
             </div>
             {/* Beam dimensions summary */}
             <div className="mt-3 flex flex-wrap gap-3 text-xs text-slate-600">
-              <span className="bg-slate-100 rounded px-2 py-1">Width (b) = <strong>{preset.width} mm</strong></span>
-              <span className="bg-slate-100 rounded px-2 py-1">Depth (d) = <strong>{preset.depth} mm</strong></span>
-              <span className="bg-slate-100 rounded px-2 py-1">Length = <strong>{preset.length} mm</strong></span>
-              <span className="bg-slate-100 rounded px-2 py-1">Span (L) = <strong>{preset.span} mm</strong></span>
-              <span className="bg-slate-100 rounded px-2 py-1">Middle Third = <strong>{preset.span / 3}–{(preset.span * 2) / 3} mm</strong> from support</span>
+              <span className="bg-slate-100 rounded px-2 py-1">{ar ? "العرض (b)" : "Width (b)"} = <strong>{preset.width} mm</strong></span>
+              <span className="bg-slate-100 rounded px-2 py-1">{ar ? "العمق (d)" : "Depth (d)"} = <strong>{preset.depth} mm</strong></span>
+              <span className="bg-slate-100 rounded px-2 py-1">{ar ? "الطول" : "Length"} = <strong>{preset.length} mm</strong></span>
+              <span className="bg-slate-100 rounded px-2 py-1">{ar ? "البحر (L)" : "Span (L)"} = <strong>{preset.span} mm</strong></span>
+              <span className="bg-slate-100 rounded px-2 py-1">{ar ? "الثلث الأوسط" : "Middle Third"} = <strong>{preset.span / 3}–{(preset.span * 2) / 3} mm</strong> {ar ? "من المسند" : "from support"}</span>
             </div>
           </CardContent>
         </Card>
@@ -353,9 +374,9 @@ export default function ConcreteBeam() {
         {/* Results Table */}
         <Card>
           <CardHeader className="pb-3 flex flex-row items-center justify-between">
-            <CardTitle className="text-base">Beam Results</CardTitle>
+            <CardTitle className="text-base">{ar ? "نتائج الكمرات" : "Beam Results"}</CardTitle>
             <Button size="sm" variant="outline" onClick={addRow}>
-              <Plus size={14} className="mr-1" /> Add Beam
+              <Plus size={14} className="mr-1" /> {ar ? "إضافة كمرة" : "Add Beam"}
             </Button>
           </CardHeader>
           <CardContent>
@@ -363,15 +384,15 @@ export default function ConcreteBeam() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-xs text-slate-500">
-                    <th className="text-left py-2 pr-2 w-16">Beam No.</th>
-                    <th className="text-left py-2 pr-2">Location</th>
-                    <th className="text-left py-2 pr-2 w-20">Width (mm)</th>
-                    <th className="text-left py-2 pr-2 w-20">Depth (mm)</th>
-                    <th className="text-left py-2 pr-2 w-24">Max Load (kN)</th>
-                    <th className="text-left py-2 pr-2 w-36">Fracture Zone</th>
-                    <th className="text-left py-2 pr-2 w-24">Dist. a (mm)</th>
+                    <th className="text-left py-2 pr-2 w-16">{ar ? "رقم الكمرة" : "Beam No."}</th>
+                    <th className="text-left py-2 pr-2">{ar ? "الموقع" : "Location"}</th>
+                    <th className="text-left py-2 pr-2 w-20">{ar ? "العرض (مم)" : "Width (mm)"}</th>
+                    <th className="text-left py-2 pr-2 w-20">{ar ? "العمق (مم)" : "Depth (mm)"}</th>
+                    <th className="text-left py-2 pr-2 w-24">{ar ? "الحمل الأقصى (kN)" : "Max Load (kN)"}</th>
+                    <th className="text-left py-2 pr-2 w-36">{ar ? "منطقة الكسر" : "Fracture Zone"}</th>
+                    <th className="text-left py-2 pr-2 w-24">{ar ? "المسافة a (مم)" : "Dist. a (mm)"}</th>
                     <th className="text-left py-2 pr-2 w-24">MOR (MPa)</th>
-                    <th className="text-left py-2 pr-2 w-20">Result</th>
+                    <th className="text-left py-2 pr-2 w-20">{ar ? "النتيجة" : "Result"}</th>
                     <th className="w-8"></th>
                   </tr>
                 </thead>
@@ -384,7 +405,7 @@ export default function ConcreteBeam() {
                       </td>
                       <td className="py-2 pr-2">
                         <Input value={row.location} onChange={e => updateRow(row.id, "location", e.target.value)}
-                          className="h-8 text-xs" placeholder="e.g. Span 3" />
+                          className="h-8 text-xs" placeholder={ar ? "مثال: البحر 3" : "e.g. Span 3"} />
                       </td>
                       <td className="py-2 pr-2">
                         <Input type="number" value={row.width} onChange={e => updateRow(row.id, "width", e.target.value)}
@@ -405,9 +426,9 @@ export default function ConcreteBeam() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="middle_third">Middle Third ✓</SelectItem>
-                            <SelectItem value="outside_5pct">Outside (within 5%)</SelectItem>
-                            <SelectItem value="outside_discard">Outside (discard)</SelectItem>
+                            <SelectItem value="middle_third">{ar ? "الثلث الأوسط ✓" : "Middle Third ✓"}</SelectItem>
+                            <SelectItem value="outside_5pct">{ar ? "خارج الثلث (ضمن 5%)" : "Outside (within 5%)"}</SelectItem>
+                            <SelectItem value="outside_discard">{ar ? "خارج الحدود (استبعاد)" : "Outside (discard)"}</SelectItem>
                           </SelectContent>
                         </Select>
                       </td>
@@ -415,14 +436,14 @@ export default function ConcreteBeam() {
                         {row.fractureZone === "outside_5pct" ? (
                           <Input type="number" value={row.fractureDistance}
                             onChange={e => updateRow(row.id, "fractureDistance", e.target.value)}
-                            className="h-8 text-xs w-24" placeholder="mm" />
+                            className="h-8 text-xs w-24" placeholder={ar ? "مم" : "mm"} />
                         ) : (
                           <span className="text-slate-400 text-xs">—</span>
                         )}
                       </td>
                       <td className="py-2 pr-2 font-mono font-semibold text-slate-700">
                         {row.discarded ? (
-                          <Badge variant="outline" className="text-xs text-orange-600 border-orange-300">Discarded</Badge>
+                          <Badge variant="outline" className="text-xs text-orange-600 border-orange-300">{ar ? "مستبعدة" : "Discarded"}</Badge>
                         ) : row.mor !== undefined ? row.mor.toFixed(3) : "—"}
                       </td>
                       <td className="py-2 pr-2">
@@ -447,22 +468,22 @@ export default function ConcreteBeam() {
             {validRows.length > 0 && (
               <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div className="bg-slate-50 rounded-lg p-3 text-center">
-                  <p className="text-xs text-slate-500 mb-1">Valid Beams</p>
+                  <p className="text-xs text-slate-500 mb-1">{ar ? "الكمرات الصالحة" : "Valid Beams"}</p>
                   <p className="text-lg font-bold text-slate-800">{validRows.length}</p>
                 </div>
                 <div className="bg-slate-50 rounded-lg p-3 text-center">
-                  <p className="text-xs text-slate-500 mb-1">Average MOR</p>
+                  <p className="text-xs text-slate-500 mb-1">{ar ? "متوسط MOR" : "Average MOR"}</p>
                   <p className="text-lg font-bold text-slate-800">{avgMOR?.toFixed(3) ?? "—"} <span className="text-xs font-normal">MPa</span></p>
                 </div>
                 <div className="bg-slate-50 rounded-lg p-3 text-center">
-                  <p className="text-xs text-slate-500 mb-1">Min. Required</p>
+                  <p className="text-xs text-slate-500 mb-1">{ar ? "الحد الأدنى المطلوب" : "Min. Required"}</p>
                   <p className="text-lg font-bold text-slate-800">{minMOR.toFixed(1)} <span className="text-xs font-normal">MPa</span></p>
                 </div>
                 <div className="bg-slate-50 rounded-lg p-3 text-center">
-                  <p className="text-xs text-slate-500 mb-1">Overall Result</p>
+                  <p className="text-xs text-slate-500 mb-1">{ar ? "النتيجة الإجمالية" : "Overall Result"}</p>
                   {overallResult !== "pending" ? (
                     <PassFailBadge result={overallResult} size="lg" />
-                  ) : <span className="text-slate-400 text-sm">Pending</span>}
+                  ) : <span className="text-slate-400 text-sm">{ar ? "قيد الانتظار" : "Pending"}</span>}
                 </div>
               </div>
             )}
@@ -472,16 +493,16 @@ export default function ConcreteBeam() {
         {/* Acceptance Criteria */}
         <Card className="border-slate-200">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-slate-600">Acceptance Criteria — ASTM C78</CardTitle>
+            <CardTitle className="text-sm text-slate-600">{ar ? "معايير القبول — ASTM C78" : "Acceptance Criteria — ASTM C78"}</CardTitle>
           </CardHeader>
           <CardContent>
             <table className="w-full text-xs">
               <thead>
                 <tr className="border-b text-slate-500">
-                  <th className="text-left py-1.5 pr-4">Concrete Grade</th>
+                  <th className="text-left py-1.5 pr-4">{ar ? "رتبة الخرسانة" : "Concrete Grade"}</th>
                   <th className="text-left py-1.5 pr-4">f'c (MPa)</th>
-                  <th className="text-left py-1.5 pr-4">Typical MOR (MPa)</th>
-                  <th className="text-left py-1.5">Approx. MOR = 0.62√f'c</th>
+                  <th className="text-left py-1.5 pr-4">{ar ? "MOR النموذجي (MPa)" : "Typical MOR (MPa)"}</th>
+                  <th className="text-left py-1.5">{ar ? "تقريبًا MOR = 0.62√f'c" : "Approx. MOR = 0.62√f'c"}</th>
                 </tr>
               </thead>
               <tbody className="text-slate-700">
@@ -502,8 +523,9 @@ export default function ConcreteBeam() {
               </tbody>
             </table>
             <p className="text-xs text-slate-500 mt-2">
-              * MOR (Modulus of Rupture) = Flexural Strength. Individual beam result must meet the specified minimum MOR.
-              Discarded beams (fracture outside 5% of span) are excluded from evaluation.
+              {ar
+                ? "* MOR (معامل الانعطاف) = مقاومة الانعطاف. يجب أن تفي كل كمرة على حدة بالحد الأدنى المطلوب لـ MOR. يتم استبعاد الكمرات التي يحدث فيها الكسر خارج حدود 5% من البحر."
+                : "* MOR (Modulus of Rupture) = Flexural Strength. Individual beam result must meet the specified minimum MOR. Discarded beams (fracture outside 5% of span) are excluded from evaluation."}
             </p>
           </CardContent>
         </Card>
@@ -517,24 +539,24 @@ export default function ConcreteBeam() {
         <Card>
           <CardContent className="pt-4 space-y-4">
             <div className="space-y-1.5">
-              <Label>Notes / Observations</Label>
+              <Label>{ar ? "ملاحظات / مشاهدات" : "Notes / Observations"}</Label>
               <Textarea value={notes} onChange={e => setNotes(e.target.value)}
-                placeholder="Fracture patterns, surface condition, curing notes..." rows={3} />
+                placeholder={ar ? "أنماط الكسر، حالة السطح، ملاحظات المعالجة..." : "Fracture patterns, surface condition, curing notes..."} rows={3} />
             </div>
             <div className="flex items-center gap-3">
               {user && (
                 <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 rounded px-2 py-1.5">
                   <UserCheck size={13} />
-                  <span>Technician: <strong>{user.name}</strong></span>
+                  <span>{ar ? "الفني:" : "Technician:"} <strong>{user.name}</strong></span>
                 </div>
               )}
               <div className="flex gap-2 ml-auto">
                 <Button variant="outline" onClick={() => handleSave("draft")} disabled={saving}>
-                  Save Draft
+                  {ar ? "حفظ مسودة" : "Save Draft"}
                 </Button>
                 <Button onClick={() => handleSave("submitted")} disabled={saving || submitted}>
-                  {saving ? "Saving..." : submitted ? "Saved ✓" : (
-                    <><Send size={14} className="mr-1.5" /> Submit Results</>
+                  {saving ? (ar ? "جارٍ الحفظ..." : "Saving...") : submitted ? (ar ? "تم الحفظ ✓" : "Saved ✓") : (
+                    <><Send size={14} className="mr-1.5" /> {ar ? "إرسال النتائج" : "Submit Results"}</>
                   )}
                 </Button>
               </div>

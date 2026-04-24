@@ -29,12 +29,10 @@ function getCubeSizeFactor(sizeLabel: string): number {
 // ─── Expected strength at age (Eurocode / BS approach) ───────────────────────
 // Estimate expected strength at test age relative to 28-day strength
 function getStrengthFactor(ageDays: number): number {
-  if (ageDays <= 3)  return 0.40;
-  if (ageDays <= 7)  return 0.65;
-  if (ageDays <= 14) return 0.85;
-  if (ageDays <= 28) return 1.00;
-  if (ageDays <= 56) return 1.10;
-  return 1.15;
+  if (ageDays <= 7)  return 0.70;  // 70% at 7 days
+  if (ageDays <= 14) return 0.85;  // 85% at 14 days
+  if (ageDays <= 28) return 1.00;  // 100% at 28 days
+  return 1.00;                      // 100% for anything above 28 days
 }
 
 interface CubeRow {
@@ -271,7 +269,7 @@ export default function ConcreteCubes() {
                 <p className="font-semibold text-slate-800 text-sm">{dist?.sampleCode ?? "—"}</p>
               </div>
               <div className="bg-slate-50 rounded-lg p-3 border">
-                <p className="text-xs text-slate-500 mb-1">{ar ? "تاريخ الصب" : "Date of Casting"}</p>
+                <p className="text-xs text-slate-500 mb-1">{ar ? "تاريخ الاستلام" : "Date Received"}</p>
                 <p className="font-semibold text-slate-800 text-sm">
                   {castingDate ? castingDate.toLocaleDateString() : (
                     <span className="text-amber-600 text-xs">{ar ? "غير محدد" : "Not set"}</span>
@@ -369,10 +367,19 @@ export default function ConcreteCubes() {
               </div>
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                 <p className="text-xs text-amber-700 font-medium mb-1">
-                  {ar ? "القوة المطلوبة عند العمر الحالي" : "Required Strength at Current Age"}
+                  {ar ? "القوة المطلوبة عند عمر الاختبار" : "Required Strength at Test Age"}
                 </p>
                 <p className="text-2xl font-bold text-amber-800">
                   {requiredAtAge.toFixed(1)} <span className="text-sm font-normal">N/mm²</span>
+                </p>
+                <p className="text-xs text-amber-600 mt-1">
+                  {ar ? "7 أيام → 70% من المقاومة المحددة" : "7 days → 70% of specified strength"}
+                </p>
+                <p className="text-xs text-amber-600">
+                  {ar ? "14 يومًا → 85% من المقاومة المحددة" : "14 days → 85% of specified strength"}
+                </p>
+                <p className="text-xs text-amber-600">
+                  {ar ? "28 يومًا → 100% من المقاومة المحددة" : "28 days → 100% of specified strength"}
                 </p>
                 {sampleAgeDays !== null && (
                   <p className="text-xs text-amber-600 mt-1">

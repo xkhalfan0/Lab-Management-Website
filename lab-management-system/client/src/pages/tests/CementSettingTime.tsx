@@ -40,6 +40,34 @@ const CEMENT_TYPES = {
     standard: "BS EN 196-3",
     code: "CEM_SETTING_TIME",
   },
+  "CEM_II": {
+    label: "CEM II",
+    initialSetMin: 60,
+    finalSetMax: 600,
+    standard: "BS EN 196-3",
+    code: "CEM_SETTING_TIME",
+  },
+  "CEM_III": {
+    label: "CEM III",
+    initialSetMin: 60,
+    finalSetMax: 600,
+    standard: "BS EN 196-3",
+    code: "CEM_SETTING_TIME",
+  },
+  "CEM_IV": {
+    label: "CEM IV",
+    initialSetMin: 60,
+    finalSetMax: 600,
+    standard: "BS EN 196-3",
+    code: "CEM_SETTING_TIME",
+  },
+  "CEM_V": {
+    label: "CEM V",
+    initialSetMin: 60,
+    finalSetMax: 600,
+    standard: "BS EN 196-3",
+    code: "CEM_SETTING_TIME",
+  },
   "ASTM_TYPE_I": {
     label: "ASTM Type I/II",
     initialSetMin: 45,
@@ -90,32 +118,30 @@ export default function CementSettingTime() {
     .map(r => ({ time: parseFloat(r.time), pen: parseFloat(r.penetration) }))
     .filter(r => !isNaN(r.time) && !isNaN(r.pen));
 
-  // Interpolate initial set (penetration = 25mm) and final set (penetration ≤ 1mm)
+  // Interpolate setting times from penetration readings
   function interpolateTime(targetPen: number): number | undefined {
     for (let i = 0; i < validReadings.length - 1; i++) {
       const a = validReadings[i];
       const b = validReadings[i + 1];
       if ((a.pen >= targetPen && b.pen <= targetPen) || (a.pen <= targetPen && b.pen >= targetPen)) {
         const denom = b.pen - a.pen;
-        if (denom === 0) continue; // avoid division by zero
+        if (denom === 0) continue;
         const t = a.time + (targetPen - a.pen) / denom * (b.time - a.time);
         if (isNaN(t) || !isFinite(t)) continue;
         return parseFloat(t.toFixed(0));
       }
     }
-    // Fallback: find first reading where pen <= targetPen
-    const fallback = validReadings.find(r => r.pen <= targetPen);
-    return fallback ? fallback.time : undefined;
+    return undefined;
   }
 
   const initialSet = interpolateTime(25);
-  // Final set: interpolate at 1mm (BS EN 196-3: final set when penetration ≤ 1mm)
-  // Fallback: if last reading is ≤ 1mm, use its time
-  let finalSet = interpolateTime(1);
+  // Final set: interpolate at 0mm (BS EN 196-3)
+  // Fallback: if no interpolation is possible, use the last reading where penetration ≤ 0mm
+  let finalSet = interpolateTime(0);
   if (finalSet === undefined && validReadings.length > 0) {
-    const lastReading = validReadings[validReadings.length - 1];
-    if (lastReading.pen <= 1) {
-      finalSet = lastReading.time;
+    const lastAtOrBelowZero = [...validReadings].reverse().find(r => r.pen <= 0);
+    if (lastAtOrBelowZero) {
+      finalSet = lastAtOrBelowZero.time;
     }
   }
 
@@ -333,9 +359,9 @@ export default function CementSettingTime() {
                     />
                     <Tooltip formatter={(v: number) => `${v} mm`} labelFormatter={v => `${v} min`} />
                     <ReferenceLine y={25} stroke="#f59e0b" strokeDasharray="4 4" label={{ value: ar ? "الشك الابتدائي (25 مم)" : "Initial Set (25mm)", position: "right", fontSize: 9, fill: "#f59e0b" }} />
-                    <ReferenceLine y={1} stroke="#ef4444" strokeDasharray="4 4" label={{ value: ar ? "الشك النهائي (≤ 1 مم)" : "Final Set (≤1mm)", position: "right", fontSize: 9, fill: "#ef4444" }} />
-                    {initialSet && <ReferenceLine x={initialSet} stroke="#f59e0b" strokeDasharray="4 4" />}
-                    {finalSet && <ReferenceLine x={finalSet} stroke="#ef4444" strokeDasharray="4 4" />}
+                    <ReferenceLine y={0} stroke="#ef4444" strokeDasharray="4 4" label={{ value: ar ? "الشك النهائي (0 مم)" : "Final Set (0mm)", position: "right", fontSize: 9, fill: "#ef4444" }} />
+                    {initialSet !== undefined && <ReferenceLine x={initialSet} stroke="#f59e0b" strokeDasharray="4 4" />}
+                    {finalSet !== undefined && <ReferenceLine x={finalSet} stroke="#ef4444" strokeDasharray="4 4" />}
                     <Line type="monotone" dataKey="pen" stroke="#2563eb" strokeWidth={2} dot={{ fill: "#2563eb", r: 4 }} />
                   </LineChart>
                 </ResponsiveContainer>
@@ -354,18 +380,16 @@ export default function CementSettingTime() {
             <div className={`rounded-xl p-4 text-center border ${initialSetResult === "pass" ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"}`}>
               <p className={`text-xs font-semibold mb-1 ${initialSetResult === "pass" ? "text-emerald-600" : "text-red-600"}`}>{ar ? "زمن الشك الابتدائي" : "Initial Setting Time"}</p>
               <p className={`text-2xl font-bold ${initialSetResult === "pass" ? "text-emerald-800" : "text-red-800"}`}>
-                {initialSet !== undefined ? `${initialSet} min` : "—"}
+                {initialSet !== undefined ? `${initialSet} min (${formatTime(initialSet)})` : "—"}
               </p>
-              {initialSet !== undefined && <p className={`text-xs mt-1 ${initialSetResult === "pass" ? "text-emerald-500" : "text-red-500"}`}>{formatTime(initialSet)}</p>}
               <p className="text-xs text-slate-400 mt-1">{ar ? "الحد الأدنى:" : "Min:"} {spec.initialSetMin} min</p>
               {initialSetResult !== "pending" && <div className="mt-2"><PassFailBadge result={initialSetResult} size="sm" /></div>}
             </div>
             <div className={`rounded-xl p-4 text-center border ${finalSetResult === "pass" ? "bg-emerald-50 border-emerald-200" : finalSetResult === "fail" ? "bg-red-50 border-red-200" : "bg-slate-50 border-slate-200"}`}>
               <p className={`text-xs font-semibold mb-1 ${finalSetResult === "pass" ? "text-emerald-600" : finalSetResult === "fail" ? "text-red-600" : "text-slate-500"}`}>{ar ? "زمن الشك النهائي" : "Final Setting Time"}</p>
               <p className={`text-2xl font-bold ${finalSetResult === "pass" ? "text-emerald-800" : finalSetResult === "fail" ? "text-red-800" : "text-slate-700"}`}>
-                {finalSet !== undefined ? `${finalSet} min` : "—"}
+                {finalSet !== undefined ? `${finalSet} min (${formatTime(finalSet)})` : "—"}
               </p>
-              {finalSet !== undefined && <p className={`text-xs mt-1 ${finalSetResult === "pass" ? "text-emerald-500" : "text-red-500"}`}>{formatTime(finalSet)}</p>}
               <p className="text-xs text-slate-400 mt-1">{ar ? "الحد الأقصى:" : "Max:"} {spec.finalSetMax} min</p>
               {finalSetResult !== "pending" && <div className="mt-2"><PassFailBadge result={finalSetResult} size="sm" /></div>}
             </div>

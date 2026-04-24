@@ -15,15 +15,13 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 // ─── L/D Correction Factors (BS EN 12504-1) ─────────────────────────────
-// Correction applies only when L/D < 1.0; at L/D ≥ 1.0, CF = 1.0 (no correction).
 function getLDCorrectionFactor(ld: number): number {
-  if (ld >= 1.0) return 1.0;
-  if (ld >= 0.95) return 0.98;
-  if (ld >= 0.90) return 0.96;
-  if (ld >= 0.85) return 0.94;
-  if (ld >= 0.80) return 0.92;
-  if (ld >= 0.75) return 0.89;
-  return 0.8;
+  if (ld >= 2.00) return 1.00;
+  if (ld >= 1.75) return 0.97;
+  if (ld >= 1.50) return 0.96;
+  if (ld >= 1.25) return 0.93;
+  if (ld >= 1.00) return 0.82;
+  return 0.82;
 }
 
 interface CoreRow {
@@ -107,7 +105,7 @@ function computeRow(row: CoreRow, specifiedCubeStrength: number): CoreRow {
     ...row,
     area: Math.round(area),
     ld: parseFloat(ld.toFixed(2)),
-    correctionFactor: ld >= 1.0 ? 1.0 : parseFloat(cf.toFixed(3)),
+    correctionFactor: parseFloat(cf.toFixed(3)),
     density,
     coreStrength: coreStrRounded,
     equivalentCubeStrength: eqCubeStrRounded,
@@ -249,9 +247,11 @@ export default function ConcreteCore() {
   };
 
   const LD_TABLE = [
-    { ld: "0.95", cf: "0.980" }, { ld: "0.90", cf: "0.960" },
-    { ld: "0.85", cf: "0.940" }, { ld: "0.80", cf: "0.920" },
-    { ld: "0.75", cf: "0.890" }, { ld: "≥1.00", cf: "1.000 (no correction)" },
+    { ld: "1.00", cf: "0.82" },
+    { ld: "1.25", cf: "0.93" },
+    { ld: "1.50", cf: "0.96" },
+    { ld: "1.75", cf: "0.97" },
+    { ld: "2.00", cf: "1.00 (no correction needed)" },
   ];
 
   return (
@@ -555,8 +555,8 @@ export default function ConcreteCore() {
           <CardContent className="pt-4">
             <p className="text-xs font-semibold text-slate-600 mb-2">
               {ar
-                ? "عوامل تصحيح L/D (BS EN 12504-1) — عند L/D = 1.0: لا يلزم تصحيح (CF = 1.000)"
-                : "L/D Correction Factors (BS EN 12504-1) — No correction when L/D ≥ 1.0 (CF = 1.000)"}
+                ? "عوامل تصحيح L/D (BS EN 12504-1)"
+                : "L/D Correction Factors (BS EN 12504-1)"}
             </p>
             <div className="flex gap-6 flex-wrap">
               {LD_TABLE.map(({ ld, cf }) => (

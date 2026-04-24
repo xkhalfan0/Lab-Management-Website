@@ -68,7 +68,7 @@ function newRow(index: number, defaultThickness: number, length = "200", width =
   };
 }
 
-const THICKNESS_FACTOR: Record<number, number> = { 60: 1.06, 80: 1.18, 100: 1.24 };
+const THICKNESS_FACTOR: Record<number, number> = { 60: 0.80, 80: 1.00, 100: 1.20 };
 
 function computeRow(row: InterlockRow, spec: typeof INTERLOCK_SPECS[InterlockTypeKey]): InterlockRow {
   const l = parseFloat(row.length);

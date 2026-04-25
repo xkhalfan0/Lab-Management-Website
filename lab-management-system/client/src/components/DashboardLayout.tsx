@@ -47,6 +47,7 @@ type AllowedRole =
 const ALL_MENU_ITEMS = [
   { icon: LayoutDashboard, labelKey: "nav.adminDashboard", path: "/admin-dashboard", permKey: "admin_dashboard", minLevel: "view", allowedRoles: ["admin", "lab_manager", "supervisor", "sample_manager"] as AllowedRole[] },
   { icon: Eye, labelKey: "nav.supervisorDashboard", path: "/supervisor-dashboard", permKey: "supervisor_dashboard", minLevel: "view", allowedRoles: ["admin", "lab_manager", "supervisor", "sample_manager"] as AllowedRole[] },
+  { icon: Target, labelKey: "nav.managerDashboard", path: "/manager-dashboard", permKey: "admin_dashboard", minLevel: "view", allowedRoles: ["admin", "lab_manager", "supervisor"] as AllowedRole[] },
   { icon: FlaskConical, labelKey: "nav.reception", path: "/reception", permKey: "samples", minLevel: "view", allowedRoles: ["admin", "lab_manager", "reception"] as AllowedRole[] },
   { icon: ClipboardList, labelKey: "nav.distribution", path: "/distribution", permKey: "distribution", minLevel: "view", allowedRoles: ["admin", "lab_manager", "supervisor", "sample_manager"] as AllowedRole[] },
   { icon: Microscope, labelKey: "nav.assignments", path: "/technician", permKey: "results", minLevel: "view", allowedRoles: ["admin", "technician"] as AllowedRole[] },

@@ -27,7 +27,7 @@ const translations: Record<string, Record<Language, string>> = {
   "nav.reception": { en: "Sample Reception", ar: "استلام العينات" },
   "nav.distribution": { en: "Distribution", ar: "التوزيع" },
   "nav.assignments": { en: "My Assignments", ar: "مهامي" },
-  "nav.managerDashboard": { en: "Dashboard", ar: "لوحة التحكم" },
+  "nav.managerDashboard": { en: "Quality Intelligence", ar: "ذكاء الجودة" },
   "nav.adminDashboard": { en: "Main Dashboard", ar: "لوحة التحكم الرئيسية" },
   "nav.supervisorDashboard": { en: "Supervisor View", ar: "لوحة المتابعة" },
   "nav.managerReview": { en: "Test Results", ar: "نتائج الاختبارات" },

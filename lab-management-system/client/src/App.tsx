@@ -25,6 +25,7 @@ import Notifications from "./pages/Notifications";
 import Analytics from "./pages/Analytics";
 import AdminDashboard from "./pages/AdminDashboard";
 import SupervisorDashboard from "./pages/SupervisorDashboard";
+import ManagerDashboard from "./pages/ManagerDashboard";
 import ChangePassword from "./pages/ChangePassword";
 import PrintReceipt from "./pages/PrintReceipt";
 import ClearanceArchive from "./pages/ClearanceArchive";
@@ -92,6 +93,7 @@ const ROUTE_ROLES: Record<string, string[]> = {
   "/manager-review": ["admin", "sample_manager", "lab_manager"],
   "/qc-review": ["admin", "qc_inspector", "lab_manager"],
   "/clearance": ["admin", "lab_manager", "sample_manager", "accountant"],
+  "/manager-dashboard": ["admin", "lab_manager", "supervisor", "sample_manager"],
   "/users": ["admin"],
   "/tests-management": ["admin"],
 };
@@ -242,6 +244,10 @@ function Router() {
 
       <Route path="/supervisor-dashboard">
         {() => <ProtectedRoute component={SupervisorDashboard} path="/supervisor-dashboard" />}
+      </Route>
+
+      <Route path="/manager-dashboard">
+        {() => <ProtectedRoute component={ManagerDashboard} path="/manager-dashboard" />}
       </Route>
 
       <Route path="/change-password">

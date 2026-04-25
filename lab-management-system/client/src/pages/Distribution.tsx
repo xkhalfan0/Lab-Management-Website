@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ClipboardList, Eye, UserCheck, Building2, FlaskConical, CheckCircle2, Pencil } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
 
@@ -76,6 +76,10 @@ export default function Distribution() {
     notes: "",
   });
   const [taskFilter, setTaskFilter] = useState<"all" | "pending" | "active" | "done">("all");
+  const [selectedOrderIds, setSelectedOrderIds] = useState<number[]>([]);
+  const [batchTechnicianId, setBatchTechnicianId] = useState("");
+  const [batchPriority, setBatchPriority] = useState<"low" | "normal" | "high" | "urgent">("normal");
+  const [batchLoading, setBatchLoading] = useState(false);
   const [, setLocation] = useLocation();
 
   // ─── Data ──────────────────────────────────────────────────────────────────
@@ -102,6 +106,7 @@ export default function Distribution() {
     },
     onError: (err) => toast.error(err.message),
   });
+  const distributeOrderBatch = trpc.orders.distribute.useMutation();
 
   // ─── Filters ───────────────────────────────────────────────────────────────
   const PENDING_STATUSES = ["pending"];
@@ -118,6 +123,12 @@ export default function Distribution() {
   const pendingOrders = orders.filter((o: any) => PENDING_STATUSES.includes(o.status));
   const activeOrders = orders.filter((o: any) => ACTIVE_STATUSES.includes(o.status));
   const doneOrders = orders.filter((o: any) => DONE_STATUSES.includes(o.status));
+  const allPendingSelected = pendingOrders.length > 0 && pendingOrders.every((o: any) => selectedOrderIds.includes(o.id));
+
+  useEffect(() => {
+    const pendingIdSet = new Set(pendingOrders.map((o: any) => o.id));
+    setSelectedOrderIds((prev) => prev.filter((id) => pendingIdSet.has(id)));
+  }, [orders]);
 
   // ─── Handlers ──────────────────────────────────────────────────────────────
   const handleOpenDialog = (order: any) => {
@@ -156,6 +167,45 @@ export default function Distribution() {
         notes: form.notes || undefined,
       });
     }
+  };
+
+  const toggleOrderSelection = (orderId: number, checked: boolean) => {
+    setSelectedOrderIds((prev) => {
+      if (checked) return prev.includes(orderId) ? prev : [...prev, orderId];
+      return prev.filter((id) => id !== orderId);
+    });
+  };
+
+  const toggleSelectAllPending = (checked: boolean) => {
+    setSelectedOrderIds(checked ? pendingOrders.map((o: any) => o.id) : []);
+  };
+
+  const batchDistribute = async () => {
+    if (!batchTechnicianId || selectedOrderIds.length === 0) return;
+    setBatchLoading(true);
+    let successCount = 0;
+    for (const orderId of selectedOrderIds) {
+      try {
+        await distributeOrderBatch.mutateAsync({
+          orderId,
+          technicianId: parseInt(batchTechnicianId),
+          priority: batchPriority,
+        });
+        successCount++;
+      } catch {
+        // Continue distributing the rest even if one fails.
+      }
+    }
+    toast.success(
+      lang === "ar"
+        ? `تم توزيع ${successCount} أوردر بنجاح`
+        : `${successCount} orders distributed successfully`
+    );
+    setSelectedOrderIds([]);
+    setBatchTechnicianId("");
+    setBatchPriority("normal");
+    setBatchLoading(false);
+    refetch();
   };
 
   // ─── Filter Buttons ────────────────────────────────────────────────────────
@@ -222,10 +272,62 @@ export default function Distribution() {
                   {lang === "ar" ? "لا توجد أوردرات جديدة" : "No pending orders"}
                 </div>
               ) : (
-                <div className="overflow-x-auto">
+                <div className="space-y-3 p-3 pt-0">
+                  {selectedOrderIds.length > 0 && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex flex-wrap items-center gap-2">
+                      <span className="text-sm font-semibold text-amber-800">
+                        {lang === "ar" ? `${selectedOrderIds.length} أوردر محدد` : `${selectedOrderIds.length} orders selected`}
+                      </span>
+                      <div className="min-w-[220px] flex-1">
+                        <Select value={batchTechnicianId} onValueChange={setBatchTechnicianId}>
+                          <SelectTrigger className="h-9 bg-white">
+                            <SelectValue placeholder={lang === "ar" ? "اختر الفني..." : "Select technician..."} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {technicians.map((tech: any) => (
+                              <SelectItem key={tech.id} value={String(tech.id)}>
+                                {tech.name} {tech.specialty ? `(${tech.specialty})` : ""}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="w-[170px]">
+                        <Select value={batchPriority} onValueChange={(v) => setBatchPriority(v as any)}>
+                          <SelectTrigger className="h-9 bg-white">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="low">{lang === "ar" ? "منخفضة" : "Low"}</SelectItem>
+                            <SelectItem value="normal">{lang === "ar" ? "عادية" : "Normal"}</SelectItem>
+                            <SelectItem value="high">{lang === "ar" ? "عالية" : "High"}</SelectItem>
+                            <SelectItem value="urgent">{lang === "ar" ? "عاجلة" : "Urgent"}</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <Button
+                        className="h-9"
+                        disabled={!batchTechnicianId || batchLoading}
+                        onClick={batchDistribute}
+                      >
+                        {batchLoading
+                          ? (lang === "ar" ? "جاري التوزيع..." : "Distributing...")
+                          : (lang === "ar" ? "توزيع الكل" : "Distribute All")}
+                      </Button>
+                    </div>
+                  )}
+                  <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b bg-muted/30">
+                        <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">
+                          <input
+                            type="checkbox"
+                            checked={allPendingSelected}
+                            onChange={(e) => toggleSelectAllPending(e.target.checked)}
+                            aria-label={lang === "ar" ? "تحديد الكل" : "Select all"}
+                          />
+                        </th>
                         <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{lang === "ar" ? "رقم الأوردر" : "Order #"}</th>
                         <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{lang === "ar" ? "المقاول" : "Contractor"}</th>
                         <th className="text-start px-4 py-2.5 text-xs font-medium text-muted-foreground">{lang === "ar" ? "النوع" : "Type"}</th>
@@ -238,6 +340,14 @@ export default function Distribution() {
                     <tbody>
                       {pendingOrders.map((order: any) => (
                         <tr key={order.id} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
+                          <td className="px-4 py-2.5">
+                            <input
+                              type="checkbox"
+                              checked={selectedOrderIds.includes(order.id)}
+                              onChange={(e) => toggleOrderSelection(order.id, e.target.checked)}
+                              aria-label={lang === "ar" ? "تحديد الأوردر" : "Select order"}
+                            />
+                          </td>
                           <td className="px-4 py-2.5 font-mono text-xs font-semibold text-primary">{order.orderCode}</td>
                           <td className="px-4 py-2.5 text-xs">{order.contractorName ?? "—"}</td>
                           <td className="px-4 py-2.5 text-xs"><TypeCell order={order} lang={lang} /></td>
@@ -275,6 +385,7 @@ export default function Distribution() {
                       ))}
                     </tbody>
                   </table>
+                </div>
                 </div>
               )}
             </CardContent>

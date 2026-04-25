@@ -94,7 +94,7 @@ export default function SupervisorDashboard() {
       )}
 
       {/* KPI Cards — 4 essential ones */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {[
           {
             title: isAr ? "إجمالي العينات" : "Total Samples",
@@ -122,6 +122,12 @@ export default function SupervisorDashboard() {
             icon: <AlertTriangle className="w-4 h-4" />,
             color: "text-red-600", bg: "bg-red-50",
             critical: true,
+          },
+          {
+            title: isAr ? "بانتظار التوزيع" : "Pending Distribution",
+            value: kpis?.pendingDistribution.value ?? 0,
+            icon: <Clock className="w-4 h-4" />,
+            color: "text-orange-600", bg: "bg-orange-50",
           },
         ].map((card, i) => (
           <Card key={i} className={`border-0 shadow-sm ${card.critical && Number(card.value) > 0 ? "ring-2 ring-red-300" : ""}`}>

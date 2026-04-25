@@ -187,7 +187,7 @@ export default function AdminDashboard() {
       )}
 
       {/* ── KPI Cards ── */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-3">
         <KpiCard
           title={isAr ? "إجمالي العينات" : "Total Samples"}
           value={kpis?.totalSamples.value ?? 0}
@@ -210,6 +210,13 @@ export default function AdminDashboard() {
           icon={<AlertTriangle className="w-4 h-4" />}
           color="text-red-600" bgColor="bg-red-50"
           critical
+          loading={kpisLoading}
+        />
+        <KpiCard
+          title={isAr ? "بانتظار التوزيع" : "Pending Distribution"}
+          value={kpis?.pendingDistribution.value ?? 0}
+          icon={<Clock className="w-4 h-4" />}
+          color="text-orange-600" bgColor="bg-orange-50"
           loading={kpisLoading}
         />
         <KpiCard

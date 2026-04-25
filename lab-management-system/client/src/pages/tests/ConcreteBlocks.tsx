@@ -48,6 +48,7 @@ interface BlockRow {
   grossAreaMm2?: number;
   unitWeightGcc?: number;
   strengthMpa?: number;
+  correctedStrengthMpa?: number;
   correctionFactor?: number;
   result?: "pass" | "fail" | "pending";
 }
@@ -91,6 +92,7 @@ function computeRow(row: BlockRow, spec: typeof BLOCK_SPECS[BlockTypeKey]): Bloc
     unitWeightGcc: unitWeight ? parseFloat(unitWeight.toFixed(3)) : undefined,
     correctionFactor,
     strengthMpa: Math.round(correctedStrength * 10) / 10,
+    correctedStrengthMpa: Math.round(correctedStrength * 10) / 10,
     result: correctedStrength >= spec.requiredStrength ? "pass" : "fail",
   };
 }
@@ -182,7 +184,7 @@ export default function ConcreteBlocks() {
           manufacturer,
           mtsReference,
           batchNo,
-          blocks: computedRows,
+          blocks: computedRows.filter(r => r.loadKN && parseFloat(r.loadKN) > 0),
           avgStrength,
           overallResult,
         },

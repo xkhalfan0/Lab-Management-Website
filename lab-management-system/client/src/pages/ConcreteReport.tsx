@@ -80,7 +80,21 @@ function extractTargetFromClass(classStr: string | null | undefined): number | n
   return m ? parseFloat(m[1]) : null;
 }
 // ─── Single Report Page (one age group = one page) ────────────────────────────
-function ReportPage({ group, refNo, castingDate: distCastingDate }: { group: any; refNo: string; castingDate?: Date | string | null }) {
+function ReportPage({
+  group,
+  refNo,
+  castingDate: distCastingDate,
+  testedByName,
+  managerReviewedByName,
+  qcReviewedByName,
+}: {
+  group: any;
+  refNo: string;
+  castingDate?: Date | string | null;
+  testedByName?: string | null;
+  managerReviewedByName?: string | null;
+  qcReviewedByName?: string | null;
+}) {
   const cubes: any[] = group.cubes ?? [];
   const avg = group.avgCompressiveStrength ? parseFloat(group.avgCompressiveStrength) : null;
   // Use minAcceptable from DB; fallback to extracting from classOfConcrete
@@ -338,10 +352,21 @@ function ReportPage({ group, refNo, castingDate: distCastingDate }: { group: any
           <p>Type of Fracture : SF - Satisfactory, USF - Unsatisfactory</p>
           <p>* Curing before delivery to lab was performed outside the control of the laboratory</p>
         </div>
-        <div className="text-right text-xs">
-          <p className="font-semibold">مدني مهندس</p>
-          <p className="font-semibold">ركن المختبر</p>
-          <p className="font-bold mt-1">عادل محمد الزيني</p>
+        <div className="text-right text-xs min-w-[260px]">
+          <div className="grid grid-cols-3 gap-3">
+            <div className="text-center">
+              <p className="font-semibold">Tested By</p>
+              <p className="font-bold mt-1">{testedByName ?? group.testedBy ?? " "}</p>
+            </div>
+            <div className="text-center">
+              <p className="font-semibold">Reviewed By</p>
+              <p className="font-bold mt-1">{managerReviewedByName ?? " "}</p>
+            </div>
+            <div className="text-center">
+              <p className="font-semibold">Approved By</p>
+              <p className="font-bold mt-1">{qcReviewedByName ?? " "}</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -431,6 +456,10 @@ export default function ConcreteReport() {
     { distributionId: distId },
     { enabled: distId > 0 }
   );
+  const { data: testResult } = trpc.testResults.getByDistribution.useQuery(
+    { distributionId: distId },
+    { enabled: distId > 0 }
+  );
 
   const handlePrint = async () => {
     if (!printRef.current) return window.print();
@@ -472,6 +501,8 @@ export default function ConcreteReport() {
   }
 
   const refNo = distribution?.distributionCode ?? `DIST-${distId}`;
+  const distributionAny = distribution as any;
+  const testResultAny = testResult as any;
 
   return (
     <>
@@ -508,7 +539,14 @@ export default function ConcreteReport() {
           (groups as any[]).map((group: any, idx: number) => (
             <div key={group.id} className={`mx-auto mb-6 shadow-lg print:shadow-none print:mb-0 ${idx > 0 ? "print:page-break-before" : ""}`}
               style={{ width: "210mm" }}>
-              <ReportPage group={group} refNo={refNo} castingDate={distribution?.castingDate} />
+              <ReportPage
+                group={group}
+                refNo={refNo}
+                castingDate={distribution?.castingDate}
+                testedByName={distributionAny?.technicianName ?? testResultAny?.testedBy ?? group?.testedBy}
+                managerReviewedByName={testResultAny?.managerReviewedByName ?? null}
+                qcReviewedByName={testResultAny?.qcReviewedByName ?? null}
+              />
             </div>
           ))
         )}

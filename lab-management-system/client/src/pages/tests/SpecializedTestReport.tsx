@@ -135,7 +135,19 @@ function renderConcreteCore(fd: any, isAr: boolean, castingDateMs?: number | nul
 }
 
 function renderConcreteBlocks(fd: any, isAr: boolean) {
-  const blocks = (fd.blocks ?? []).filter((b: any) => b.strengthMpa != null && Number(b.strengthMpa) > 0);
+  if (typeof fd.blocks === "string") {
+    try {
+      fd.blocks = JSON.parse(fd.blocks);
+    } catch {
+      fd.blocks = [];
+    }
+  }
+  const blocks = (fd.blocks ?? []).filter((b: any) =>
+    typeof b === "object" &&
+    b !== null &&
+    b.strengthMpa != null &&
+    Number(b.strengthMpa) > 0
+  );
   const spec = fd.blockSpec ?? {};
   const BLOCK_CF_BY_THICKNESS: Record<number, number> = { 100: 0.80, 150: 0.86, 200: 1.00, 250: 1.05 };
   const inferThicknessMm = (b: any): number | undefined => {
@@ -1081,7 +1093,16 @@ function renderConcreteCubes(fd: any, isAr: boolean) {
 function renderFormData(formTemplate: string, formData: any, isAr: boolean, castingDateMs?: number | null) {
   switch (formTemplate) {
     case "concrete_cubes": return renderConcreteCubes(formData, isAr);
-    case "concrete_blocks": return renderConcreteBlocks(formData, isAr);
+    case "concrete_blocks":
+      try {
+        return renderConcreteBlocks(formData, isAr);
+      } catch {
+        return (
+          <div className="text-xs border border-red-200 bg-red-50 rounded p-3 text-red-700">
+            Report data could not be rendered. Please re-submit the test results.
+          </div>
+        );
+      }
     case "concrete_cores": return renderConcreteCore(formData, isAr, castingDateMs);
     case "concrete_beam": return renderConcreteBeam(formData, isAr, castingDateMs);
     case "steel_rebar": return renderSteelRebar(formData, isAr);

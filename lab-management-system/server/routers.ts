@@ -1992,13 +1992,18 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
         requireRole(ctx.user.role, ["admin", "technician", "lab_manager"]);
         const existing = await getSpecializedTestResultByDistribution(input.distributionId);
         if (existing) {
+          const resolvedTestedBy =
+            input.testedBy ??
+            (input.status === "submitted" ? (ctx.user.name ?? ctx.user.username ?? undefined) : undefined) ??
+            existing.testedBy ??
+            undefined;
           await updateSpecializedTestResult(existing.id, {
             formData: input.formData,
             overallResult: input.overallResult,
             summaryValues: input.summaryValues,
             notes: input.notes,
             status: input.status,
-            testedBy: input.testedBy,
+            testedBy: resolvedTestedBy,
             testDate: input.testDate ? new Date(input.testDate) : undefined,
             ...(input.status === "submitted" ? { submittedAt: new Date() } : {}),
           });
@@ -2046,7 +2051,7 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
           contractNo: input.contractNo ?? sample?.contractNumber ?? undefined,
           projectName: input.projectName ?? sample?.contractName ?? undefined,
           contractorName: input.contractorName ?? sample?.contractorName ?? undefined,
-          testedBy: input.testedBy ?? ctx.user.name ?? undefined,
+          testedBy: input.testedBy ?? (input.status === "submitted" ? (ctx.user.name ?? ctx.user.username ?? undefined) : undefined) ?? undefined,
           testDate: input.testDate ? new Date(input.testDate) : new Date(),
           formData: input.formData,
           overallResult: input.overallResult,
@@ -2613,6 +2618,20 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
       const result = await Promise.all(
         orders.map(async (o: any) => {
           const items = await getLabOrderItems(o.id);
+          const mappedItems = items.map((item: any) => ({
+            id: item.id,
+            testName: item.testTypeName,
+            testTypeCode: item.testTypeCode,
+            status: item.status,
+            quantity: item.quantity,
+            testSubType: item.testSubType,
+          }));
+          const testCount = mappedItems.reduce((sum: number, item: any) => sum + (Number(item.quantity) || 1), 0);
+          const testNames = mappedItems.map((item: any) => {
+            const name = item.testName || item.testTypeCode || "—";
+            const qty = Number(item.quantity) || 1;
+            return qty > 1 ? `${name} ×${qty}` : name;
+          });
           // Get sampleSubType from the linked sample
           let sampleSubType: string | null = null;
           if (o.sampleId) {
@@ -2622,14 +2641,9 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
           const tech = allUsers.find((u: any) => u.id === o.assignedTechnicianId);
           return {
             ...o,
-            items: items.map((item: any) => ({
-              id: item.id,
-              testName: item.testTypeName,
-              testTypeCode: item.testTypeCode,
-              status: item.status,
-              quantity: item.quantity,
-              testSubType: item.testSubType,
-            })),
+            items: mappedItems,
+            testCount,
+            testNames,
             sampleSubType,
             assignedTechnicianName: tech?.name ?? null,
           };
@@ -2913,6 +2927,8 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
         requireRole(ctx.user.role, ["admin", "sample_manager"]);
         const order = await getLabOrderById(input.orderId);
         if (!order) throw new TRPCError({ code: "NOT_FOUND" });
+        const reviewerName = ctx.user.name || ctx.user.username || "";
+        const reviewedAt = new Date();
         const newStatus = input.decision === "approved" ? "reviewed" : "rejected";
         await updateLabOrderStatus(input.orderId, newStatus);
         await updateSampleStatus(order.sampleId, input.decision === "approved" ? "reviewed" : "rejected");
@@ -2925,6 +2941,16 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
         });
         if (input.decision === "approved") {
           await notifyUsersByRole("qc_inspector", "Order Ready for QC", `Order ${order.orderCode} approved by supervisor`, order.sampleId, "info", "order_reviewed");
+        }
+        // Backfill legacy test_result reviewer signature fields for reporting.
+        const sampleResults = await getTestResultBySample(order.sampleId);
+        if (sampleResults.length > 0) {
+          await updateTestResult(sampleResults[0].id, {
+            managerReviewedById: ctx.user.id,
+            managerReviewedByName: reviewerName,
+            managerReviewedAt: reviewedAt,
+            managerNotes: input.notes,
+          });
         }
         return { success: true };
       }),
@@ -2939,6 +2965,8 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
         requireRole(ctx.user.role, ["admin", "qc_inspector"]);
         const order = await getLabOrderById(input.orderId);
         if (!order) throw new TRPCError({ code: "NOT_FOUND" });
+        const qcReviewerName = ctx.user.name || ctx.user.username || "";
+        const qcReviewedAt = new Date();
         const newStatus = input.decision === "approved" ? "qc_passed" : "rejected";
         await updateLabOrderStatus(input.orderId, newStatus);
         await updateSampleStatus(order.sampleId, input.decision === "approved" ? "qc_passed" : "rejected");
@@ -2949,6 +2977,16 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
           comments: input.notes ?? null,
           reviewType: "qc_review",
         });
+        // Backfill legacy test_result QC signature fields for reporting.
+        const sampleResults = await getTestResultBySample(order.sampleId);
+        if (sampleResults.length > 0) {
+          await updateTestResult(sampleResults[0].id, {
+            qcReviewedById: ctx.user.id,
+            qcReviewedByName: qcReviewerName,
+            qcReviewedAt: qcReviewedAt,
+            qcNotes: input.notes,
+          });
+        }
         return { success: true };
       }),
     updateItemQty: protectedProcedure

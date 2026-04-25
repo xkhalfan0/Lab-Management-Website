@@ -1199,8 +1199,14 @@ export default function Reception() {
                         <td className="px-4 py-2.5 text-xs">{order.contractorName ?? "—"}</td>
                         <td className="px-4 py-2.5 text-xs">{typeLabel(order.sampleType ?? "")}</td>
                         <td className="px-4 py-2.5 text-xs">
-                          <Badge variant="outline" className="text-xs">
-                            {(order as any).itemCount ?? "—"} {lang === "ar" ? "اختبار" : "test(s)"}
+                          <Badge
+                            variant="outline"
+                            className="text-xs"
+                            title={((order as any).testNames ?? [])
+                              .filter((n: string) => !!n)
+                              .join("\n")}
+                          >
+                            {((order as any).testCount ?? 0)} {lang === "ar" ? "اختبار" : "tests"}
                           </Badge>
                         </td>
                         <td className="px-4 py-2.5 text-xs">

@@ -65,6 +65,18 @@ const ALL_ACTIVE = [...PENDING_STATUSES, ...IN_PROGRESS_STATUSES];
 // SLA threshold in hours (configurable)
 const SLA_HOURS = 72;
 const STUCK_HOURS = 24;
+const DIST_ACTIVE_STATUSES = ["pending", "in_progress"];
+const DIST_DONE_STATUSES = ["completed", "cancelled"];
+const NOT_OVERDUE_SAMPLE_STATUSES = [
+  "completed",
+  "qc_passed",
+  "qc_review",
+  "manager_review",
+  "approved",
+  "clearance_issued",
+  "rejected",
+  "qc_failed",
+];
 
 export const dashboardRouter = router({
   /**
@@ -104,14 +116,25 @@ export const dashboardRouter = router({
         IN_PROGRESS_STATUSES.includes(s.status)
       ).length;
 
-      // KPI 3: Overdue (received > SLA_HOURS ago and not completed)
-      const slaMs = SLA_HOURS * 60 * 60 * 1000;
-      const overdue = allSamples.filter(
-        (s) =>
-          !COMPLETED_STATUSES.includes(s.status) &&
-          !FAILED_STATUSES.includes(s.status) &&
-          now.getTime() - new Date(s.receivedAt).getTime() > slaMs
+      // KPI 3 + pending distribution (distribution-based SLA)
+      const sampleWithDistMeta = await Promise.all(
+        allSamples.map(async (s) => {
+          const dists = await getDistributionsBySample(s.id);
+          return { sample: s, dists };
+        })
+      );
+      const pendingDistribution = sampleWithDistMeta.filter(({ sample, dists }) =>
+        sample.status === "received" && dists.length === 0
       ).length;
+      const overdue = sampleWithDistMeta.filter(({ sample, dists }) => {
+        if (NOT_OVERDUE_SAMPLE_STATUSES.includes(sample.status)) return false;
+        if (!dists.length) return false;
+        return dists.some((d) => {
+          if (!d.expectedCompletionDate) return false;
+          if (DIST_DONE_STATUSES.includes(d.status)) return false;
+          return now.getTime() > new Date(d.expectedCompletionDate).getTime();
+        });
+      }).length;
 
       // KPI 4: Completed in period
       const completed = periodSamples.filter((s) =>
@@ -164,6 +187,7 @@ export const dashboardRouter = router({
         totalSamples: { value: totalSamples, trend: totalTrend, prev: prevTotal },
         inProgress: { value: inProgress },
         overdue: { value: overdue },
+        pendingDistribution: { value: pendingDistribution },
         completed: { value: completed, trend: completedTrend, prev: prevCompleted },
         avgTAT: { value: avgTAT }, // hours
         failed: { value: failed, trend: failedTrend, prev: prevFailed },
@@ -311,20 +335,28 @@ export const dashboardRouter = router({
 
       if (COMPLETED_STATUSES.includes(s.status)) continue;
 
-      // SLA breach (> 72h)
-      if (ageMs > slaMs) {
+      const dists = await getDistributionsBySample(s.id);
+
+      // SLA breach: sample must be distributed and past expected completion date
+      const hasSlaBreach = !NOT_OVERDUE_SAMPLE_STATUSES.includes(s.status) && dists.some((d) => {
+        if (!d.expectedCompletionDate) return false;
+        if (DIST_DONE_STATUSES.includes(d.status)) return false;
+        return now.getTime() > new Date(d.expectedCompletionDate).getTime();
+      });
+
+      if (hasSlaBreach) {
         alerts.push({
           sampleId: s.id,
           sampleCode: s.sampleCode,
           issueType: "sla_breach",
-          issueLabel: `SLA Exceeded (${ageHours}h)`,
-          issueLabelAr: `تجاوز وقت الخدمة (${ageHours} ساعة)`,
+          issueLabel: "SLA Exceeded",
+          issueLabelAr: "تجاوز وقت الخدمة",
           delayHours: ageHours,
           severity: "critical",
           status: s.status,
           sector: s.sector,
         });
-      } else if (lastUpdateMs > stuckMs && IN_PROGRESS_STATUSES.includes(s.status)) {
+      } else if (lastUpdateMs > stuckMs && IN_PROGRESS_STATUSES.includes(s.status) && dists.some((d) => DIST_ACTIVE_STATUSES.includes(d.status))) {
         // Stuck (no update for 24h)
         alerts.push({
           sampleId: s.id,

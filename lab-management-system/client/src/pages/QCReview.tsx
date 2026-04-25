@@ -446,27 +446,30 @@ export default function QCReview() {
   const [taskFilter, setTaskFilter] = useState<TaskFilter>("new");
   const [showHistory, setShowHistory] = useState(false);
   const [archiveSearch, setArchiveSearch] = useState("");
+  const [loadTimedOut, setLoadTimedOut] = useState(false);
+
+  const selectedSampleId = Number(selectedSample?.id ?? 0);
 
   const { data: samples, refetch } = trpc.samples.list.useQuery();
-  const { data: results, isLoading: isLegacyResultsLoading } = trpc.testResults.bySample.useQuery(
-    { sampleId: selectedSample?.id ?? 0 },
-    { enabled: !!selectedSample }
+  const { data: results, isLoading: isLegacyResultsLoading, refetch: refetchLegacyResults } = trpc.testResults.bySample.useQuery(
+    { sampleId: selectedSampleId },
+    { enabled: selectedSampleId > 0 }
   );
-  const { data: specializedResults, isLoading: isSpecializedResultsLoading } = trpc.specializedTests.getBySample.useQuery(
-    { sampleId: selectedSample?.id ?? 0 },
-    { enabled: !!selectedSample }
+  const { data: specializedResults, isLoading: isSpecializedResultsLoading, refetch: refetchSpecializedResults } = trpc.specializedTests.getBySample.useQuery(
+    { sampleId: selectedSampleId },
+    { enabled: selectedSampleId > 0 }
   );
-  const { data: distributions, isLoading: isDistributionsLoading } = trpc.distributions.bySample.useQuery(
-    { sampleId: selectedSample?.id ?? 0 },
-    { enabled: !!selectedSample }
+  const { data: distributions, isLoading: isDistributionsLoading, refetch: refetchDistributions } = trpc.distributions.bySample.useQuery(
+    { sampleId: selectedSampleId },
+    { enabled: selectedSampleId > 0 }
   );
-  const { data: reviews, isLoading: isReviewsLoading } = trpc.reviews.bySample.useQuery(
-    { sampleId: selectedSample?.id ?? 0 },
-    { enabled: !!selectedSample }
+  const { data: reviews, isLoading: isReviewsLoading, refetch: refetchReviews } = trpc.reviews.bySample.useQuery(
+    { sampleId: selectedSampleId },
+    { enabled: selectedSampleId > 0 }
   );
-  const { data: sampleOrders, isLoading: isOrdersLoading } = trpc.orders.bySample.useQuery(
-    { sampleId: selectedSample?.id ?? 0 },
-    { enabled: !!selectedSample }
+  const { data: sampleOrders, isLoading: isOrdersLoading, refetch: refetchSampleOrders } = trpc.orders.bySample.useQuery(
+    { sampleId: selectedSampleId },
+    { enabled: selectedSampleId > 0 }
   );
 
   const qcReview = trpc.reviews.qcReview.useMutation({
@@ -522,6 +525,30 @@ export default function QCReview() {
     value: v,
     fill: (minVal == null || v >= minVal) && (maxVal == null || v <= maxVal) ? "#22c55e" : "#ef4444",
   }));
+
+  useEffect(() => {
+    if (selectedSampleId > 0) {
+      console.debug("[QCReview] fetching modal results for sampleId:", selectedSampleId);
+    }
+  }, [selectedSampleId]);
+
+  useEffect(() => {
+    if (!selectedSample || !isModalDataLoading) {
+      setLoadTimedOut(false);
+      return;
+    }
+    const timer = setTimeout(() => setLoadTimedOut(true), 5000);
+    return () => clearTimeout(timer);
+  }, [selectedSample, isModalDataLoading]);
+
+  const handleRetryLoad = () => {
+    setLoadTimedOut(false);
+    refetchLegacyResults();
+    refetchSpecializedResults();
+    refetchDistributions();
+    refetchReviews();
+    refetchSampleOrders();
+  };
 
   const handleReview = () => {
     if (!decision) { toast.error(lang === "ar" ? "يرجى اختيار قرار" : "Please select a decision"); return; }
@@ -599,7 +626,7 @@ export default function QCReview() {
                 const state = getSampleTaskState(sample);
                 return (
                   <Card key={sample.id} className={`hover:shadow-md transition-shadow cursor-pointer border-l-4 ${state === "new" ? "border-l-red-400 bg-red-50/20" : state === "incomplete" ? "border-l-amber-400 bg-amber-50/20" : "border-l-green-400"}`}
-                    onClick={() => { setSelectedSample(sample); setComments(""); setSignature(""); setDecision(null); }}>
+                    onClick={() => { setSelectedSample(sample); setComments(""); setSignature(""); setDecision(null); setLoadTimedOut(false); }}>
                     <CardContent className="p-4 flex items-center justify-between">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2 flex-wrap">
@@ -633,7 +660,7 @@ export default function QCReview() {
                 <div className="grid gap-2 mt-2 opacity-70">
                   {completedSamples.map(sample => (
                     <Card key={sample.id} className="border-l-4 border-l-green-400 cursor-pointer hover:shadow-sm"
-                      onClick={() => { setSelectedSample(sample); setComments(""); setSignature(""); setDecision(null); }}>
+                      onClick={() => { setSelectedSample(sample); setComments(""); setSignature(""); setDecision(null); setLoadTimedOut(false); }}>
                       <CardContent className="p-3 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <p className="font-mono text-xs font-bold text-primary">{sample.sampleCode}</p>
@@ -663,7 +690,16 @@ export default function QCReview() {
 
           {isModalDataLoading ? (
             <div className="p-8 text-center text-sm text-muted-foreground">
-              {lang === "ar" ? "جاري تحميل النتائج..." : "Loading results..."}
+              {loadTimedOut ? (
+                <div className="space-y-3">
+                  <p>{lang === "ar" ? "تعذر تحميل النتائج" : "Could not load results"}</p>
+                  <Button variant="outline" size="sm" onClick={handleRetryLoad}>
+                    {lang === "ar" ? "إعادة المحاولة" : "Retry"}
+                  </Button>
+                </div>
+              ) : (
+                <p>{lang === "ar" ? "جاري تحميل النتائج..." : "Loading results..."}</p>
+              )}
             </div>
           ) : hasAnyResult ? (
             <div className="space-y-5 mt-2">
@@ -886,7 +922,7 @@ export default function QCReview() {
             </div>
           ) : (
             <div className="p-8 text-center text-sm text-muted-foreground">
-              {lang === "ar" ? "لا توجد نتائج اختبار لهذه العينة" : "No test results found for this sample"}
+              {lang === "ar" ? "لا توجد نتائج اختبار مُدخلة لهذه العينة" : "No test results submitted yet for this sample"}
             </div>
           )}
         </DialogContent>

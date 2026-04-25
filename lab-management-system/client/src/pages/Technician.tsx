@@ -234,7 +234,7 @@ export default function Technician() {
         ? allSamples.find((s: any) => s.sampleCode === selectedDist.sampleCode)?.id
         : undefined);
     if (resolvedSampleId == null) {
-      toast.error("Sample ID not found — please contact admin");
+      toast.error("Sample record not found");
       return;
     }
     submitResults.mutate({

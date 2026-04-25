@@ -15,6 +15,7 @@
     "db:seed:contractors": "tsx server/scripts/seed-contractors-projects.ts",
     "db:seed:users": "tsx server/scripts/seed-role-users.ts",
     "db:seed:test-types": "tsx server/scripts/seed-test-types.ts",
+    "seed:demo": "tsx server/scripts/seedDemo.ts",
     "db:import:catalog": "tsx server/scripts/import-catalog.ts",
     "db:import:contracts-sql": "node server/scripts/run-sql-file.mjs"
   },

@@ -119,6 +119,7 @@ export default function Technician() {
 
   const { data: assignments = [], refetch } = trpc.distributions.myAssignments.useQuery();
   const { data: myOrders = [], refetch: refetchOrders } = trpc.orders.myOrders.useQuery();
+  const { data: allSamples = [] } = trpc.samples.list.useQuery();
   const markRead = trpc.distributions.markRead.useMutation();
 
   const toggleOrder = (id: number) => {
@@ -227,9 +228,18 @@ export default function Technician() {
       toast.error(tx("noValue", lang));
       return;
     }
+    const resolvedSampleId =
+      selectedDist?.sampleId ??
+      (selectedDist?.sampleCode
+        ? allSamples.find((s: any) => s.sampleCode === selectedDist.sampleCode)?.id
+        : undefined);
+    if (resolvedSampleId == null) {
+      toast.error("Sample ID not found — please contact admin");
+      return;
+    }
     submitResults.mutate({
       distributionId: selectedDist.id,
-      sampleId: selectedDist.sampleId,
+      sampleId: resolvedSampleId,
       rawValues: values,
       unit,
       testNotes: testNotes || undefined,
@@ -303,7 +313,14 @@ export default function Technician() {
                                     ? "bg-muted/30 text-muted-foreground"
                                     : "bg-primary/5 hover:bg-primary/10 cursor-pointer"
                                 }`}
-                                onClick={() => !isDone && handleOpenTest(item)}
+                                onClick={() =>
+                                  !isDone &&
+                                  handleOpenTest({
+                                    ...item,
+                                    sampleId: item.sampleId ?? order.sampleId,
+                                    sampleCode: item.sampleCode ?? order.sampleCode,
+                                  })
+                                }
                               >
                                 <div className="flex items-center gap-2">
                                   {isDone

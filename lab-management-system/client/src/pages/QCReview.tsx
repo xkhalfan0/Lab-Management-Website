@@ -448,19 +448,23 @@ export default function QCReview() {
   const [archiveSearch, setArchiveSearch] = useState("");
 
   const { data: samples, refetch } = trpc.samples.list.useQuery();
-  const { data: results } = trpc.testResults.bySample.useQuery(
+  const { data: results, isLoading: isLegacyResultsLoading } = trpc.testResults.bySample.useQuery(
     { sampleId: selectedSample?.id ?? 0 },
     { enabled: !!selectedSample }
   );
-  const { data: distributions } = trpc.distributions.bySample.useQuery(
+  const { data: specializedResults, isLoading: isSpecializedResultsLoading } = trpc.specializedTests.getBySample.useQuery(
     { sampleId: selectedSample?.id ?? 0 },
     { enabled: !!selectedSample }
   );
-  const { data: reviews } = trpc.reviews.bySample.useQuery(
+  const { data: distributions, isLoading: isDistributionsLoading } = trpc.distributions.bySample.useQuery(
     { sampleId: selectedSample?.id ?? 0 },
     { enabled: !!selectedSample }
   );
-  const { data: sampleOrders } = trpc.orders.bySample.useQuery(
+  const { data: reviews, isLoading: isReviewsLoading } = trpc.reviews.bySample.useQuery(
+    { sampleId: selectedSample?.id ?? 0 },
+    { enabled: !!selectedSample }
+  );
+  const { data: sampleOrders, isLoading: isOrdersLoading } = trpc.orders.bySample.useQuery(
     { sampleId: selectedSample?.id ?? 0 },
     { enabled: !!selectedSample }
   );
@@ -495,6 +499,15 @@ export default function QCReview() {
 
   const dist = distributions?.[0];
   const result = results?.[0];
+  const specializedResult = specializedResults?.[0];
+  const hasAnyResult = !!result || !!specializedResult;
+  const isModalDataLoading = !!selectedSample && (
+    isLegacyResultsLoading ||
+    isSpecializedResultsLoading ||
+    isDistributionsLoading ||
+    isReviewsLoading ||
+    isOrdersLoading
+  );
   const managerReview = reviews?.find((r) => r.reviewType === "manager_review");
 
   const chartsData = result?.chartsData as any;
@@ -648,10 +661,38 @@ export default function QCReview() {
             </DialogTitle>
           </DialogHeader>
 
-          {result ? (
+          {isModalDataLoading ? (
+            <div className="p-8 text-center text-sm text-muted-foreground">
+              {lang === "ar" ? "جاري تحميل النتائج..." : "Loading results..."}
+            </div>
+          ) : hasAnyResult ? (
             <div className="space-y-5 mt-2">
+              {/* Specialized result summary (for tests like Marshall, soil proctor, etc.) */}
+              {specializedResult && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs space-y-1">
+                  <p className="font-semibold text-blue-800">
+                    {lang === "ar" ? "نتيجة الاختبار التخصصي" : "Specialized Test Result"}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">{lang === "ar" ? "القالب:" : "Template:"}</span>{" "}
+                    <span className="font-medium">{specializedResult.formTemplate}</span>
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">{lang === "ar" ? "النتيجة:" : "Overall Result:"}</span>{" "}
+                    <span className="font-medium capitalize">{specializedResult.overallResult}</span>
+                  </p>
+                  {specializedResult.testTypeCode && (
+                    <p>
+                      <span className="text-muted-foreground">{lang === "ar" ? "رمز الاختبار:" : "Test Code:"}</span>{" "}
+                      <span className="font-mono">{specializedResult.testTypeCode}</span>
+                    </p>
+                  )}
+                </div>
+              )}
+
               {/* Stats */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {result && (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {[
                   { label: lang === "ar" ? "المتوسط" : "Average", value: `${result.average} ${result.unit}` },
                   { label: lang === "ar" ? "الانحراف المعياري" : "Std Deviation", value: result.stdDeviation ?? "—" },
@@ -664,6 +705,7 @@ export default function QCReview() {
                   </div>
                 ))}
               </div>
+              )}
 
               {/* Full Report Link */}
               <div className="flex gap-2">
@@ -689,7 +731,7 @@ export default function QCReview() {
               </div>
 
               {/* Charts */}
-              {rawValues.length > 0 && (
+              {result && rawValues.length > 0 && (
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-xs font-medium mb-2">{lang === "ar" ? "خط الاتجاه" : "Trend Line"}</p>
@@ -844,7 +886,7 @@ export default function QCReview() {
             </div>
           ) : (
             <div className="p-8 text-center text-sm text-muted-foreground">
-              {lang === "ar" ? "جاري تحميل النتائج..." : "Loading results..."}
+              {lang === "ar" ? "لا توجد نتائج اختبار لهذه العينة" : "No test results found for this sample"}
             </div>
           )}
         </DialogContent>

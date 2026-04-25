@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ClipboardList, Eye, UserCheck, Building2, FlaskConical, CheckCircle2, Pencil } from "lucide-react";
+import { ClipboardList, Eye, UserCheck, Building2, FlaskConical, CheckCircle2, Pencil, Printer } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
@@ -64,6 +64,109 @@ function orderStatusColor(status: string) {
     rejected: "#ef4444",
   };
   return map[status] ?? "#94a3b8";
+}
+
+function printDistributionSlip(order: any, lang: string) {
+  const isAr = lang === "ar";
+  const dir = isAr ? "rtl" : "ltr";
+  const today = new Date().toLocaleDateString(
+    isAr ? "ar-AE" : "en-AE",
+    { year: "numeric", month: "long", day: "numeric" }
+  );
+  const dueDate = order.expectedCompletionDate
+    ? new Date(order.expectedCompletionDate)
+    : new Date(new Date(order.createdAt).getTime() + 7 * 24 * 60 * 60 * 1000);
+  const dueDateText = dueDate.toLocaleDateString(isAr ? "ar-AE" : "en-AE", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const distDateText = new Date(order.createdAt).toLocaleDateString(isAr ? "ar-AE" : "en-AE", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const testsHtml = ((order.items ?? []) as any[])
+    .map((item: any) => {
+      const name = item.testName && item.testName !== "__multi__" ? item.testName : item.testTypeCode;
+      const qty = Number(item.quantity) > 1 ? ` ×${item.quantity}` : "";
+      return `<li>${name}${qty}</li>`;
+    })
+    .join("");
+  const priority = order.priority ?? "normal";
+  const priorityColor =
+    priority === "urgent"
+      ? "#dc2626"
+      : priority === "high"
+      ? "#ea580c"
+      : "#2563eb";
+  const priorityLabel = isAr
+    ? (priority === "urgent" ? "عاجلة" : priority === "high" ? "عالية" : priority === "low" ? "منخفضة" : "عادية")
+    : priority;
+
+  const popup = window.open("", "_blank", "width=900,height=700");
+  if (!popup) return;
+  popup.document.write(`
+    <html>
+      <head>
+        <title>${isAr ? "بطاقة توزيع" : "Distribution Slip"} - ${order.orderCode}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 0; padding: 18px; direction: ${dir}; color: #111; background: #fff; }
+          .sheet { width: 100%; max-width: 190mm; margin: 0 auto; }
+          .slip { border: 2px solid #111; padding: 14px; min-height: 120mm; max-height: 130mm; box-sizing: border-box; }
+          .lab-name { font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+          .title { text-align: center; font-size: 18px; font-weight: 700; margin: 4px 0 10px; }
+          .order-code { text-align: center; font-size: 28px; font-family: monospace; font-weight: 800; margin: 8px 0 12px; letter-spacing: 1px; }
+          .row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 6px; }
+          .label { color: #444; }
+          .value { font-weight: 600; text-align: ${isAr ? "left" : "right"}; }
+          .tests { margin: 6px 0 8px; padding-${isAr ? "right" : "left"}: 18px; font-size: 14px; }
+          .priority { display: inline-block; padding: 3px 10px; border-radius: 999px; color: #fff; font-weight: 700; background: ${priorityColor}; }
+          .sig-box { margin-top: 14px; border: 1.5px solid #333; padding: 10px; height: 42px; display: flex; align-items: end; }
+          .sig-line { width: 100%; border-bottom: 1px solid #333; }
+          .footer { text-align: center; font-size: 11px; margin-top: 10px; color: #333; }
+          @media print {
+            @page { size: A4 portrait; margin: 10mm; }
+            body { padding: 0; }
+            .sheet { width: 100%; }
+            .slip { page-break-inside: avoid; margin-bottom: 10mm; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="sheet">
+          <div class="slip">
+            <div class="lab-name">
+              ${isAr ? "مختبر مواد البناء والهندسة" : "Construction Materials & Engineering Laboratory"}
+            </div>
+            <div class="title">${isAr ? "بطاقة توزيع / Distribution Slip" : "Distribution Slip / بطاقة توزيع"}</div>
+            <div class="order-code">${order.orderCode ?? "—"}</div>
+            <div class="row"><span class="label">${isAr ? "رمز العينة" : "Sample Code"}</span><span class="value">${order.sampleCode ?? "—"}</span></div>
+            <div class="row"><span class="label">${isAr ? "المقاول" : "Contractor"}</span><span class="value">${order.contractorName ?? "—"}</span></div>
+            <div class="row"><span class="label">${isAr ? "الفني المعين" : "Assigned Technician"}</span><span class="value">${order.assignedTechnicianName ?? "—"}</span></div>
+            <div class="row"><span class="label">${isAr ? "الأولوية" : "Priority"}</span><span class="value"><span class="priority">${priorityLabel}</span></span></div>
+            <div class="row"><span class="label">${isAr ? "تاريخ الاستحقاق" : "Due Date"}</span><span class="value">${dueDateText}</span></div>
+            <div class="row"><span class="label">${isAr ? "تاريخ التوزيع" : "Distribution Date"}</span><span class="value">${distDateText}</span></div>
+            <div class="row"><span class="label">${isAr ? "تاريخ الطباعة" : "Printed Date"}</span><span class="value">${today}</span></div>
+            <div class="row" style="display:block;">
+              <span class="label">${isAr ? "الاختبارات" : "Tests"}</span>
+              <ul class="tests">${testsHtml || "<li>—</li>"}</ul>
+            </div>
+            <div class="row" style="display:block; margin-top: 8px;">
+              <span class="label">${isAr ? "توقيع الفني / Technician Signature" : "Technician Signature / توقيع الفني"}</span>
+              <div class="sig-box"><div class="sig-line"></div></div>
+            </div>
+            <div class="footer">Construction Materials & Engineering Laboratory</div>
+          </div>
+        </div>
+      </body>
+    </html>
+  `);
+  popup.document.close();
+  setTimeout(() => {
+    popup.focus();
+    popup.print();
+  }, 300);
 }
 
 export default function Distribution() {
@@ -424,6 +527,7 @@ export default function Distribution() {
                           );
                           const canEditDistribution =
                             (order.status === "distributed" || order.status === "in_progress") && !hasSubmittedItems;
+                          const canPrintSlip = order.status === "distributed" || order.status === "in_progress";
                           return (
                         <tr key={order.id} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
                           <td className="px-4 py-2.5 font-mono text-xs font-semibold text-primary">{order.orderCode}</td>
@@ -475,6 +579,17 @@ export default function Distribution() {
                                   onClick={() => handleOpenEditDialog(order)}
                                 >
                                   <Pencil className="w-3.5 h-3.5" />
+                                </Button>
+                              )}
+                              {canPrintSlip && (
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-7 px-2 text-blue-600 hover:text-blue-700"
+                                  title={lang === "ar" ? "طباعة بطاقة التوزيع" : "Print Distribution Slip"}
+                                  onClick={() => printDistributionSlip(order, lang)}
+                                >
+                                  <Printer className="w-3.5 h-3.5" />
                                 </Button>
                               )}
                             </div>

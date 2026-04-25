@@ -2635,9 +2635,11 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
           });
           // Get sampleSubType from the linked sample
           let sampleSubType: string | null = null;
+          let sampleCode: string | null = null;
           if (o.sampleId) {
             const sample = await getSampleById(o.sampleId);
             sampleSubType = sample?.sampleSubType ?? null;
+            sampleCode = sample?.sampleCode ?? null;
           }
           const tech = allUsers.find((u: any) => u.id === o.assignedTechnicianId);
           return {
@@ -2646,6 +2648,7 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
             testCount,
             testNames,
             sampleSubType,
+            sampleCode,
             assignedTechnicianName: tech?.name ?? null,
           };
         })

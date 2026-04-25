@@ -1991,10 +1991,11 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
       .mutation(async ({ ctx, input }) => {
         requireRole(ctx.user.role, ["admin", "technician", "lab_manager"]);
         const existing = await getSpecializedTestResultByDistribution(input.distributionId);
+        const actorDisplayName = ctx.user.name ?? ctx.user.username ?? undefined;
         if (existing) {
           const resolvedTestedBy =
+            (input.status === "submitted" ? actorDisplayName : undefined) ??
             input.testedBy ??
-            (input.status === "submitted" ? (ctx.user.name ?? ctx.user.username ?? undefined) : undefined) ??
             existing.testedBy ??
             undefined;
           await updateSpecializedTestResult(existing.id, {
@@ -2051,7 +2052,7 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
           contractNo: input.contractNo ?? sample?.contractNumber ?? undefined,
           projectName: input.projectName ?? sample?.contractName ?? undefined,
           contractorName: input.contractorName ?? sample?.contractorName ?? undefined,
-          testedBy: input.testedBy ?? (input.status === "submitted" ? (ctx.user.name ?? ctx.user.username ?? undefined) : undefined) ?? undefined,
+          testedBy: (input.status === "submitted" ? actorDisplayName : undefined) ?? input.testedBy ?? undefined,
           testDate: input.testDate ? new Date(input.testDate) : new Date(),
           formData: input.formData,
           overallResult: input.overallResult,

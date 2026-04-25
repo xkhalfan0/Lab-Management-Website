@@ -17,6 +17,7 @@ import {
   AlertTriangle, CheckCircle2, FileText, BarChart2, Activity,
   Target, Award, Calendar, CalendarDays, Search, ArrowRight,
   PackageOpen, Beaker, ShieldCheck, Building2, CheckCircle,
+  TrendingDown, Zap, AlertOctagon,
 } from "lucide-react";
 import { useLocation } from "wouter";
 
@@ -139,6 +140,7 @@ export default function ManagerDashboard() {
   const { data: stats, isLoading: statsLoading } = trpc.analytics.testStats.useQuery(queryInput);
   const { data: samples, isLoading: samplesLoading } = trpc.samples.list.useQuery();
   const { data: sampleStats } = trpc.samples.stats.useQuery();
+  const { data: orders = [] } = trpc.orders.list.useQuery();
   const { data: dailyData, isLoading: dailyLoading } = trpc.samples.dailyWork.useQuery({
     fromDate: appliedFrom,
     toDate: appliedTo,
@@ -207,6 +209,137 @@ export default function ManagerDashboard() {
 
   const topTests = useMemo(() => (stats?.byTestType ?? []).slice(0, 6), [stats?.byTestType]);
 
+  const contractReadinessRows = useMemo(() => {
+    try {
+      const grouped = new Map<string, {
+        contractNo: string;
+        contractor: string;
+        total: number;
+        completed: number;
+        inProgress: number;
+        pending: number;
+      }>();
+      for (const o of orders as any[]) {
+        const contractNo = o.contractNumber ?? "—";
+        const contractor = o.contractorName ?? "—";
+        const key = `${contractNo}::${contractor}`;
+        if (!grouped.has(key)) {
+          grouped.set(key, { contractNo, contractor, total: 0, completed: 0, inProgress: 0, pending: 0 });
+        }
+        const row = grouped.get(key)!;
+        row.total++;
+        if (["completed", "qc_passed"].includes(o.status)) row.completed++;
+        else if (["distributed", "in_progress", "reviewed"].includes(o.status)) row.inProgress++;
+        else row.pending++;
+      }
+      return Array.from(grouped.values())
+        .map((r) => ({ ...r, readiness: r.total > 0 ? Math.round((r.completed / r.total) * 100) : 0 }))
+        .sort((a, b) => a.readiness - b.readiness);
+    } catch {
+      return [] as Array<any>;
+    }
+  }, [orders]);
+
+  const contractorScores = useMemo(() => {
+    try {
+      const grouped = new Map<string, {
+        contractor: string;
+        totalOrders: number;
+        completedOrders: number;
+        failedOrders: number;
+      }>();
+      for (const o of orders as any[]) {
+        const contractor = o.contractorName ?? (lang === "ar" ? "غير محدد" : "Unknown");
+        if (!grouped.has(contractor)) {
+          grouped.set(contractor, { contractor, totalOrders: 0, completedOrders: 0, failedOrders: 0 });
+        }
+        const g = grouped.get(contractor)!;
+        g.totalOrders++;
+        if (["completed", "qc_passed"].includes(o.status)) g.completedOrders++;
+        if (o.status === "rejected") g.failedOrders++;
+      }
+
+      const riskOrder: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
+      return Array.from(grouped.values())
+        .map((g) => {
+          const passRate = g.totalOrders > 0
+            ? Math.round((g.completedOrders / g.totalOrders) * 100)
+            : 0;
+          let riskLevel: "low" | "medium" | "high" | "critical" = "low";
+          if (passRate >= 80) riskLevel = "low";
+          else if (passRate >= 60) riskLevel = "medium";
+          else if (passRate >= 40) riskLevel = "high";
+          else riskLevel = "critical";
+          if (g.failedOrders >= 3) riskLevel = "critical";
+          return { ...g, passRate, riskLevel };
+        })
+        .sort((a, b) => riskOrder[a.riskLevel] - riskOrder[b.riskLevel]);
+    } catch {
+      return [] as Array<any>;
+    }
+  }, [orders, stats, lang]);
+
+  const slaWarnings = useMemo(() => {
+    try {
+      const now0 = new Date();
+      const tomorrow = new Date(now0.getTime() + 24 * 60 * 60 * 1000);
+      return (orders as any[])
+        .filter((o) => {
+          if (!["distributed", "in_progress"].includes(o.status)) return false;
+          if (!o.createdAt) return false;
+          const dueDate = new Date(o.createdAt);
+          dueDate.setDate(dueDate.getDate() + 7);
+          return dueDate <= tomorrow;
+        })
+        .map((o) => {
+          const dueDate = new Date(o.createdAt);
+          dueDate.setDate(dueDate.getDate() + 7);
+          const hoursLeft = Math.round((dueDate.getTime() - now0.getTime()) / (1000 * 60 * 60));
+          return { ...o, dueDate, hoursLeft };
+        })
+        .sort((a, b) => a.hoursLeft - b.hoursLeft);
+    } catch {
+      return [] as Array<any>;
+    }
+  }, [orders]);
+
+  const failureHeatmap = useMemo(() => {
+    try {
+      return (stats?.byTestType ?? [])
+        .filter((t2: any) => Number(t2.count) >= 3)
+        .map((t2: any) => {
+          const failRate = Number(t2.count) > 0 ? Math.round((Number(t2.failed ?? 0) / Number(t2.count)) * 100) : 0;
+          return {
+            name: lang === "ar" ? (t2.nameAr || t2.nameEn) : t2.nameEn,
+            failRate,
+            count: Number(t2.count),
+          };
+        })
+        .sort((a: any, b: any) => b.failRate - a.failRate);
+    } catch {
+      return [] as Array<any>;
+    }
+  }, [stats?.byTestType, lang]);
+
+  const todayActivity = useMemo(() => {
+    try {
+      const td = todayStr();
+      const todaySamples = (samples ?? []).filter((s: any) => {
+        if (!s.receivedAt) return false;
+        return new Date(s.receivedAt).toISOString().slice(0, 10) === td;
+      });
+      return {
+        received: todaySamples.length,
+        inTesting: (samples ?? []).filter((s: any) => ["distributed", "tested"].includes(s.status)).length,
+        awaitingReview: (samples ?? []).filter((s: any) => s.status === "processed").length,
+        qcQueue: (samples ?? []).filter((s: any) => s.status === "approved").length,
+        completedToday: todaySamples.filter((s: any) => ["qc_passed", "clearance_issued"].includes(s.status)).length,
+      };
+    } catch {
+      return { received: 0, inTesting: 0, awaitingReview: 0, qcQueue: 0, completedToday: 0 };
+    }
+  }, [samples]);
+
   // ─── Daily work ────────────────────────────────────────────────────────────
   function sectorLabel(val: string | null | undefined) {
     if (!val) return "—";
@@ -263,6 +396,27 @@ export default function ManagerDashboard() {
                 <p className="text-xs text-muted-foreground mt-0.5">{t("dashboard.uaeTime")}</p>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* ── Today's Lab Activity Summary ───────────────────────────────── */}
+        <div className="rounded-xl border bg-gradient-to-r from-blue-50 to-white p-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            {[
+              { label: lang === "ar" ? "وارد اليوم" : "Today's Received", value: todayActivity.received, icon: PackageOpen, color: "text-blue-600" },
+              { label: lang === "ar" ? "قيد الفحص" : "In Testing", value: todayActivity.inTesting, icon: Beaker, color: "text-amber-600" },
+              { label: lang === "ar" ? "بانتظار المراجعة" : "Awaiting Review", value: todayActivity.awaitingReview, icon: CheckSquare, color: "text-purple-600" },
+              { label: lang === "ar" ? "طابور الجودة" : "QC Queue", value: todayActivity.qcQueue, icon: ShieldCheck, color: "text-indigo-600" },
+              { label: lang === "ar" ? "مكتمل اليوم" : "Completed Today", value: todayActivity.completedToday, icon: CheckCircle2, color: "text-green-600" },
+            ].map((it) => (
+              <div key={it.label} className="rounded-lg border bg-white/80 px-3 py-2 flex items-center gap-2">
+                <it.icon className={`w-4 h-4 ${it.color}`} />
+                <div>
+                  <p className="text-[10px] text-muted-foreground">{it.label}</p>
+                  <p className={`text-base font-bold ${it.color}`}>{it.value}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -387,6 +541,183 @@ export default function ManagerDashboard() {
             </button>
           ))}
         </div>
+
+        {/* ── Quality Intelligence ───────────────────────────────────────── */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <FileText className="w-4 h-4 text-blue-600" />
+              {lang === "ar" ? "جاهزية إغلاق العقود" : "Contract Closure Readiness"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {contractReadinessRows.length === 0 ? (
+              <div className="text-sm text-muted-foreground">{lang === "ar" ? "لا توجد عقود نشطة" : "No active contracts"}</div>
+            ) : (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="border-b bg-muted/30">
+                        <th className="text-start px-3 py-2">{lang === "ar" ? "رقم العقد" : "Contract No."}</th>
+                        <th className="text-start px-3 py-2">{lang === "ar" ? "المقاول" : "Contractor"}</th>
+                        <th className="text-center px-3 py-2">{lang === "ar" ? "إجمالي" : "Total Orders"}</th>
+                        <th className="text-center px-3 py-2">{lang === "ar" ? "مكتمل" : "Completed"}</th>
+                        <th className="text-center px-3 py-2">{lang === "ar" ? "قيد التنفيذ" : "In Progress"}</th>
+                        <th className="text-center px-3 py-2">{lang === "ar" ? "معلق" : "Pending"}</th>
+                        <th className="text-end px-3 py-2">{lang === "ar" ? "الجاهزية %" : "Readiness %"}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {contractReadinessRows.slice(0, 8).map((r: any) => (
+                        <tr key={`${r.contractNo}-${r.contractor}`} className="border-b last:border-0">
+                          <td className="px-3 py-2 font-mono">{r.contractNo}</td>
+                          <td className="px-3 py-2">{r.contractor}</td>
+                          <td className="px-3 py-2 text-center font-semibold">{r.total}</td>
+                          <td className="px-3 py-2 text-center text-green-700 font-semibold">{r.completed}</td>
+                          <td className="px-3 py-2 text-center text-amber-700 font-semibold">{r.inProgress}</td>
+                          <td className="px-3 py-2 text-center text-slate-700 font-semibold">{r.pending}</td>
+                          <td className="px-3 py-2 text-end">
+                            <span className={`px-2 py-1 rounded font-bold ${
+                              r.readiness >= 80 ? "bg-green-100 text-green-700" :
+                              r.readiness >= 50 ? "bg-amber-100 text-amber-700" :
+                              "bg-red-100 text-red-700"
+                            }`}>
+                              {r.readiness}%
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-2 text-end">
+                  <button onClick={() => setLocation("/distribution")} className="text-xs text-primary hover:underline">
+                    {lang === "ar" ? "عرض الكل" : "View all"}
+                  </button>
+                </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <AlertOctagon className="w-4 h-4 text-rose-600" />
+              {lang === "ar" ? "بطاقة جودة المقاولين" : "Contractor Quality Scorecard"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {contractorScores.length === 0 ? (
+              <div className="text-sm text-muted-foreground">{lang === "ar" ? "لا توجد بيانات" : "No data"}</div>
+            ) : (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                {contractorScores.slice(0, 8).map((c: any) => {
+                  const riskCls =
+                    c.riskLevel === "low"
+                      ? "bg-green-100 text-green-700"
+                      : c.riskLevel === "medium"
+                      ? "bg-amber-100 text-amber-700"
+                      : c.riskLevel === "high"
+                      ? "bg-orange-100 text-orange-700"
+                      : "bg-red-100 text-red-700 animate-pulse";
+                  const riskLabel =
+                    c.riskLevel === "low"
+                      ? (lang === "ar" ? "مخاطر منخفضة" : "Low Risk")
+                      : c.riskLevel === "medium"
+                      ? (lang === "ar" ? "مخاطر متوسطة" : "Medium Risk")
+                      : c.riskLevel === "high"
+                      ? (lang === "ar" ? "مخاطر عالية" : "High Risk")
+                      : (lang === "ar" ? "حرجة" : "Critical");
+                  return (
+                    <div key={c.contractor} className="border rounded-lg p-3 space-y-2 bg-card">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-xs font-bold truncate">{c.contractor}</p>
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${riskCls}`}>{riskLabel}</span>
+                      </div>
+                      <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
+                        <div className="h-full bg-green-500" style={{ width: `${c.passRate}%` }} />
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                        <span>{lang === "ar" ? "النجاح" : "Pass"}: {c.passRate}%</span>
+                        <span>{lang === "ar" ? "الطلبات" : "Orders"}: {c.totalOrders}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-[10px]">
+                        {c.passRate >= 60 ? <TrendingUp className="w-3 h-3 text-green-600" /> : <TrendingDown className="w-3 h-3 text-red-600" />}
+                        <span className={c.passRate >= 60 ? "text-green-600" : "text-red-600"}>
+                          {c.passRate >= 60 ? (lang === "ar" ? "اتجاه جيد" : "Positive trend") : (lang === "ar" ? "اتجاه مقلق" : "Risk trend")}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {slaWarnings.length > 0 && (
+          <Card className="border-amber-300 bg-amber-50/60">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-semibold flex items-center gap-2 text-amber-800">
+                <Zap className="w-4 h-4" />
+                {lang === "ar"
+                  ? `${slaWarnings.length} أوردر يقترب من مهلة SLA`
+                  : `${slaWarnings.length} orders approaching SLA deadline`}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {slaWarnings.slice(0, 8).map((o: any) => (
+                  <div key={o.id} className="grid grid-cols-1 md:grid-cols-4 gap-2 text-xs border rounded-lg bg-white p-2">
+                    <div className="font-mono font-semibold">{o.orderCode}</div>
+                    <div>{o.contractorName ?? "—"}</div>
+                    <div>{o.sampleType ?? "—"}</div>
+                    <div className={`font-semibold ${
+                      o.hoursLeft < 0 ? "text-red-700" : o.hoursLeft < 12 ? "text-amber-700" : "text-yellow-700"
+                    }`}>
+                      {lang === "ar" ? "متبقي:" : "Remaining:"} {o.hoursLeft}h
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-semibold flex items-center gap-2">
+              <BarChart2 className="w-4 h-4 text-red-600" />
+              {lang === "ar" ? "معدل فشل أنواع الاختبارات" : "Test Type Failure Rate"}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {failureHeatmap.length === 0 ? (
+              <div className="text-sm text-muted-foreground">{lang === "ar" ? "لا توجد بيانات كافية" : "Insufficient test data"}</div>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {failureHeatmap.map((t2: any) => (
+                  <span
+                    key={t2.name}
+                    className={`text-xs px-2.5 py-1 rounded-full border font-medium ${
+                      t2.failRate >= 30
+                        ? "bg-red-100 border-red-300 text-red-700"
+                        : t2.failRate >= 15
+                        ? "bg-orange-100 border-orange-300 text-orange-700"
+                        : t2.failRate >= 5
+                        ? "bg-amber-100 border-amber-300 text-amber-700"
+                        : "bg-green-100 border-green-300 text-green-700"
+                    }`}
+                  >
+                    {t2.name} • {t2.failRate}%
+                  </span>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* ── Sector Filter ─────────────────────────────────────────────── */}
         <div className="flex items-center gap-2 flex-wrap">

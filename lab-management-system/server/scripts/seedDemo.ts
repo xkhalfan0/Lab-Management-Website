@@ -49,10 +49,7 @@ async function main() {
       .from(contractors)
       .where(eq(contractors.nameEn, "United Construction Co."))
       .limit(1);
-    if (existingDemo.length > 0) {
-      console.log("Demo data already exists, skipping");
-      return;
-    }
+    const hasCoreDemo = existingDemo.length > 0;
 
     console.log("Resolving users and test types...");
     const technician = (
@@ -97,6 +94,132 @@ async function main() {
           .limit(1)
       )[0];
     if (!reception) throw new Error("No reception/admin user found.");
+
+    // Dashboard-focused seeding block (samples + distributions) for repeated runs.
+    const dashboardSamplesSeeded = await db
+      .select({ id: samples.id })
+      .from(samples)
+      .where(eq(samples.sampleCode, "LAB-2026-0010"))
+      .limit(1);
+    if (dashboardSamplesSeeded.length > 0) {
+      console.log("samples already seeded");
+      if (hasCoreDemo) return;
+    } else {
+      console.log("Seeding dashboard samples (LAB-2026-0010..0019)...");
+      const dashContractNumbers = [
+        "DOI-2025-T001",
+        "GB-2025-001",
+        "GB-2025-002",
+        "HSG-2025-001",
+        "DOI-2025-T002",
+      ];
+      const dashContracts = await db
+        .select({
+          id: contracts.id,
+          contractNumber: contracts.contractNumber,
+          contractName: contracts.contractName,
+          contractorId: contracts.contractorId,
+          sectorKey: contracts.sectorKey,
+        })
+        .from(contracts)
+        .where(inArray(contracts.contractNumber, dashContractNumbers));
+      if (dashContracts.length < dashContractNumbers.length) {
+        throw new Error("Missing demo contracts required for dashboard sample seeding.");
+      }
+      const dashContractorData = await db
+        .select({ id: contractors.id, nameEn: contractors.nameEn })
+        .from(contractors)
+        .where(inArray(contractors.id, dashContracts.map((c) => c.contractorId)));
+      const dashContractByNumber = new Map(dashContracts.map((c) => [c.contractNumber, c]));
+      const dashContractorNameById = new Map(dashContractorData.map((c) => [c.id, c.nameEn]));
+
+      // Note: schema uses "received" instead of "new", and "tested" instead of "testing".
+      const dashboardSamples = [
+        { sampleCode: "LAB-2026-0010", contractNumber: "DOI-2025-T001", sampleType: "concrete" as const, sector: "sector_1", status: "received" as const, location: "Floor 3 Column C2", receivedAt: "2026-04-10", castingDate: "2026-03-31", condition: "good" as const },
+        { sampleCode: "LAB-2026-0011", contractNumber: "GB-2025-001", sampleType: "soil" as const, sector: "sector_2", status: "received" as const, location: "Grid B-4 Foundation", receivedAt: "2026-04-11", castingDate: "2026-04-01", condition: "partial" as const },
+        { sampleCode: "LAB-2026-0012", contractNumber: "GB-2025-002", sampleType: "steel" as const, sector: "sector_3", status: "received" as const, location: "Retaining Wall West", receivedAt: "2026-04-12", castingDate: "2026-04-02", condition: "good" as const },
+        { sampleCode: "LAB-2026-0013", contractNumber: "HSG-2025-001", sampleType: "asphalt" as const, sector: "sector_4", status: "distributed" as const, location: "Road Section KM 12", receivedAt: "2026-04-13", castingDate: "2026-04-03", condition: "good" as const },
+        { sampleCode: "LAB-2026-0014", contractNumber: "DOI-2025-T002", sampleType: "concrete" as const, sector: "sector_1", status: "distributed" as const, location: "Slab Level 2", receivedAt: "2026-04-14", castingDate: "2026-04-04", condition: "good" as const },
+        { sampleCode: "LAB-2026-0015", contractNumber: "DOI-2025-T001", sampleType: "soil" as const, sector: "sector_1", status: "distributed" as const, location: "Grid B-4 Foundation", receivedAt: "2026-04-15", castingDate: "2026-04-05", condition: "partial" as const },
+        { sampleCode: "LAB-2026-0016", contractNumber: "GB-2025-001", sampleType: "steel" as const, sector: "sector_2", status: "tested" as const, location: "Retaining Wall West", receivedAt: "2026-04-16", castingDate: "2026-04-06", condition: "good" as const },
+        { sampleCode: "LAB-2026-0017", contractNumber: "GB-2025-002", sampleType: "asphalt" as const, sector: "sector_3", status: "tested" as const, location: "Road Section KM 12", receivedAt: "2026-04-17", castingDate: "2026-04-07", condition: "good" as const },
+        { sampleCode: "LAB-2026-0018", contractNumber: "HSG-2025-001", sampleType: "concrete" as const, sector: "sector_4", status: "processed" as const, location: "Floor 3 Column C2", receivedAt: "2026-04-18", castingDate: "2026-04-08", condition: "good" as const },
+        { sampleCode: "LAB-2026-0019", contractNumber: "DOI-2025-T002", sampleType: "soil" as const, sector: "sector_1", status: "qc_passed" as const, location: "Slab Level 2", receivedAt: "2026-04-19", castingDate: "2026-04-09", condition: "good" as const },
+      ];
+      await db.insert(samples).values(
+        dashboardSamples.map((s) => {
+          const c = dashContractByNumber.get(s.contractNumber)!;
+          return {
+            sampleCode: s.sampleCode,
+            contractId: c.id,
+            contractNumber: c.contractNumber,
+            contractName: c.contractName,
+            contractorName: dashContractorNameById.get(c.contractorId) ?? "",
+            sampleType: s.sampleType,
+            sector: s.sector,
+            quantity: 1,
+            condition: s.condition,
+            status: s.status,
+            location: s.location,
+            castingDate: d(s.castingDate),
+            receivedById: reception.id,
+            receivedAt: d(s.receivedAt),
+          };
+        })
+      );
+
+      const dashboardSampleRows = await db
+        .select({ id: samples.id, sampleCode: samples.sampleCode })
+        .from(samples)
+        .where(inArray(samples.sampleCode, dashboardSamples.map((s) => s.sampleCode)));
+      const dashboardSampleByCode = new Map(dashboardSampleRows.map((s) => [s.sampleCode, s.id]));
+
+      console.log("Seeding dashboard distributions (DIST-2026-010..015)...");
+      const dashboardDists = [
+        { distributionCode: "DIST-2026-010", sampleCode: "LAB-2026-0013", status: "pending" as const, createdAt: "2026-04-20" },
+        { distributionCode: "DIST-2026-011", sampleCode: "LAB-2026-0014", status: "pending" as const, createdAt: "2026-04-21" },
+        { distributionCode: "DIST-2026-012", sampleCode: "LAB-2026-0015", status: "pending" as const, createdAt: "2026-04-22" },
+        { distributionCode: "DIST-2026-013", sampleCode: "LAB-2026-0016", status: "in_progress" as const, createdAt: "2026-04-23" },
+        { distributionCode: "DIST-2026-014", sampleCode: "LAB-2026-0017", status: "in_progress" as const, createdAt: "2026-04-24" },
+        { distributionCode: "DIST-2026-015", sampleCode: "LAB-2026-0018", status: "in_progress" as const, createdAt: "2026-04-25" },
+      ];
+      await db.insert(distributions).values(
+        dashboardDists.map((dist, i) => {
+          const createdAt = d(dist.createdAt);
+          const sampleCode = dist.sampleCode;
+          const sampleType = dashboardSamples.find((s) => s.sampleCode === sampleCode)?.sampleType ?? "concrete";
+          return {
+            distributionCode: dist.distributionCode,
+            sampleId: dashboardSampleByCode.get(sampleCode)!,
+            assignedTechnicianId: technician.id,
+            assignedById: supervisor.id,
+            testType:
+              sampleType === "concrete" ? "CONC_CUBE" :
+              sampleType === "soil" ? "SOIL_PROCTOR" :
+              sampleType === "steel" ? "STEEL_REBAR" : "ASPH_MARSHALL",
+            testName:
+              sampleType === "concrete" ? "Compressive Strength of Concrete Cubes" :
+              sampleType === "soil" ? "MDD/OMC (Proctor) test" :
+              sampleType === "steel" ? "Tensile Strength of Reinforcement Steel" : "Stability, Flow & Voids Percentage of Marshall Specimens",
+            priority: i % 3 === 0 ? "high" : i % 3 === 1 ? "normal" : "urgent",
+            quantity: 1,
+            unitPrice: "100",
+            totalCost: "100",
+            expectedCompletionDate: addDays(createdAt, 7),
+            notes: "Dashboard demo distribution",
+            status: dist.status,
+            createdAt,
+          };
+        })
+      );
+      console.log("Dashboard sample/distribution data seeded.");
+      if (hasCoreDemo) return;
+    }
+
+    if (hasCoreDemo) {
+      console.log("Demo data already exists, skipping");
+      return;
+    }
 
     const requiredCodes = [
       "CONC_CUBE",

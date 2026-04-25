@@ -2882,6 +2882,82 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
         });
         return { success: true };
       }),
+    reassign: protectedProcedure
+      .input(z.object({
+        orderId: z.number(),
+        technicianId: z.number(),
+        priority: z.enum(["low", "normal", "high", "urgent"]).optional(),
+        notes: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        requireRole(ctx.user.role, ["admin", "lab_manager"]);
+        const order = await getLabOrderById(input.orderId);
+        if (!order) throw new TRPCError({ code: "NOT_FOUND", message: "Order not found" });
+        if (!["distributed", "in_progress"].includes(order.status)) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Only distributed/in-progress orders can be edited" });
+        }
+
+        const items = await getLabOrderItems(input.orderId);
+        const hasSubmittedItems = items.some((item: any) => item.status === "completed" || item.status === "submitted");
+        if (hasSubmittedItems) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Cannot edit distribution after technician has submitted results",
+          });
+        }
+
+        const oldValue = {
+          technicianId: order.assignedTechnicianId ?? null,
+          priority: order.priority ?? "normal",
+        };
+        const newPriority = input.priority ?? order.priority ?? "normal";
+        const newValue = {
+          technicianId: input.technicianId,
+          priority: newPriority,
+        };
+
+        await updateLabOrderFields(input.orderId, {
+          assignedTechnicianId: input.technicianId,
+          priority: input.priority ?? undefined,
+          notes: input.notes ?? "",
+        });
+
+        // Reassign only distributions that belong to this order's items.
+        const allDists = order.sampleId ? await getDistributionsBySample(order.sampleId) : [];
+        const orderDistIds = items
+          .map((i: { distributionId: number | null }) => i.distributionId)
+          .filter((v): v is number => typeof v === "number");
+        for (const d of allDists.filter((dist: any) => orderDistIds.includes(dist.id))) {
+          await reassignDistribution(d.id, input.technicianId, input.notes);
+        }
+
+        await createAuditLog({
+          userId: ctx.user.id,
+          userName: ctx.user.name ?? ctx.user.username ?? "Unknown",
+          action: "distribution_edited",
+          entity: "labOrder",
+          entityId: input.orderId,
+          entityLabel: order.orderCode,
+          oldValue,
+          newValue,
+          ipAddress: ctx.req.ip,
+        });
+
+        await createAuditLog({
+          userId: ctx.user.id,
+          userName: ctx.user.name ?? ctx.user.username ?? "Unknown",
+          action: "distribution_reassigned",
+          entity: "labOrder",
+          entityId: input.orderId,
+          entityLabel: order.orderCode,
+          oldValue,
+          newValue,
+          ipAddress: ctx.req.ip,
+        });
+
+        const updatedOrder = await getLabOrderById(input.orderId);
+        return updatedOrder;
+      }),
 
     updateItemStatus: protectedProcedure
       .input(z.object({

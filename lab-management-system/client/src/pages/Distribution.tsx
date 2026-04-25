@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ClipboardList, Eye, UserCheck, Building2, FlaskConical, CheckCircle2 } from "lucide-react";
+import { ClipboardList, Eye, UserCheck, Building2, FlaskConical, CheckCircle2, Pencil } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
@@ -69,6 +69,7 @@ function orderStatusColor(status: string) {
 export default function Distribution() {
   const { lang } = useLanguage();
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({
     technicianId: "",
     priority: "normal" as "low" | "normal" | "high" | "urgent",
@@ -88,6 +89,15 @@ export default function Distribution() {
         ? `تم توزيع الأوردر بنجاح`
         : `Order distributed successfully`);
       setSelectedOrder(null);
+      refetch();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+  const editDistribution = trpc.orders.reassign.useMutation({
+    onSuccess: () => {
+      toast.success(lang === "ar" ? "تم تعديل التوزيع بنجاح" : "Distribution updated successfully");
+      setSelectedOrder(null);
+      setIsEditing(false);
       refetch();
     },
     onError: (err) => toast.error(err.message),
@@ -112,7 +122,17 @@ export default function Distribution() {
   // ─── Handlers ──────────────────────────────────────────────────────────────
   const handleOpenDialog = (order: any) => {
     setSelectedOrder(order);
+    setIsEditing(false);
     setForm({ technicianId: "", priority: "normal", notes: "" });
+  };
+  const handleOpenEditDialog = (order: any) => {
+    setSelectedOrder(order);
+    setIsEditing(true);
+    setForm({
+      technicianId: String(order.assignedTechnicianId ?? ""),
+      priority: order.priority ?? "normal",
+      notes: order.notes ?? "",
+    });
   };
 
   const handleDistribute = (e: React.FormEvent) => {
@@ -121,12 +141,21 @@ export default function Distribution() {
       toast.error(lang === "ar" ? "يرجى اختيار فني" : "Please select a technician");
       return;
     }
-    distributeOrder.mutate({
-      orderId: selectedOrder.id,
-      technicianId: parseInt(form.technicianId),
-      priority: form.priority,
-      notes: form.notes || undefined,
-    });
+    if (isEditing) {
+      editDistribution.mutate({
+        orderId: selectedOrder.id,
+        technicianId: parseInt(form.technicianId),
+        priority: form.priority,
+        notes: form.notes || undefined,
+      });
+    } else {
+      distributeOrder.mutate({
+        orderId: selectedOrder.id,
+        technicianId: parseInt(form.technicianId),
+        priority: form.priority,
+        notes: form.notes || undefined,
+      });
+    }
   };
 
   // ─── Filter Buttons ────────────────────────────────────────────────────────
@@ -278,6 +307,13 @@ export default function Distribution() {
                     {filteredOrders
                       .filter((o: any) => !PENDING_STATUSES.includes(o.status))
                       .map((order: any) => (
+                        (() => {
+                          const hasSubmittedItems = (order.items ?? []).some(
+                            (item: any) => item.status === "completed" || item.status === "submitted"
+                          );
+                          const canEditDistribution =
+                            (order.status === "distributed" || order.status === "in_progress") && !hasSubmittedItems;
+                          return (
                         <tr key={order.id} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
                           <td className="px-4 py-2.5 font-mono text-xs font-semibold text-primary">{order.orderCode}</td>
                           <td className="px-4 py-2.5 text-xs">{order.contractorName ?? "—"}</td>
@@ -310,16 +346,31 @@ export default function Distribution() {
                             <StatusBadge status={order.status} />
                           </td>
                           <td className="px-4 py-2.5">
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="h-7 px-2"
-                              onClick={() => setLocation(`/order/${order.id}`)}
-                            >
-                              <Eye className="w-3.5 h-3.5" />
-                            </Button>
+                            <div className="flex items-center gap-1">
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-7 px-2"
+                                onClick={() => setLocation(`/order/${order.id}`)}
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                              </Button>
+                              {canEditDistribution && (
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-7 px-2 text-amber-600 hover:text-amber-700"
+                                  title={lang === "ar" ? "تعديل التوزيع" : "Edit Distribution"}
+                                  onClick={() => handleOpenEditDialog(order)}
+                                >
+                                  <Pencil className="w-3.5 h-3.5" />
+                                </Button>
+                              )}
+                            </div>
                           </td>
                         </tr>
+                          );
+                        })()
                       ))}
                   </tbody>
                 </table>
@@ -330,13 +381,17 @@ export default function Distribution() {
       </div>
 
       {/* Distribute Dialog */}
-      <Dialog open={!!selectedOrder} onOpenChange={(o) => !o && setSelectedOrder(null)}>
+      <Dialog open={!!selectedOrder} onOpenChange={(o) => { if (!o) { setSelectedOrder(null); setIsEditing(false); } }}>
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {lang === "ar"
-                ? `توزيع الأوردر — ${selectedOrder?.orderCode}`
-                : `Distribute Order — ${selectedOrder?.orderCode}`}
+              {isEditing
+                ? (lang === "ar"
+                  ? `تعديل التوزيع — ${selectedOrder?.orderCode}`
+                  : `Edit Distribution — ${selectedOrder?.orderCode}`)
+                : (lang === "ar"
+                  ? `توزيع الأوردر — ${selectedOrder?.orderCode}`
+                  : `Distribute Order — ${selectedOrder?.orderCode}`)}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleDistribute} className="space-y-4 mt-2">
@@ -409,14 +464,18 @@ export default function Distribution() {
             </div>
 
             <div className="flex gap-2 justify-end pt-2">
-              <Button type="button" variant="outline" onClick={() => setSelectedOrder(null)}>
+              <Button type="button" variant="outline" onClick={() => { setSelectedOrder(null); setIsEditing(false); }}>
                 {lang === "ar" ? "إلغاء" : "Cancel"}
               </Button>
-              <Button type="submit" disabled={distributeOrder.isPending}>
-                <UserCheck className="w-4 h-4 mr-1" />
-                {distributeOrder.isPending
-                  ? (lang === "ar" ? "جاري التوزيع..." : "Distributing...")
-                  : (lang === "ar" ? "توزيع الأوردر" : "Distribute Order")}
+              <Button type="submit" disabled={distributeOrder.isPending || editDistribution.isPending}>
+                {isEditing ? <Pencil className="w-4 h-4 mr-1" /> : <UserCheck className="w-4 h-4 mr-1" />}
+                {isEditing
+                  ? (editDistribution.isPending
+                    ? (lang === "ar" ? "جاري الحفظ..." : "Saving...")
+                    : (lang === "ar" ? "حفظ التعديلات" : "Save Changes"))
+                  : (distributeOrder.isPending
+                    ? (lang === "ar" ? "جاري التوزيع..." : "Distributing...")
+                    : (lang === "ar" ? "توزيع الأوردر" : "Distribute Order"))}
               </Button>
             </div>
           </form>

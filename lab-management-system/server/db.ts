@@ -1541,6 +1541,7 @@ export async function updateLabOrderFields(
     location?: string;
     notes?: string;
     priority?: "low" | "normal" | "high" | "urgent";
+    assignedTechnicianId?: number | null;
     castingDate?: Date | null;
   }
 ) {
@@ -1551,6 +1552,7 @@ export async function updateLabOrderFields(
   if (data.location !== undefined) set.location = data.location;
   if (data.notes !== undefined) set.notes = data.notes;
   if (data.priority !== undefined) set.priority = data.priority;
+  if (data.assignedTechnicianId !== undefined) set.assignedTechnicianId = data.assignedTechnicianId;
   if (data.castingDate !== undefined) set.castingDate = data.castingDate;
   await db.update(labOrders).set(set).where(eq(labOrders.id, id));
 }

@@ -28,11 +28,41 @@ function getCubeSizeFactor(sizeLabel: string): number {
 
 // ─── Expected strength at age (Eurocode / BS approach) ───────────────────────
 // Estimate expected strength at test age relative to 28-day strength
+// Age factor: percentage of 28-day strength expected at test age.
+// FIX: Range-based grouping per BS EN 12390-3 / BS EN 206.
+// Cubes tested at days 8–13 belong to the 14-day set (85%), not 7-day.
+// Cubes tested at days 15–28 belong to the 28-day set (100%).
+// Age factors corrected: 7d→65% (was wrong at 70%). Added 3d/56d/>56d.
 function getStrengthFactor(ageDays: number): number {
-  if (ageDays <= 7)  return 0.70;  // 70% at 7 days
-  if (ageDays <= 14) return 0.85;  // 85% at 14 days
-  if (ageDays <= 28) return 1.00;  // 100% at 28 days
-  return 1.00;                      // 100% for anything above 28 days
+  if (ageDays <= 3)  return 0.40;  // 3-day group: 40%
+  if (ageDays <= 7)  return 0.65;  // 7-day group (days 4–7): 65%
+  if (ageDays <= 14) return 0.85;  // 14-day group (days 8–14): 85%
+  if (ageDays <= 28) return 1.00;  // 28-day group (days 15–28): 100%
+  if (ageDays <= 56) return 1.10;  // 56-day: 110%
+  return 1.15;                     // >56 days: 115%
+}
+
+function getAgeGroupLabel(ageDays: number): string {
+  if (ageDays <= 3)  return "3-day";
+  if (ageDays <= 7)  return "7-day";
+  if (ageDays <= 14) return "14-day";
+  if (ageDays <= 28) return "28-day";
+  if (ageDays <= 56) return "56-day";
+  return ">56-day";
+}
+
+// BS EN 206 Table B.1 — k-factor for characteristic strength fck.
+// Fixed k=1.48 is only valid for n≥15. Use this table for small batches.
+const K_FACTORS: Record<number, number> = {
+  3: 1.02, 4: 0.87, 5: 0.82, 6: 0.79, 7: 0.77, 8: 0.76, 9: 0.75,
+  10: 0.74, 11: 0.73, 12: 0.72, 13: 0.71, 14: 0.70,
+};
+const K_CONTINUOUS = 1.48; // n ≥ 15
+
+function getKFactor(n: number): number | null {
+  if (n < 3) return null; // insufficient for statistical analysis
+  if (n >= 15) return K_CONTINUOUS;
+  return K_FACTORS[n] ?? K_CONTINUOUS;
 }
 
 interface CubeRow {
@@ -148,6 +178,20 @@ export default function ConcreteCubes() {
   const avgStrength = validRows.length > 0
     ? validRows.reduce((s, r) => s + (r.correctedStrength ?? 0), 0) / validRows.length
     : 0;
+  // Characteristic strength with n-dependent k-factor (BS EN 206 Table B.1)
+  const n = validRows.length;
+  const k = getKFactor(n);
+  let fck: number | null = null;
+  let stdDev: number | null = null;
+
+  if (k !== null && n >= 3) {
+    const mean = avgStrength;
+    const variance = validRows.reduce(
+      (s, r) => s + Math.pow((r.correctedStrength ?? 0) - mean, 2), 0
+    ) / (n - 1);
+    stdDev = Math.sqrt(variance);
+    fck = mean - k * stdDev;
+  }
   const overallResult: "pass" | "fail" | "pending" =
     validRows.length === 0 ? "pending"
     : validRows.every(r => r.result === "pass") ? "pass" : "fail";
@@ -180,6 +224,11 @@ export default function ConcreteCubes() {
           requiredAtAge: parseFloat(requiredAtAge.toFixed(2)),
           cubes: computedRows,
           avgStrength: parseFloat(avgStrength.toFixed(2)),
+          fck: fck !== null ? parseFloat(fck.toFixed(2)) : null,
+          stdDev: stdDev !== null ? parseFloat(stdDev.toFixed(3)) : null,
+          kFactor: k,
+          sampleCount: n,
+          ageGroup: sampleAgeDays !== null ? getAgeGroupLabel(sampleAgeDays) : "unknown",
           // Nominal cube size: determined from the first cube row (all cubes in one test are same size)
           nominalCubeSize: computedRows.length > 0 ? `${computedRows[0].cubeSize ?? 150}mm` : "150mm",
         },
@@ -512,7 +561,7 @@ export default function ConcreteCubes() {
               <CardTitle className="text-base">{ar ? "ملخص" : "Summary"}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-slate-50 rounded-xl p-4 text-center border">
                   <p className="text-xs text-slate-500 mb-1">{ar ? "عدد المكعبات المختبرة" : "No. of Cubes Tested"}</p>
                   <p className="text-3xl font-bold text-slate-800">{validRows.length}</p>
@@ -530,6 +579,30 @@ export default function ConcreteCubes() {
                   </p>
                   <p className="text-3xl font-bold text-slate-800">{requiredAtAge.toFixed(1)}</p>
                   <p className="text-xs text-slate-400">N/mm²</p>
+                </div>
+                <div className={`rounded-xl p-4 text-center border ${
+                  fck !== null
+                    ? fck >= specStr ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"
+                    : "bg-slate-50"
+                }`}>
+                  <p className="text-xs text-slate-500 mb-1">
+                    {`Char. Strength fck (n=${n}, k=${k?.toFixed(2) ?? "—"})`}
+                  </p>
+                  {fck !== null ? (
+                    <>
+                      <p className={`text-3xl font-bold ${fck >= specStr ? "text-green-700" : "text-red-700"}`}>
+                        {fck.toFixed(2)}
+                      </p>
+                      <p className="text-xs text-slate-400">N/mm²</p>
+                      <p className="text-xs mt-1">
+                        {fck >= specStr ? "✓ Meets requirement" : "✗ Below requirement"}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-sm text-slate-400 mt-2">
+                      {n < 3 ? "Min 3 samples required" : "—"}
+                    </p>
+                  )}
                 </div>
               </div>
               <ResultBanner

@@ -15,13 +15,44 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 // ─── L/D Correction Factors (BS EN 12504-1) ─────────────────────────────
-function getLDCorrectionFactor(ld: number): number {
-  if (ld >= 2.00) return 1.00;
-  if (ld >= 1.75) return 0.97;
-  if (ld >= 1.50) return 0.96;
-  if (ld >= 1.25) return 0.93;
-  if (ld >= 1.00) return 0.82;
-  return 0.82;
+// BS EN 12504-1 Table 1 — L/D correction factors.
+// BUGS FIXED:
+//  1. Missing 0.96–1.04 no-correction range. L/D=1.00 was returning
+//     0.82 — wrong. Per BS EN 12504-1, L/D 0.96–1.04 → CF = 1.00.
+//  2. Wrong table values: old 1.50→0.96 (correct: 0.93),
+//     old 1.25→0.93 (correct: 0.87).
+//  3. No interpolation — now uses linear interpolation.
+
+const LD_CORRECTION_TABLE = [
+  { ld: 1.00, cf: 0.80 },
+  { ld: 1.10, cf: 0.82 },
+  { ld: 1.25, cf: 0.87 },
+  { ld: 1.50, cf: 0.93 },
+  { ld: 1.75, cf: 0.97 },
+  { ld: 2.00, cf: 1.00 },
+] as const;
+
+function getLDCorrectionFactor(ld: number): { cf: number; isCylinderStrength: boolean; noCorrection: boolean } {
+  // Priority 1: no-correction range — MUST be checked before table
+  if (ld >= 0.96 && ld <= 1.04) {
+    return { cf: 1.00, isCylinderStrength: false, noCorrection: true };
+  }
+  // Priority 2: cylinder strength
+  if (ld >= 2.00) {
+    return { cf: 1.00, isCylinderStrength: true, noCorrection: false };
+  }
+  // Priority 3: linear interpolation between table values
+  for (let i = 0; i < LD_CORRECTION_TABLE.length - 1; i++) {
+    const lo = LD_CORRECTION_TABLE[i];
+    const hi = LD_CORRECTION_TABLE[i + 1];
+    if (ld >= lo.ld && ld < hi.ld) {
+      const t = (ld - lo.ld) / (hi.ld - lo.ld);
+      const cf = lo.cf + t * (hi.cf - lo.cf);
+      return { cf: parseFloat(cf.toFixed(3)), isCylinderStrength: false, noCorrection: false };
+    }
+  }
+  // Fallback: very short cores (L/D < 1.00)
+  return { cf: 0.80, isCylinderStrength: false, noCorrection: false };
 }
 
 interface CoreRow {
@@ -40,6 +71,7 @@ interface CoreRow {
   coreStrength?: number;
   equivalentCubeStrength?: number;
   isCylinderStrength?: boolean; // true when L/D ≥ 2.0 (result is cylinder strength, not eq. cube)
+  noLDCorrection?: boolean;
   result?: "pass" | "fail" | "pending";
 }
 
@@ -78,14 +110,14 @@ function computeRow(row: CoreRow, specifiedCubeStrength: number): CoreRow {
   }
   const area = Math.PI * (d / 2) ** 2;
   const ld = l / d;
-  const cf = getLDCorrectionFactor(ld);
+  const { cf, isCylinderStrength, noCorrection } = getLDCorrectionFactor(ld);
   const coreStr = (load * 1000) / area;
   const eqCubeStr = coreStr * cf;
   // When L/D >= 2.0: result is cylinder strength (not equivalent cube strength)
   // BS EN 12504-1: at L/D=2, CF=1.0 and result is treated as cylinder strength
-  const isCylinderStrength = ld >= 2.0;
-  // Acceptance: equivalent cube strength ≥ 100% of specified cube strength
-  const required = specifiedCubeStrength * 1.0;
+  // BS EN 13791 Method A: Eq. cube strength ≥ 0.85 × fck
+  // ORIGINAL used 1.0 × fck — too strict. Valid cores were failing.
+  const required = specifiedCubeStrength * 0.85;
   const coreStrRounded = Math.round(coreStr * 10) / 10;
   const eqCubeStrRounded = Math.round(eqCubeStr * 10) / 10;
 
@@ -110,6 +142,7 @@ function computeRow(row: CoreRow, specifiedCubeStrength: number): CoreRow {
     coreStrength: coreStrRounded,
     equivalentCubeStrength: eqCubeStrRounded,
     isCylinderStrength,
+    noLDCorrection: noCorrection,
     result: eqCubeStrRounded >= required ? "pass" : "fail",
   };
 }
@@ -235,7 +268,7 @@ export default function ConcreteCore() {
         overallResult,
         summaryValues: {
           avgEqStrength: avgEqStrength.toFixed(2),
-          required: (specStr * 1.0).toFixed(1),
+          required: (specStr * 0.85).toFixed(1),
           coreCount: validRows.length,
         },
         notes,
@@ -247,11 +280,13 @@ export default function ConcreteCore() {
   };
 
   const LD_TABLE = [
-    { ld: "1.00", cf: "0.82" },
-    { ld: "1.25", cf: "0.93" },
-    { ld: "1.50", cf: "0.96" },
+    { ld: "0.96–1.04", cf: "1.00 (no correction)" },
+    { ld: "1.00", cf: "0.80" },
+    { ld: "1.10", cf: "0.82" },
+    { ld: "1.25", cf: "0.87" },
+    { ld: "1.50", cf: "0.93" },
     { ld: "1.75", cf: "0.97" },
-    { ld: "2.00", cf: "1.00 (no correction needed)" },
+    { ld: "2.00", cf: "1.00 (cylinder strength)" },
   ];
 
   return (
@@ -381,8 +416,8 @@ export default function ConcreteCore() {
                   <div>
                     <Info size={12} className="inline mr-1" />
                     {ar
-                      ? `ناجح: قوة المكعب المكافئة ≥ 100% من المحدد (${specStr.toFixed(1)} N/mm²) — BS EN 12504-1`
-                      : `Pass: Eq. cube strength ≥ 100% of specified (${specStr.toFixed(1)} N/mm²) — BS EN 12504-1`}
+                      ? `ناجح: قوة المكعب المكافئة ≥ 0.85 × fck = ${(specStr * 0.85).toFixed(1)} N/mm² — BS EN 13791`
+                      : `Pass: Eq. cube strength ≥ 0.85 × fck = ${(specStr * 0.85).toFixed(1)} N/mm² — BS EN 13791 Method A`}
                   </div>
                   <div className="text-amber-700">
                     <Info size={12} className="inline mr-1" />
@@ -587,9 +622,9 @@ export default function ConcreteCore() {
                 </div>
                 <div className="bg-slate-50 rounded-xl p-4 text-center border">
                   <p className="text-xs text-slate-500 mb-1">
-                    {ar ? `المطلوب (100% من ${specStr})` : `Required (100% of ${specStr})`}
+                    {ar ? `المطلوب (0.85 × ${specStr})` : `Required (0.85 × ${specStr})`}
                   </p>
-                  <p className="text-3xl font-bold text-slate-800">{specStr.toFixed(1)}</p>
+                  <p className="text-3xl font-bold text-slate-800">{(specStr * 0.85).toFixed(1)}</p>
                   <p className="text-xs text-slate-400">N/mm²</p>
                 </div>
               </div>

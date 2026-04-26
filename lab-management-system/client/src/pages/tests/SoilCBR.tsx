@@ -49,6 +49,7 @@ interface CBRFace {
   cbr_2_5?: number;
   cbr_5_0?: number;
   cbrValue?: number; // max of 2.5 and 5.0
+  cbrAnomaly?: boolean; // true when CBR at 5.0mm > CBR at 2.5mm (repeat test required)
 }
 
 function newFace(label: string): CBRFace {
@@ -74,11 +75,15 @@ function computeFace(face: CBRFace, stdLoads: typeof STANDARD_LOADS[StandardKey]
   // CBR value = max of 2.5mm and 5.0mm CBR
   const cbrValue = Math.max(cbr_2_5 ?? 0, cbr_5_0 ?? 0);
 
+  // BS 1377-4 Cl. 7.4: if CBR at 5.0mm > CBR at 2.5mm, repeat test is required
+  const cbrAnomaly = !!(cbr_5_0 && cbr_2_5 && cbr_5_0 > cbr_2_5);
+
   return {
     ...face,
     cbr_2_5,
     cbr_5_0,
     cbrValue: cbrValue > 0 ? parseFloat(cbrValue.toFixed(1)) : undefined,
+    cbrAnomaly,
   };
 }
 
@@ -126,10 +131,11 @@ export default function SoilCBR() {
     onSuccess: (_, vars) => {
       if (vars.status === "submitted") {
         toast.success(ar ? "تم إرسال النتائج بنجاح" : "Results submitted successfully");
+        setSubmitted(true);
         setLocation("/technician");
       } else {
         toast.success(ar ? "تم حفظ المسودة" : "Draft saved");
-      setSubmitted(true);}
+      }
     },
     onError: (e) => toast.error(ar ? "حدث خطأ: " + e.message : e.message),
   });
@@ -205,7 +211,7 @@ export default function SoilCBR() {
             </p>
           </div>
           <div className="flex gap-2">
-                        {submitted ? (
+            {submitted ? (
               <>
                 <Button variant="outline" size="sm" onClick={() => setLocation("/technician")}>
                   {ar ? "العودة للوحة التحكم" : "Back to Dashboard"}
@@ -221,28 +227,13 @@ export default function SoilCBR() {
               </>
             ) : (
               <>
-                            {submitted ? (
-              <>
-                <Button variant="outline" size="sm" onClick={() => setLocation("/technician")}>
-                  {ar ? "العودة للوحة التحكم" : "Back to Dashboard"}
+                <Button variant="outline" size="sm" onClick={() => handleSave("draft")} disabled={saving}>
+                  {ar ? "حفظ مسودة" : "Save Draft"}
                 </Button>
-                <Button
-                  size="sm"
-                  className="bg-green-600 hover:bg-green-700 gap-1.5"
-                  onClick={() => window.open(`/test-report/${distId}`, "_blank")}
-                >
-                  <Printer size={14} />
-                  {ar ? "طباعة التقرير / PDF" : "Print Report / PDF"}
+                <Button size="sm" onClick={() => handleSave("submitted")} disabled={saving}>
+                  <Send size={14} className="mr-1.5" />
+                  {saving ? (ar ? "جاري الإرسال..." : "Submitting...") : (ar ? "إرسال النتائج" : "Submit Results")}
                 </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="outline" size="sm" onClick={() => handleSave("draft")} disabled={saving}>{ar ? "حفظ مسودة" : "Save Draft"}</Button>
-            <Button size="sm" onClick={() => handleSave("submitted")} disabled={saving}>
-              <Send size={14} className="mr-1.5" />{saving ? (ar ? "جاري الإرسال..." : "Submitting...") : (ar ? "إرسال النتائج" : "Submit Results")}
-            </Button>
-              </>
-            )}
               </>
             )}
           </div>
@@ -328,7 +319,7 @@ export default function SoilCBR() {
                   {ar ? (face.faceLabel === "Top" ? "الوجه العلوي" : "الوجه السفلي") : face.faceLabel + " Face"} — {ar ? "الاختراق مقابل الحمل" : "Penetration vs. Load Readings"}
                 </CardTitle>
                 {face.cbrValue !== undefined && (
-                  <div className="flex gap-3 text-xs font-mono">
+                  <div className="flex flex-wrap gap-3 text-xs font-mono items-center">
                     <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
                       CBR @ 2.5mm: {face.cbr_2_5 ?? "—"}%
                     </span>
@@ -338,6 +329,11 @@ export default function SoilCBR() {
                     <span className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-bold">
                       CBR Value: {face.cbrValue}%
                     </span>
+                    {face.cbrAnomaly && (
+                      <span className="bg-amber-100 text-amber-800 border border-amber-300 px-2 py-1 rounded font-sans font-semibold">
+                        ⚠ {ar ? "CBR عند 5mm > CBR عند 2.5mm — يلزم إعادة الاختبار (BS 1377-4)" : "CBR at 5.0mm > CBR at 2.5mm — repeat test required (BS 1377-4)"}
+                      </span>
+                    )}
                   </div>
                 )}
               </div>

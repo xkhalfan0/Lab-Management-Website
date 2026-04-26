@@ -64,8 +64,11 @@ interface MarshallRow {
   weightSSD: string;
   maxLoad: string; // kN
   flow: string; // mm
+  specimenHeight: string; // mm — for stability correction factor
   // computed
   bulkDensity?: number;
+  correctionFactor?: number;   // BS EN 12697-34 Table 1
+  correctedStability?: number; // stability × correctionFactor
   vma?: number;
   vfa?: number;
   airVoids?: number;
@@ -81,6 +84,32 @@ interface MarshallRow {
 // VMA = 100 - (Gmb * (100-Pb)) / Gsa
 // VFA = (VMA - Va) / VMA * 100
 
+// BS EN 12697-34 Table 1 — Marshall stability correction factors
+// Applied when specimen height ≠ 63.5mm standard height
+const MARSHALL_CORRECTION_TABLE = [
+  { h: 50.0, cf: 1.47 }, { h: 51.5, cf: 1.39 }, { h: 53.0, cf: 1.32 },
+  { h: 54.0, cf: 1.27 }, { h: 55.0, cf: 1.22 }, { h: 56.5, cf: 1.17 },
+  { h: 58.0, cf: 1.11 }, { h: 59.0, cf: 1.07 }, { h: 60.0, cf: 1.04 },
+  { h: 61.0, cf: 1.01 }, { h: 63.5, cf: 1.00 },
+  { h: 65.0, cf: 0.97 }, { h: 66.5, cf: 0.94 }, { h: 67.5, cf: 0.91 },
+  { h: 69.0, cf: 0.89 }, { h: 70.5, cf: 0.86 }, { h: 71.5, cf: 0.84 },
+  { h: 73.0, cf: 0.81 }, { h: 74.5, cf: 0.79 }, { h: 76.0, cf: 0.77 },
+];
+
+function getMarshallCorrectionFactor(heightMm: number): number {
+  if (!heightMm || isNaN(heightMm)) return 1.00;
+  if (Math.abs(heightMm - 63.5) < 0.1) return 1.00;
+  for (let i = 0; i < MARSHALL_CORRECTION_TABLE.length - 1; i++) {
+    const lo = MARSHALL_CORRECTION_TABLE[i];
+    const hi = MARSHALL_CORRECTION_TABLE[i + 1];
+    if (heightMm >= lo.h && heightMm <= hi.h) {
+      const t = (heightMm - lo.h) / (hi.h - lo.h);
+      return parseFloat((lo.cf + t * (hi.cf - lo.cf)).toFixed(3));
+    }
+  }
+  return 1.00; // outside table range — no correction
+}
+
 function computeRow(row: MarshallRow, spec: typeof ASPHALT_SPECS[AsphaltType], gmm: number): MarshallRow {
   const wair = parseFloat(row.weightInAir);
   const wwater = parseFloat(row.weightInWater);
@@ -92,7 +121,9 @@ function computeRow(row: MarshallRow, spec: typeof ASPHALT_SPECS[AsphaltType], g
 
   const gmb = wair / (wssd - wwater);
   const airVoids = gmm > 0 ? (1 - gmb / gmm) * 100 : undefined;
-  const stability = load; // already in kN
+  const height = parseFloat(row.specimenHeight) || 63.5;
+  const correctionFactor = getMarshallCorrectionFactor(height);
+  const stability = parseFloat((load * correctionFactor).toFixed(2));
   const flowVal = flow;
 
   const stabilityResult: "pass" | "fail" = stability >= spec.stabilityMin ? "pass" : "fail";
@@ -109,6 +140,8 @@ function computeRow(row: MarshallRow, spec: typeof ASPHALT_SPECS[AsphaltType], g
   return {
     ...row,
     bulkDensity: parseFloat(gmb.toFixed(3)),
+    correctionFactor: parseFloat(correctionFactor.toFixed(3)),
+    correctedStability: parseFloat(stability.toFixed(2)),
     airVoids: airVoids !== undefined ? parseFloat(airVoids.toFixed(2)) : undefined,
     stability: parseFloat(stability.toFixed(2)),
     stabilityResult,
@@ -128,6 +161,7 @@ function newRow(index: number): MarshallRow {
     weightSSD: "",
     maxLoad: "",
     flow: "",
+    specimenHeight: "63.5",
   };
 }
 
@@ -157,10 +191,11 @@ export default function AsphaltMarshall() {
     onSuccess: (_, vars) => {
       if (vars.status === "submitted") {
         toast.success(ar ? "تم إرسال النتائج بنجاح" : "Results submitted successfully");
+        setSubmitted(true);
         setLocation("/technician");
       } else {
         toast.success(ar ? "تم حفظ المسودة" : "Draft saved");
-      setSubmitted(true);}
+      }
     },
     onError: (e) => toast.error(e.message),
   });
@@ -231,7 +266,7 @@ export default function AsphaltMarshall() {
             </p>
           </div>
           <div className="flex gap-2">
-                        {submitted ? (
+            {submitted ? (
               <>
                 <Button variant="outline" size="sm" onClick={() => setLocation("/technician")}>
                   {ar ? "العودة للوحة التحكم" : "Back to Dashboard"}
@@ -247,28 +282,13 @@ export default function AsphaltMarshall() {
               </>
             ) : (
               <>
-                            {submitted ? (
-              <>
-                <Button variant="outline" size="sm" onClick={() => setLocation("/technician")}>
-                  {ar ? "العودة للوحة التحكم" : "Back to Dashboard"}
+                <Button variant="outline" size="sm" onClick={() => handleSave("draft")} disabled={saving}>
+                  {ar ? "حفظ مسودة" : "Save Draft"}
                 </Button>
-                <Button
-                  size="sm"
-                  className="bg-green-600 hover:bg-green-700 gap-1.5"
-                  onClick={() => window.open(`/test-report/${distId}`, "_blank")}
-                >
-                  <Printer size={14} />
-                  {ar ? "طباعة التقرير / PDF" : "Print Report / PDF"}
+                <Button size="sm" onClick={() => handleSave("submitted")} disabled={saving}>
+                  <Send size={14} className="mr-1.5" />
+                  {saving ? (ar ? "جاري الإرسال..." : "Submitting...") : (ar ? "إرسال النتائج" : "Submit Results")}
                 </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="outline" size="sm" onClick={() => handleSave("draft")} disabled={saving}>{ar ? "حفظ مسودة" : "Save Draft"}</Button>
-            <Button size="sm" onClick={() => handleSave("submitted")} disabled={saving}>
-              <Send size={14} className="mr-1.5" />{saving ? (ar ? "جاري الإرسال..." : "Submitting...") : (ar ? "إرسال النتائج" : "Submit Results")}
-            </Button>
-              </>
-            )}
               </>
             )}
           </div>
@@ -343,6 +363,8 @@ export default function AsphaltMarshall() {
                   <th className="border border-slate-200 px-2 py-2 text-xs font-semibold text-slate-600">W. SSD (g)</th>
                   <th className="border border-slate-200 px-2 py-2 text-xs font-semibold text-slate-600">Gmb</th>
                   <th className="border border-slate-200 px-2 py-2 text-xs font-semibold text-slate-600">Air Voids (%)</th>
+                  <th className="border border-slate-200 px-2 py-2 text-xs font-semibold text-slate-600">Height (mm)</th>
+                  <th className="border border-slate-200 px-2 py-2 text-xs font-semibold text-slate-600">CF</th>
                   <th className="border border-slate-200 px-2 py-2 text-xs font-semibold text-slate-600">Max Load (kN)</th>
                   <th className="border border-slate-200 px-2 py-2 text-xs font-semibold text-slate-600">Flow (mm)</th>
                   <th className="border border-slate-200 px-2 py-2 text-xs font-semibold text-slate-600">Stability</th>
@@ -378,6 +400,14 @@ export default function AsphaltMarshall() {
                       ) : "—"}
                     </td>
                     <td className="border border-slate-200 px-1 py-1">
+                      <Input value={row.specimenHeight} onChange={e => updateRow(row.id, "specimenHeight", e.target.value)} className="h-7 text-xs w-16 text-center font-mono" placeholder="63.5" />
+                    </td>
+                    <td className="border border-slate-200 px-1 py-1 text-center font-mono text-xs text-slate-600">
+                      {row.correctionFactor !== undefined && row.correctionFactor !== 1.00
+                        ? <span className="text-amber-600 font-bold">{row.correctionFactor}</span>
+                        : <span className="text-slate-400">{row.correctionFactor ?? "—"}</span>}
+                    </td>
+                    <td className="border border-slate-200 px-1 py-1">
                       <Input value={row.maxLoad} onChange={e => updateRow(row.id, "maxLoad", e.target.value)} className="h-7 text-xs w-20 text-center font-mono" placeholder="—" />
                     </td>
                     <td className="border border-slate-200 px-1 py-1">
@@ -407,7 +437,7 @@ export default function AsphaltMarshall() {
               {validRows.length > 0 && (
                 <tfoot>
                   <tr className="bg-slate-100 font-semibold">
-                    <td colSpan={7} className="border border-slate-200 px-3 py-2 text-right text-xs text-slate-600">Average Stability:</td>
+                    <td colSpan={9} className="border border-slate-200 px-3 py-2 text-right text-xs text-slate-600">Average Stability:</td>
                     <td className="border border-slate-200 px-2 py-2 text-center font-mono text-sm font-bold">{avgStability.toFixed(2)} kN</td>
                     <td colSpan={3} className="border border-slate-200"></td>
                     <td className="border border-slate-200 px-2 py-2 text-center"><PassFailBadge result={overallResult} size="sm" /></td>

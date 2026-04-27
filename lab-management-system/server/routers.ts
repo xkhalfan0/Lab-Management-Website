@@ -2619,9 +2619,10 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
       const result = await Promise.all(
         orders.map(async (o: any) => {
           const items = await getLabOrderItems(o.id);
+          const allTestTypes = await getAllTestTypes();
           const mappedItems = items.map((item: any) => ({
             id: item.id,
-            testName: item.testTypeName,
+            testName: item.testTypeName || allTestTypes.find((tt: any) => tt.code === item.testTypeCode)?.nameEn || item.testTypeCode,
             testTypeCode: item.testTypeCode,
             status: item.status,
             quantity: item.quantity,

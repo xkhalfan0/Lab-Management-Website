@@ -208,6 +208,7 @@ export const appRouter = router({
     list: protectedProcedure.query(async ({ ctx }) => {
       requireRole(ctx.user.role, ["admin"]);
       const allUsers = await getAllUsers();
+      const allTestTypesForNames = await getAllTestTypes();
       // Never expose passwordHash to frontend
       return allUsers.map(u => ({ ...u, passwordHash: undefined }));
     }),
@@ -2616,13 +2617,13 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
       const orders = await getAllLabOrders();
       // Attach items + sampleSubType + assignedTechnicianName to each order
       const allUsers = await getAllUsers();
+      const allTestTypesForNames = await getAllTestTypes();
       const result = await Promise.all(
         orders.map(async (o: any) => {
           const items = await getLabOrderItems(o.id);
-          const allTestTypes = await getAllTestTypes();
           const mappedItems = items.map((item: any) => ({
             id: item.id,
-            testName: item.testTypeName || allTestTypes.find((tt: any) => tt.code === item.testTypeCode)?.nameEn || item.testTypeCode,
+            testName: item.testTypeName || allTestTypesForNames.find((tt: any) => tt.code === item.testTypeCode)?.nameEn || item.testTypeCode,
             testTypeCode: item.testTypeCode,
             status: item.status,
             quantity: item.quantity,

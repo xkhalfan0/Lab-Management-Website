@@ -132,10 +132,11 @@ export default function Interlock() {
     onSuccess: (_, vars) => {
       if (vars.status === "submitted") {
         toast.success(ar ? "تم إرسال النتائج بنجاح" : "Results submitted successfully");
+        setSubmitted(true);
         setLocation("/technician");
       } else {
         toast.success(ar ? "تم حفظ المسودة" : "Draft saved");
-      setSubmitted(true);}
+      }
     },
     onError: (e) => toast.error(e.message),
   });
@@ -200,7 +201,7 @@ export default function Interlock() {
             <p className="text-slate-500 text-sm mt-1">BS EN 1338 | Distribution: {dist?.distributionCode ?? `DIST-${distId}`}</p>
           </div>
           <div className="flex gap-2">
-                        {submitted ? (
+            {submitted ? (
               <>
                 <Button variant="outline" size="sm" onClick={() => setLocation("/technician")}>
                   {ar ? "العودة للوحة التحكم" : "Back to Dashboard"}
@@ -216,28 +217,13 @@ export default function Interlock() {
               </>
             ) : (
               <>
-                            {submitted ? (
-              <>
-                <Button variant="outline" size="sm" onClick={() => setLocation("/technician")}>
-                  {ar ? "العودة للوحة التحكم" : "Back to Dashboard"}
+                <Button variant="outline" size="sm" onClick={() => handleSave("draft")} disabled={saving}>
+                  {ar ? "حفظ مسودة" : "Save Draft"}
                 </Button>
-                <Button
-                  size="sm"
-                  className="bg-green-600 hover:bg-green-700 gap-1.5"
-                  onClick={() => window.open(`/test-report/${distId}`, "_blank")}
-                >
-                  <Printer size={14} />
-                  {ar ? "طباعة التقرير / PDF" : "Print Report / PDF"}
+                <Button size="sm" onClick={() => handleSave("submitted")} disabled={saving}>
+                  <Send size={14} className="mr-1.5" />
+                  {saving ? (ar ? "جاري الإرسال..." : "Submitting...") : (ar ? "إرسال النتائج" : "Submit Results")}
                 </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="outline" size="sm" onClick={() => handleSave("draft")} disabled={saving}>{ar ? "حفظ مسودة" : "Save Draft"}</Button>
-            <Button size="sm" onClick={() => handleSave("submitted")} disabled={saving}>
-              <Send size={14} className="mr-1.5" />{saving ? (ar ? "جاري الإرسال..." : "Submitting...") : (ar ? "إرسال النتائج" : "Submit Results")}
-            </Button>
-              </>
-            )}
               </>
             )}
           </div>

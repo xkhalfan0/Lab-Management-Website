@@ -142,10 +142,11 @@ export default function ConcreteBlocks() {
     onSuccess: (_, vars) => {
       if (vars.status === "submitted") {
         toast.success(ar ? "تم إرسال النتائج بنجاح" : "Test results submitted successfully");
+        setSubmitted(true);
         setLocation("/technician");
       } else {
         toast.success(ar ? "تم حفظ المسودة" : "Draft saved");
-      setSubmitted(true);}
+      }
     },
     onError: (e) => toast.error(e.message),
   });
@@ -221,23 +222,7 @@ export default function ConcreteBlocks() {
             </p>
           </div>
           <div className="flex gap-2">
-                        {submitted ? (
-              <>
-                <Button variant="outline" size="sm" onClick={() => setLocation("/technician")}>
-                  {ar ? "العودة للوحة التحكم" : "Back to Dashboard"}
-                </Button>
-                <Button
-                  size="sm"
-                  className="bg-green-600 hover:bg-green-700 gap-1.5"
-                  onClick={() => window.open(`/test-report/${distId}`, "_blank")}
-                >
-                  <Printer size={14} />
-                  {ar ? "طباعة التقرير / PDF" : "Print Report / PDF"}
-                </Button>
-              </>
-            ) : (
-              <>
-                            {submitted ? (
+            {submitted ? (
               <>
                 <Button variant="outline" size="sm" onClick={() => setLocation("/technician")}>
                   {ar ? "العودة للوحة التحكم" : "Back to Dashboard"}
@@ -254,14 +239,12 @@ export default function ConcreteBlocks() {
             ) : (
               <>
                 <Button variant="outline" size="sm" onClick={() => handleSave("draft")} disabled={saving}>
-              {ar ? "حفظ مسودة" : "Save Draft"}
-            </Button>
-            <Button size="sm" onClick={() => handleSave("submitted")} disabled={saving}>
-              <Send size={14} className="mr-1.5" />
-              {saving ? (ar ? "جاري..." : "Submitting...") : (ar ? "إرسال النتائج" : "Submit Results")}
-            </Button>
-              </>
-            )}
+                  {ar ? "حفظ مسودة" : "Save Draft"}
+                </Button>
+                <Button size="sm" onClick={() => handleSave("submitted")} disabled={saving}>
+                  <Send size={14} className="mr-1.5" />
+                  {saving ? (ar ? "جاري..." : "Submitting...") : (ar ? "إرسال النتائج" : "Submit Results")}
+                </Button>
               </>
             )}
           </div>

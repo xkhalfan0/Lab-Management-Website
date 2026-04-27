@@ -123,10 +123,11 @@ export default function AggSpecificGravity() {
   const saveResult = trpc.specializedTests.save.useMutation({
     onSuccess: (_, vars) => {
       if (vars.status === "submitted") {
-     toast.success(ar ? "تم إرسال النتائج بنجاح" : "Results submitted successfully")
+        toast.success(ar ? "تم إرسال النتائج بنجاح" : "Results submitted successfully");
+        setSubmitted(true);
         setLocation("/technician");
       } else {
-     toast.success(ar ? "تم حفظ المسودة" : "Draft saved")
+        toast.success(ar ? "تم حفظ المسودة" : "Draft saved");
       }
     },
     onError: (e) => toast.error(e.message),

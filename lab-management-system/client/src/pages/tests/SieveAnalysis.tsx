@@ -249,10 +249,10 @@ export default function SieveAnalysis() {
     onSuccess: (_, vars) => {
       if (vars.status === "submitted") {
         toast.success(ar ? "تم إرسال النتائج بنجاح" : "Results submitted successfully");
+        setSubmitted(true);
         setLocation("/technician");
       } else {
         toast.success(ar ? "تم حفظ المسودة" : "Draft saved");
-        setSubmitted(true);
       }
     },
     onError: (e) => toast.error(e.message),

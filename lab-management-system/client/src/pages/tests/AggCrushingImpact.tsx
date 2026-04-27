@@ -117,10 +117,11 @@ export default function AggCrushingImpact() {
     onSuccess: (_, vars) => {
       if (vars.status === "submitted") {
         toast.success(ar ? "تم إرسال النتائج بنجاح" : "Results submitted successfully");
+        setSubmitted(true);
         setLocation("/technician");
       } else {
         toast.success(ar ? "تم حفظ المسودة" : "Draft saved");
-      setSubmitted(true);}
+      }
     },
     onError: (e) => toast.error(ar ? "حدث خطأ: " + e.message : e.message),
   });

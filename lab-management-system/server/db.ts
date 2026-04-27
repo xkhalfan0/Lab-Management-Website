@@ -194,12 +194,16 @@ export async function generateSampleCode(): Promise<string> {
   const db = await getDb();
   if (!db) return `LAB-${new Date().getFullYear()}-0001`;
   const year = new Date().getFullYear();
+  // Use the highest existing code suffix (not COUNT) to avoid duplicate
+  // sample codes when rows are deleted or historical imports create gaps.
   const result = await db
-    .select({ count: sql<number>`COUNT(*)` })
+    .select({
+      maxSuffix: sql<number>`COALESCE(MAX(CAST(SUBSTRING_INDEX(${samples.sampleCode}, '-', -1) AS UNSIGNED)), 0)`,
+    })
     .from(samples)
-    .where(sql`YEAR(createdAt) = ${year}`);
-  const count = (result[0]?.count ?? 0) + 1;
-  return `LAB-${year}-${String(count).padStart(4, "0")}`;
+    .where(sql`${samples.sampleCode} LIKE ${`LAB-${year}-%`}`);
+  const next = (result[0]?.maxSuffix ?? 0) + 1;
+  return `LAB-${year}-${String(next).padStart(4, "0")}`;
 }
 
 export async function generateDistributionCode(): Promise<string> {

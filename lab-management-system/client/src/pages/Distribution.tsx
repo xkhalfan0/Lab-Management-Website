@@ -647,7 +647,7 @@ export default function Distribution() {
 
       {/* Distribute Dialog */}
       <Dialog open={!!selectedOrder} onOpenChange={(o) => { if (!o) { setSelectedOrder(null); setIsEditing(false); } }}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>
               {isEditing

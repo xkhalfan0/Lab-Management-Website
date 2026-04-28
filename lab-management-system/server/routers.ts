@@ -2644,6 +2644,11 @@ ${testSummaries.length > 0 ? testSummaries.join("\n\n") : "لم تُجرَ اخ�
           const tech = allUsers.find((u: any) => u.id === o.assignedTechnicianId);
           return {
             ...o,
+            castingDate: o.castingDate ? new Date(o.castingDate).toISOString() : null,
+            distributedAt: o.distributedAt ? new Date(o.distributedAt).toISOString() : null,
+            completedAt: o.completedAt ? new Date(o.completedAt).toISOString() : null,
+            createdAt: o.createdAt ? new Date(o.createdAt).toISOString() : null,
+            updatedAt: o.updatedAt ? new Date(o.updatedAt).toISOString() : null,
             items: mappedItems,
             testCount,
             testNames,

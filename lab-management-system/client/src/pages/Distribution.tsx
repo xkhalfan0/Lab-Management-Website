@@ -186,7 +186,17 @@ export default function Distribution() {
   const [, setLocation] = useLocation();
 
   // ─── Data ──────────────────────────────────────────────────────────────────
-  const { data: orders = [], refetch } = trpc.orders.list.useQuery();
+  const { data: rawOrders = [], refetch } = trpc.orders.list.useQuery();
+  const orders = rawOrders.map((o: any) => ({
+    ...o,
+    items: Array.isArray(o.items) ? o.items.map((item: any) => ({
+      ...item,
+      testName: item.testName != null && typeof item.testName !== "object" ? String(item.testName) : (item.testTypeCode ?? "—"),
+      testTypeCode: item.testTypeCode != null ? String(item.testTypeCode) : "—",
+      quantity: Number(item.quantity) || 1,
+    })) : [],
+    testNames: Array.isArray(o.testNames) ? o.testNames.map((n: any) => typeof n === "string" ? n : String(n ?? "—")) : [],
+  }));
   const { data: technicians = [] } = trpc.users.technicians.useQuery();
 
   // ─── Mutations ─────────────────────────────────────────────────────────────

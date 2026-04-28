@@ -430,8 +430,8 @@ function DashboardLayoutContent({ children, setSidebarWidth, sidebarSide }: Prop
               );
             })()}
 
-            {/* Notification Bell */}
-            <NotificationBell isAr={lang === "ar"} />
+            {/* Notification Bell - DISABLED for diagnostic */}
+            {/* <NotificationBell isAr={lang === "ar"} /> */}
 
             {/* Language toggle */}
             <button

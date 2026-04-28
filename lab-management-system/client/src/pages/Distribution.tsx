@@ -185,6 +185,27 @@ export default function Distribution() {
   const [batchLoading, setBatchLoading] = useState(false);
   const [, setLocation] = useLocation();
   const toText = (v: unknown): string => (v == null ? "—" : String(v));
+  const normalizeOrderForDialog = (order: any) => ({
+    ...order,
+    orderCode: toText(order?.orderCode),
+    contractorName: toText(order?.contractorName),
+    sampleType: toText(order?.sampleType),
+    assignedTechnicianId: order?.assignedTechnicianId,
+    items: Array.isArray(order?.items)
+      ? order.items
+          .filter((item: any) => item && typeof item === "object")
+          .map((item: any) => ({
+            ...item,
+            id: item.id ?? `${item.testTypeCode ?? "tt"}-${Math.random().toString(36).slice(2, 8)}`,
+            testName:
+              item.testName != null && typeof item.testName !== "object"
+                ? String(item.testName)
+                : String(item.testTypeCode ?? "—"),
+            testTypeCode: String(item.testTypeCode ?? "—"),
+            quantity: Number(item.quantity) || 1,
+          }))
+      : [],
+  });
 
   // ─── Data ──────────────────────────────────────────────────────────────────
   const { data: rawOrders = [], refetch } = trpc.orders.list.useQuery();
@@ -246,12 +267,12 @@ export default function Distribution() {
 
   // ─── Handlers ──────────────────────────────────────────────────────────────
   const handleOpenDialog = (order: any) => {
-    setSelectedOrder(order);
+    setSelectedOrder(normalizeOrderForDialog(order));
     setIsEditing(false);
     setForm({ technicianId: "", priority: "normal", notes: "" });
   };
   const handleOpenEditDialog = (order: any) => {
-    setSelectedOrder(order);
+    setSelectedOrder(normalizeOrderForDialog(order));
     setIsEditing(true);
     setForm({
       technicianId: String(order.assignedTechnicianId ?? ""),

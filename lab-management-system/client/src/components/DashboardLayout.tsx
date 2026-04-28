@@ -248,6 +248,10 @@ function DashboardLayoutContent({ children, setSidebarWidth, sidebarSide }: Prop
   const activeMenuItem = menuItems.find(item => item.path === location);
   // const { data: notifs } = trpc.notifications.list.useQuery(undefined, { refetchInterval: 30000 });
   const unreadCount = 0;
+  const safeText = (value: unknown): string =>
+    value == null ? "" : (typeof value === "string" || typeof value === "number" || typeof value === "boolean")
+      ? String(value)
+      : String(value);
 
   useEffect(() => {
     if (isCollapsed) setIsResizing(false);
@@ -318,11 +322,11 @@ function DashboardLayoutContent({ children, setSidebarWidth, sidebarSide }: Prop
                     <SidebarMenuButton
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
-                      tooltip={t(item.labelKey)}
+                      tooltip={safeText(t(item.labelKey))}
                       className="h-10 transition-all font-normal"
                     >
                       <item.icon className={`h-4 w-4 shrink-0 ${isActive ? "text-primary" : ""}`} />
-                      <span className="truncate">{t(item.labelKey)}</span>
+                      <span className="truncate">{safeText(t(item.labelKey))}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
@@ -391,7 +395,7 @@ function DashboardLayoutContent({ children, setSidebarWidth, sidebarSide }: Prop
           <div className="flex items-center gap-2">
             {isMobile && <SidebarTrigger className="h-9 w-9 rounded-lg" />}
             <span className="text-sm font-medium text-muted-foreground">
-              {activeMenuItem ? t(activeMenuItem.labelKey) : ""}
+              {activeMenuItem ? safeText(t(activeMenuItem.labelKey)) : ""}
             </span>
           </div>
 

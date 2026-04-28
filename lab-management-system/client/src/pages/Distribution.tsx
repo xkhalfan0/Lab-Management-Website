@@ -677,7 +677,7 @@ export default function Distribution() {
                     <span key={item.id || item._id || idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                       <FlaskConical className="w-3 h-3" />
                       {item.testName && item.testName !== "__multi__" ? String(item.testName) : String(item.testTypeCode ?? "—")}
-                      {Number(item.quantity) > 1 ? ` ×${item.quantity}` : ""}
+                      {Number(item.quantity) > 1 ? ` ×${toText(item.quantity)}` : ""}
                     </span>
                   ))}
                 </div>

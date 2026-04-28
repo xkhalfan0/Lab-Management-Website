@@ -322,7 +322,6 @@ function DashboardLayoutContent({ children, setSidebarWidth, sidebarSide }: Prop
                     <SidebarMenuButton
                       isActive={isActive}
                       onClick={() => setLocation(item.path)}
-                      tooltip={safeText(t(item.labelKey))}
                       className="h-10 transition-all font-normal"
                     >
                       <item.icon className={`h-4 w-4 shrink-0 ${isActive ? "text-primary" : ""}`} />

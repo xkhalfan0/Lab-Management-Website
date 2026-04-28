@@ -211,15 +211,30 @@ export default function Distribution() {
   const { data: rawOrders = [], refetch } = trpc.orders.list.useQuery();
   const orders = rawOrders.map((o: any) => ({
     ...o,
+    orderCode: toText(o.orderCode),
+    contractorName: toText(o.contractorName),
+    sampleType: toText(o.sampleType),
+    sampleSubType: o.sampleSubType != null ? String(o.sampleSubType) : null,
+    sector: o.sector != null ? String(o.sector) : null,
+    assignedTechnicianName: o.assignedTechnicianName != null ? String(o.assignedTechnicianName) : null,
+    status: o.status != null ? String(o.status) : "pending",
+    priority: o.priority != null ? String(o.priority) : "normal",
     items: Array.isArray(o.items) ? o.items.map((item: any) => ({
       ...item,
       testName: item.testName != null && typeof item.testName !== "object" ? String(item.testName) : (item.testTypeCode ?? "—"),
       testTypeCode: item.testTypeCode != null ? String(item.testTypeCode) : "—",
+      status: item.status != null ? String(item.status) : "pending",
       quantity: Number(item.quantity) || 1,
     })) : [],
     testNames: Array.isArray(o.testNames) ? o.testNames.map((n: any) => typeof n === "string" ? n : String(n ?? "—")) : [],
   }));
-  const { data: technicians = [] } = trpc.users.technicians.useQuery();
+  const { data: rawTechnicians = [] } = trpc.users.technicians.useQuery();
+  const technicians = (rawTechnicians as any[]).map((tech: any) => ({
+    ...tech,
+    id: tech.id,
+    name: toText(tech.name),
+    specialty: tech.specialty != null ? String(tech.specialty) : "",
+  }));
 
   // ─── Mutations ─────────────────────────────────────────────────────────────
   const distributeOrder = trpc.orders.distribute.useMutation({

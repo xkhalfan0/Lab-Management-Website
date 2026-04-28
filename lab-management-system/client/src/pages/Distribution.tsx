@@ -498,7 +498,7 @@ export default function Distribution() {
                               {(order.items ?? []).length === 0 ? (
                                 <span className="text-xs text-muted-foreground italic">{lang === "ar" ? "لا توجد" : "None"}</span>
                               ) : (order.items ?? []).filter((item: any) => item && typeof item === "object").map((item: any, idx: number) => (
-                                <span key={item.id || item._id || idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                <span key={`pending-${order.id}-${item.id || item._id || idx}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                                   <FlaskConical className="w-3 h-3" />
                                   {item.testName && item.testName !== "__multi__" ? String(item.testName) : String(item.testTypeCode ?? "—")}
                                   {Number(item.quantity) > 1 ? ` ×${item.quantity}` : ""}
@@ -578,7 +578,7 @@ export default function Distribution() {
                                 <span className="text-xs text-muted-foreground italic">{lang === "ar" ? "لا توجد" : "None"}</span>
                               ) : (order.items ?? []).filter((item: any) => item && typeof item === "object").map((item: any, idx: number) => (
                                 <span
-                                  key={item.id || item._id || idx}
+                                  key={`all-${order.id}-${item.id || item._id || idx}`}
                                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border"
                                   style={{
                                     background: item.status === "completed" ? "#f0fdf4" : "#f8fafc",
@@ -674,7 +674,7 @@ export default function Distribution() {
                 <span className="text-muted-foreground">{lang === "ar" ? "الاختبارات:" : "Tests:"}</span>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {(selectedOrder?.items ?? []).filter((item: any) => item && typeof item === "object").map((item: any, idx: number) => (
-                    <span key={item.id || item._id || idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                    <span key={`dialog-${selectedOrder?.id}-${item.id || item._id || idx}`} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                       <FlaskConical className="w-3 h-3" />
                       {item.testName && item.testName !== "__multi__" ? String(item.testName) : String(item.testTypeCode ?? "—")}
                       {Number(item.quantity) > 1 ? ` ×${toText(item.quantity)}` : ""}

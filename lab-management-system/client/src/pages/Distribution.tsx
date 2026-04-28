@@ -458,11 +458,11 @@ export default function Distribution() {
                             <div className="flex flex-wrap gap-1">
                               {(order.items ?? []).length === 0 ? (
                                 <span className="text-xs text-muted-foreground italic">{lang === "ar" ? "لا توجد" : "None"}</span>
-                              ) : (order.items ?? []).filter((item: any) => item && typeof item === "object").map((item: any, idx: number) => (
-                                <span key={item.id ?? idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                              ) : (order.items ?? []).map((item: any) => (
+                                <span key={item.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                                   <FlaskConical className="w-3 h-3" />
-                                  {item.testName && item.testName !== "__multi__" ? String(item.testName) : String(item.testTypeCode ?? "—")}
-                                  {Number(item.quantity) > 1 ? ` ×${item.quantity}` : ""}
+                                  {item.testName && item.testName !== "__multi__" ? item.testName : item.testTypeCode}
+                                  {item.quantity > 1 ? ` ×${item.quantity}` : ""}
                                 </span>
                               ))}
                             </div>
@@ -537,9 +537,9 @@ export default function Distribution() {
                             <div className="flex flex-wrap gap-1">
                               {(order.items ?? []).length === 0 ? (
                                 <span className="text-xs text-muted-foreground italic">{lang === "ar" ? "لا توجد" : "None"}</span>
-                              ) : (order.items ?? []).filter((item: any) => item && typeof item === "object").map((item: any, idx: number) => (
+                              ) : (order.items ?? []).map((item: any) => (
                                 <span
-                                  key={item.id ?? idx}
+                                  key={item.id}
                                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border"
                                   style={{
                                     background: item.status === "completed" ? "#f0fdf4" : "#f8fafc",
@@ -548,8 +548,8 @@ export default function Distribution() {
                                   }}
                                 >
                                   {item.status === "completed" ? <CheckCircle2 className="w-3 h-3" /> : <FlaskConical className="w-3 h-3" />}
-                                  {item.testName && item.testName !== "__multi__" ? String(item.testName) : String(item.testTypeCode ?? "—")}
-                                  {Number(item.quantity) > 1 ? ` ×${item.quantity}` : ""}
+                                  {item.testName && item.testName !== "__multi__" ? item.testName : item.testTypeCode}
+                                  {item.quantity > 1 ? ` ×${item.quantity}` : ""}
                                 </span>
                               ))}
                             </div>
@@ -637,7 +637,7 @@ export default function Distribution() {
                   {(selectedOrder?.items ?? []).map((item: any) => (
                     <span key={item.id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                       <FlaskConical className="w-3 h-3" />
-                      {item.testName && item.testName !== "__multi__" ? String(item.testName) : String(item.testTypeCode ?? "—")}
+                      {item.testName && item.testName !== "__multi__" ? item.testName : item.testTypeCode}
                       {item.quantity > 1 ? ` ×${item.quantity}` : ""}
                     </span>
                   ))}

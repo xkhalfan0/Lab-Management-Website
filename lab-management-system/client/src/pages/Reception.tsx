@@ -1202,7 +1202,9 @@ export default function Reception() {
                           <Badge
                             variant="outline"
                             className="text-xs"
-                            title={((order as any).testNames ?? []).filter((n: string) => !!n).join("\n")}
+                            title={((order as any).testNames ?? [])
+                              .filter((n: string) => !!n)
+                              .join("\n")}
                           >
                             {((order as any).testCount ?? 0)} {lang === "ar" ? "اختبار" : "tests"}
                           </Badge>

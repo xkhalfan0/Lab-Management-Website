@@ -14,11 +14,8 @@ import { toast } from "sonner";
 import { useLocation } from "wouter";
 
 const toText = (val: any) => {
-  if (val == null || val === undefined) return "—";
-  if (typeof val === "object") {
-    if (Array.isArray(val)) return val.join(", ");
-    return JSON.stringify(val);
-  }
+  if (val == null) return "—";
+  if (typeof val === "object") return JSON.stringify(val);
   return String(val);
 };
 
@@ -29,18 +26,10 @@ const normalizeOrder = (order: any) => {
     orderCode: String(order.orderCode || ""),
     contractorName: String(order.contractorName || ""),
     sampleType: String(order.sampleType || ""),
-    sampleSubType: String(order.sampleSubType || ""),
-    sector: String(order.sector || ""),
-    assignedTechnicianName: String(order.assignedTechnicianName || ""),
-    status: String(order.status || ""),
-    items: (order.items || [])
-      .filter((item: any) => item && typeof item === "object")
-      .map((item: any) => ({
+    items: (order.items || []).map((item: any) => ({
         ...item,
         testName: String(item?.testName || ""),
-        testTypeCode: String(item?.testTypeCode || ""),
         quantity: Number(item?.quantity) || 0,
-        status: String(item?.status || ""),
       })),
   };
 };

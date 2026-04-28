@@ -184,6 +184,7 @@ export default function Distribution() {
   const [batchPriority, setBatchPriority] = useState<"low" | "normal" | "high" | "urgent">("normal");
   const [batchLoading, setBatchLoading] = useState(false);
   const [, setLocation] = useLocation();
+  const toText = (v: unknown): string => (v == null ? "—" : String(v));
 
   // ─── Data ──────────────────────────────────────────────────────────────────
   const { data: rawOrders = [], refetch } = trpc.orders.list.useQuery();
@@ -399,7 +400,7 @@ export default function Distribution() {
                           <SelectContent>
                             {technicians.map((tech: any) => (
                               <SelectItem key={tech.id} value={String(tech.id)}>
-                                {tech.name} {tech.specialty ? `(${tech.specialty})` : ""}
+                                {toText(tech.name)} {tech.specialty ? `(${toText(tech.specialty)})` : ""}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -635,11 +636,11 @@ export default function Distribution() {
             <div className="bg-muted/40 rounded-lg p-3 text-xs space-y-2">
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground">{lang === "ar" ? "المقاول:" : "Contractor:"}</span>
-                <span className="font-medium">{selectedOrder?.contractorName ?? "—"}</span>
+                <span className="font-medium">{toText(selectedOrder?.contractorName)}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground">{lang === "ar" ? "النوع:" : "Type:"}</span>
-                <span className="font-medium">{typeLabel(selectedOrder?.sampleType ?? "", lang)}</span>
+                <span className="font-medium">{toText(typeLabel(String(selectedOrder?.sampleType ?? ""), lang))}</span>
               </div>
               <div>
                 <span className="text-muted-foreground">{lang === "ar" ? "الاختبارات:" : "Tests:"}</span>
@@ -665,7 +666,7 @@ export default function Distribution() {
                 <SelectContent>
                   {technicians.map((tech: any) => (
                     <SelectItem key={tech.id} value={String(tech.id)}>
-                      {tech.name} {tech.specialty ? `(${tech.specialty})` : ""}
+                      {toText(tech.name)} {tech.specialty ? `(${toText(tech.specialty)})` : ""}
                     </SelectItem>
                   ))}
                 </SelectContent>

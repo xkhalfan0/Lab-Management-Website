@@ -329,7 +329,6 @@ export default function Distribution() {
     { key: "done", label: lang === "ar" ? "مُنجزة" : "Done", count: doneOrders.length, color: "#10b981" },
   ];
 
-  /*
   return (
     <DashboardLayout>
       <div className="space-y-5">
@@ -340,7 +339,7 @@ export default function Distribution() {
           </p>
         </div>
 
-        {/* Filter Buttons * /}
+        {/* Filter Buttons */}
         <div className="flex items-center gap-2 flex-wrap">
           {filterBtns.map((btn) => {
             const active = taskFilter === btn.key;
@@ -371,7 +370,7 @@ export default function Distribution() {
           })}
         </div>
 
-        {/* Pending Orders * /}
+        {/* Pending Orders */}
         {(taskFilter === "all" || taskFilter === "pending") && (
           <Card className="border-amber-200">
             <CardHeader className="pb-2">
@@ -506,7 +505,7 @@ export default function Distribution() {
           </Card>
         )}
 
-        {/* All Orders * /}
+        {/* All Orders */}
         {(taskFilter === "all" || taskFilter === "active" || taskFilter === "done") && (
           <Card>
             <CardHeader className="pb-2">
@@ -617,7 +616,7 @@ export default function Distribution() {
         )}
       </div>
 
-      {/* Distribute Dialog * /}
+      {/* Distribute Dialog */}
       <Dialog open={!!selectedOrder} onOpenChange={(o) => { if (!o) { setSelectedOrder(null); setIsEditing(false); } }}>
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
@@ -632,7 +631,7 @@ export default function Distribution() {
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleDistribute} className="space-y-4 mt-2">
-            {/* Order Summary * /}
+            {/* Order Summary */}
             <div className="bg-muted/40 rounded-lg p-3 text-xs space-y-2">
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground">{lang === "ar" ? "المقاول:" : "Contractor:"}</span>
@@ -656,7 +655,7 @@ export default function Distribution() {
               </div>
             </div>
 
-            {/* Technician * /}
+            {/* Technician */}
             <div className="space-y-1.5">
               <Label>{lang === "ar" ? "الفني المسؤول" : "Assigned Technician"} <span className="text-red-500">*</span></Label>
               <Select value={form.technicianId} onValueChange={(v) => setForm({ ...form, technicianId: v })}>
@@ -673,7 +672,7 @@ export default function Distribution() {
               </Select>
             </div>
 
-            {/* Priority * /}
+            {/* Priority */}
             <div className="space-y-1.5">
               <Label>{lang === "ar" ? "الأولوية" : "Priority"}</Label>
               <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v as any })}>
@@ -689,7 +688,7 @@ export default function Distribution() {
               </Select>
             </div>
 
-            {/* Notes * /}
+            {/* Notes */}
             <div className="space-y-1.5">
               <Label>{lang === "ar" ? "ملاحظات" : "Notes"}</Label>
               <Textarea
@@ -718,17 +717,6 @@ export default function Distribution() {
           </form>
         </DialogContent>
       </Dialog>
-    </DashboardLayout>
-  );
-  */
-
-  return (
-    <DashboardLayout>
-      <div className="p-4">
-        <h1>Distribution Test</h1>
-        <p>Orders count: {orders.length}</p>
-        <p>Technicians count: {technicians.length}</p>
-      </div>
     </DashboardLayout>
   );
 }

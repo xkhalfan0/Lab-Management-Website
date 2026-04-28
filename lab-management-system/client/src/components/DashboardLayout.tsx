@@ -246,8 +246,8 @@ function DashboardLayoutContent({ children, setSidebarWidth, sidebarSide }: Prop
     return hasPermission(user, item.permKey, item.minLevel);
   });
   const activeMenuItem = menuItems.find(item => item.path === location);
-  const { data: notifs } = trpc.notifications.list.useQuery(undefined, { refetchInterval: 30000 });
-  const unreadCount = notifs?.filter(n => !n.isRead).length ?? 0;
+  // const { data: notifs } = trpc.notifications.list.useQuery(undefined, { refetchInterval: 30000 });
+  const unreadCount = 0;
 
   useEffect(() => {
     if (isCollapsed) setIsResizing(false);
@@ -330,23 +330,7 @@ function DashboardLayoutContent({ children, setSidebarWidth, sidebarSide }: Prop
             </SidebarMenu>
           </SidebarContent>
 
-          {/* Notification banner */}
-          {!isCollapsed && unreadCount > 0 && (
-            <div className="px-3 pb-1">
-              <button
-                onClick={() => setLocation("/notifications")}
-                className="sidebar-notif-btn flex items-center gap-2 w-full text-xs text-amber-700 bg-amber-50 px-3 py-2 rounded-lg hover:bg-amber-100 transition-colors"
-              >
-                <Bell className="w-3.5 h-3.5 shrink-0" />
-                <span>
-                  {unreadCount}{" "}
-                  {lang === "ar"
-                    ? `إشعار${unreadCount > 1 ? "ات" : ""} غير مقروء${unreadCount > 1 ? "ة" : ""}`
-                    : `unread notification${unreadCount > 1 ? "s" : ""}`}
-                </span>
-              </button>
-            </div>
-          )}
+          {/* Notification banner - DISABLED for diagnostic */}
 
           {/* Footer / user */}
           <SidebarFooter className="p-3">

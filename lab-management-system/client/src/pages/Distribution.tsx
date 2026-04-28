@@ -14,8 +14,14 @@ import { toast } from "sonner";
 import { useLocation } from "wouter";
 
 const toText = (val: any) => {
-  if (val == null) return "—";
-  if (typeof val === "object") return JSON.stringify(val);
+  if (val == null || val === undefined) return "—";
+  if (typeof val === "object") {
+    if (val instanceof Date) return val.toLocaleDateString();
+    if (Array.isArray(val)) return val.join(", ");
+    if (val.name) return String(val.name);
+    if (val.label) return String(val.label);
+    return JSON.stringify(val);
+  }
   return String(val);
 };
 

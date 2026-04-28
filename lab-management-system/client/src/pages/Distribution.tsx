@@ -483,9 +483,9 @@ export default function Distribution() {
                               aria-label={lang === "ar" ? "تحديد الأوردر" : "Select order"}
                             />
                           </td>
-                          <td className="px-4 py-2.5 font-mono text-xs font-semibold text-primary">{order.orderCode}</td>
-                          <td className="px-4 py-2.5 text-xs">{order.contractorName ?? "—"}</td>
-                          <td className="px-4 py-2.5 text-xs"><TypeCell order={order} lang={lang} /></td>
+                          <td className="px-4 py-2.5 font-mono text-xs font-semibold text-primary">{toText(order.orderCode)}</td>
+                          <td className="px-4 py-2.5 text-xs">{toText(order.contractorName)}</td>
+                          <td className="px-4 py-2.5 text-xs"><TypeCell order={{ ...order, sampleType: String(order.sampleType ?? ""), sampleSubType: toText(order.sampleSubType) }} lang={lang} /></td>
                           <td className="px-4 py-2.5">
                             <div className="flex flex-wrap gap-1">
                               {(order.items ?? []).length === 0 ? (
@@ -503,7 +503,7 @@ export default function Distribution() {
                             {order.sector ? (
                               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                                 <Building2 className="w-3 h-3" />
-                                {sectorLabel(order.sector, lang)}
+                                {toText(sectorLabel(String(order.sector ?? ""), lang))}
                               </span>
                             ) : "—"}
                           </td>
@@ -562,9 +562,9 @@ export default function Distribution() {
                           const canPrintSlip = order.status === "distributed" || order.status === "in_progress";
                           return (
                         <tr key={order.id} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
-                          <td className="px-4 py-2.5 font-mono text-xs font-semibold text-primary">{order.orderCode}</td>
-                          <td className="px-4 py-2.5 text-xs">{order.contractorName ?? "—"}</td>
-                          <td className="px-4 py-2.5 text-xs"><TypeCell order={order} lang={lang} /></td>
+                          <td className="px-4 py-2.5 font-mono text-xs font-semibold text-primary">{toText(order.orderCode)}</td>
+                          <td className="px-4 py-2.5 text-xs">{toText(order.contractorName)}</td>
+                          <td className="px-4 py-2.5 text-xs"><TypeCell order={{ ...order, sampleType: String(order.sampleType ?? ""), sampleSubType: toText(order.sampleSubType) }} lang={lang} /></td>
                           <td className="px-4 py-2.5">
                             <div className="flex flex-wrap gap-1">
                               {(order.items ?? []).length === 0 ? (
@@ -587,7 +587,7 @@ export default function Distribution() {
                             </div>
                           </td>
                           <td className="px-4 py-2.5 text-xs text-muted-foreground">
-                            {order.assignedTechnicianName ?? "—"}
+                            {toText(order.assignedTechnicianName)}
                           </td>
                           <td className="px-4 py-2.5">
                             <StatusBadge status={order.status} />

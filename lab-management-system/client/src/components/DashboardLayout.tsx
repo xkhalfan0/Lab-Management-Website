@@ -306,7 +306,7 @@ function DashboardLayoutContent({ children, setSidebarWidth, sidebarSide }: Prop
               </button>
               {!isCollapsed && (
                 <span className="font-semibold tracking-tight truncate text-sm">
-                  {t("app.title")}
+                  {safeText(t("app.title"))}
                 </span>
               )}
             </div>
@@ -342,13 +342,13 @@ function DashboardLayoutContent({ children, setSidebarWidth, sidebarSide }: Prop
                 <button className="flex items-center gap-3 rounded-lg px-1 py-1 hover:bg-accent/50 transition-colors w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                   <Avatar className="h-9 w-9 border shrink-0">
                     <AvatarFallback className="text-xs font-medium">
-                      {user?.name?.charAt(0).toUpperCase()}
+                      {safeText(user?.name).charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0 group-data-[collapsible=icon]:hidden text-start">
-                    <p className="text-sm font-medium truncate leading-none">{user?.name || "—"}</p>
+                    <p className="text-sm font-medium truncate leading-none">{safeText(user?.name) || "—"}</p>
                     <p className="text-xs text-muted-foreground truncate mt-0.5">
-                      {(user as any)?.role?.replace(/_/g, " ") ?? user?.email ?? "—"}
+                      {safeText((typeof (user as any)?.role === "string" ? (user as any).role.replace(/_/g, " ") : null) ?? user?.email ?? "—")}
                     </p>
                   </div>
                 </button>

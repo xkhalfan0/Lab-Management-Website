@@ -26,6 +26,22 @@ function fmt(val: string | number | null | undefined, decimals = 2): string {
   if (isNaN(n)) return String(val);
   return n.toFixed(decimals);
 }
+function safeText(val: unknown): string {
+  if (val == null) return "—";
+  if (val instanceof Date) return val.toLocaleDateString("en-GB");
+  if (Array.isArray(val)) return val.map((x) => (x == null ? "—" : String(x))).join(", ");
+  if (typeof val === "object") {
+    const anyVal = val as any;
+    if (anyVal?.name != null) return String(anyVal.name);
+    if (anyVal?.label != null) return String(anyVal.label);
+    try {
+      return JSON.stringify(anyVal);
+    } catch {
+      return "—";
+    }
+  }
+  return String(val);
+}
 
 // ─── Bilingual labels ─────────────────────────────────────────────────────────
 const L = {
@@ -105,11 +121,11 @@ function sectorLabel(val: string | null | undefined, lang: string) {
 }
 
 // ─── InfoRow ──────────────────────────────────────────────────────────────────
-function InfoRow({ label, value }: { label: string; value: string | null | undefined }) {
+function InfoRow({ label, value }: { label: string; value: unknown }) {
   return (
     <div className="flex gap-1">
       <span className="text-gray-500 shrink-0">{label}:</span>
-      <span className="font-semibold text-gray-900">{value || "—"}</span>
+      <span className="font-semibold text-gray-900">{safeText(value)}</span>
     </div>
   );
 }
@@ -365,9 +381,9 @@ function TestSection({ item, distWithResult, lang, index }: {
       <div className="bg-gray-800 text-white px-4 py-2 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="text-xs font-bold opacity-70">#{index + 1}</span>
-          <span className="text-sm font-bold">{item.testTypeName}</span>
+          <span className="text-sm font-bold">{safeText(item.testTypeName)}</span>
           {item.testSubType && (
-            <span className="text-xs opacity-70 bg-white/10 px-2 py-0.5 rounded">{item.testSubType}</span>
+            <span className="text-xs opacity-70 bg-white/10 px-2 py-0.5 rounded">{safeText(item.testSubType)}</span>
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -378,7 +394,7 @@ function TestSection({ item, distWithResult, lang, index }: {
             </span>
           )}
           {item.quantity > 1 && (
-            <span className="text-xs opacity-70">{isAr ? `الكمية: ${item.quantity}` : `Qty: ${item.quantity}`}</span>
+            <span className="text-xs opacity-70">{isAr ? `الكمية: ${safeText(item.quantity)}` : `Qty: ${safeText(item.quantity)}`}</span>
           )}
         </div>
       </div>
@@ -427,7 +443,7 @@ function TestSection({ item, distWithResult, lang, index }: {
           <div className="mt-3 pt-3 border-t border-gray-200">
             <p className="text-[9px] font-bold text-gray-600 uppercase mb-1">{t("notes", lang)}</p>
             <p className="text-[10px] text-gray-700 bg-gray-50 border rounded p-2">
-              {specResult?.notes ?? legacyResult?.testNotes}
+              {safeText(specResult?.notes ?? legacyResult?.testNotes)}
             </p>
           </div>
         )}
@@ -550,7 +566,7 @@ export default function OrderReport() {
           <X className="w-4 h-4" /> {t("close", lang)}
         </Button>
         <span className="text-sm font-medium">
-          {t("title", lang)} — {order.orderCode}
+          {t("title", lang)} — {safeText(order.orderCode)}
         </span>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-slate-700 gap-1.5 text-xs"
@@ -594,7 +610,7 @@ export default function OrderReport() {
               <div className="text-[11px] text-gray-600 space-y-0.5">
                 <div className="flex gap-1">
                   <span className="text-gray-500">{isAr ? "رقم الوثيقة:" : "Doc No.:"}</span>
-                  <span className="font-mono font-bold text-gray-800">{order.orderCode}</span>
+                  <span className="font-mono font-bold text-gray-800">{safeText(order.orderCode)}</span>
                 </div>
                 <div className="flex gap-1">
                   <span className="text-gray-500">{isAr ? "التاريخ:" : "Date:"}</span>
@@ -679,10 +695,10 @@ export default function OrderReport() {
                     <tr key={item.id} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                       <td className="border border-gray-200 px-2 py-1.5 text-center">{i + 1}</td>
                       <td className="border border-gray-200 px-2 py-1.5">
-                        <span className="font-semibold">{item.testTypeName}</span>
-                        {item.testSubType && <span className="text-gray-500 ms-1.5">({item.testSubType})</span>}
+                        <span className="font-semibold">{safeText(item.testTypeName)}</span>
+                        {item.testSubType && <span className="text-gray-500 ms-1.5">({safeText(item.testSubType)})</span>}
                       </td>
-                      <td className="border border-gray-200 px-2 py-1.5 text-center">{item.quantity}</td>
+                      <td className="border border-gray-200 px-2 py-1.5 text-center">{safeText(item.quantity)}</td>
                       <td className="border border-gray-200 px-2 py-1.5 text-center">
                         <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-medium ${
                           item.status === "completed" ? "bg-green-100 text-green-700" :

@@ -140,7 +140,19 @@ export default function ManagerDashboard() {
   const { data: stats, isLoading: statsLoading } = trpc.analytics.testStats.useQuery(queryInput);
   const { data: samples, isLoading: samplesLoading } = trpc.samples.list.useQuery();
   const { data: sampleStats } = trpc.samples.stats.useQuery();
-  const { data: orders = [] } = trpc.orders.list.useQuery();
+  const { data: rawOrdersData = [] } = trpc.orders.list.useQuery();
+  const orders = (rawOrdersData as any[]).map((o: any) => ({
+    ...o,
+    contractNumber: o.contractNumber != null ? String(o.contractNumber) : null,
+    contractorName: o.contractorName != null ? String(o.contractorName) : null,
+    sampleType: o.sampleType != null ? String(o.sampleType) : null,
+    orderCode: o.orderCode != null ? String(o.orderCode) : null,
+    items: Array.isArray(o.items) ? o.items.map((item: any) => ({
+      ...item,
+      testName: item.testName != null && typeof item.testName !== "object" ? String(item.testName) : (item.testTypeCode ?? "—"),
+      testTypeCode: item.testTypeCode != null ? String(item.testTypeCode) : "—",
+    })) : [],
+  }));
   const { data: dailyData, isLoading: dailyLoading } = trpc.samples.dailyWork.useQuery({
     fromDate: appliedFrom,
     toDate: appliedTo,

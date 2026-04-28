@@ -13,6 +13,38 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from "wouter";
 
+const toText = (val: any) => {
+  if (val == null || val === undefined) return "—";
+  if (typeof val === "object") {
+    if (Array.isArray(val)) return val.join(", ");
+    return JSON.stringify(val);
+  }
+  return String(val);
+};
+
+const normalizeOrder = (order: any) => {
+  if (!order) return null;
+  return {
+    ...order,
+    orderCode: String(order.orderCode || ""),
+    contractorName: String(order.contractorName || ""),
+    sampleType: String(order.sampleType || ""),
+    sampleSubType: String(order.sampleSubType || ""),
+    sector: String(order.sector || ""),
+    assignedTechnicianName: String(order.assignedTechnicianName || ""),
+    status: String(order.status || ""),
+    items: (order.items || [])
+      .filter((item: any) => item && typeof item === "object")
+      .map((item: any) => ({
+        ...item,
+        testName: String(item?.testName || ""),
+        testTypeCode: String(item?.testTypeCode || ""),
+        quantity: Number(item?.quantity) || 0,
+        status: String(item?.status || ""),
+      })),
+  };
+};
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function sectorLabel(val: string, lang: string) {
   const map: Record<string, { ar: string; en: string }> = {
@@ -184,49 +216,14 @@ export default function Distribution() {
   const [batchPriority, setBatchPriority] = useState<"low" | "normal" | "high" | "urgent">("normal");
   const [batchLoading, setBatchLoading] = useState(false);
   const [, setLocation] = useLocation();
-  const toText = (v: unknown): string => (v == null ? "—" : String(v));
-  const normalizeOrderForDialog = (order: any) => ({
-    ...order,
-    orderCode: toText(order?.orderCode),
-    contractorName: toText(order?.contractorName),
-    sampleType: toText(order?.sampleType),
-    assignedTechnicianId: order?.assignedTechnicianId,
-    items: Array.isArray(order?.items)
-      ? order.items
-          .filter((item: any) => item && typeof item === "object")
-          .map((item: any) => ({
-            ...item,
-            id: item.id ?? `${item.testTypeCode ?? "tt"}-${Math.random().toString(36).slice(2, 8)}`,
-            testName:
-              item.testName != null && typeof item.testName !== "object"
-                ? String(item.testName)
-                : String(item.testTypeCode ?? "—"),
-            testTypeCode: String(item.testTypeCode ?? "—"),
-            quantity: Number(item.quantity) || 1,
-          }))
-      : [],
-  });
 
   // ─── Data ──────────────────────────────────────────────────────────────────
   const { data: rawOrders = [], refetch } = trpc.orders.list.useQuery();
-  const orders = rawOrders.map((o: any) => ({
+  const normalizedOrders = (rawOrders as any[]).map(normalizeOrder).filter((o: any) => !!o);
+  const orders = normalizedOrders.map((o: any) => ({
     ...o,
-    orderCode: toText(o.orderCode),
-    contractorName: toText(o.contractorName),
-    sampleType: toText(o.sampleType),
-    sampleSubType: o.sampleSubType != null ? String(o.sampleSubType) : null,
-    sector: o.sector != null ? String(o.sector) : null,
-    assignedTechnicianName: o.assignedTechnicianName != null ? String(o.assignedTechnicianName) : null,
-    status: o.status != null ? String(o.status) : "pending",
     priority: o.priority != null ? String(o.priority) : "normal",
-    items: Array.isArray(o.items) ? o.items.map((item: any) => ({
-      ...item,
-      testName: item.testName != null && typeof item.testName !== "object" ? String(item.testName) : (item.testTypeCode ?? "—"),
-      testTypeCode: item.testTypeCode != null ? String(item.testTypeCode) : "—",
-      status: item.status != null ? String(item.status) : "pending",
-      quantity: Number(item.quantity) || 1,
-    })) : [],
-    testNames: Array.isArray(o.testNames) ? o.testNames.map((n: any) => typeof n === "string" ? n : String(n ?? "—")) : [],
+    testNames: Array.isArray(o.testNames) ? o.testNames.map((n: any) => (typeof n === "string" ? n : String(n ?? "—"))) : [],
   }));
   const { data: rawTechnicians = [] } = trpc.users.technicians.useQuery();
   const technicians = (rawTechnicians as any[]).map((tech: any) => ({
@@ -282,12 +279,12 @@ export default function Distribution() {
 
   // ─── Handlers ──────────────────────────────────────────────────────────────
   const handleOpenDialog = (order: any) => {
-    setSelectedOrder(normalizeOrderForDialog(order));
+    setSelectedOrder(normalizeOrder(order));
     setIsEditing(false);
     setForm({ technicianId: "", priority: "normal", notes: "" });
   };
   const handleOpenEditDialog = (order: any) => {
-    setSelectedOrder(normalizeOrderForDialog(order));
+    setSelectedOrder(normalizeOrder(order));
     setIsEditing(true);
     setForm({
       technicianId: String(order.assignedTechnicianId ?? ""),
@@ -506,7 +503,7 @@ export default function Distribution() {
                               {(order.items ?? []).length === 0 ? (
                                 <span className="text-xs text-muted-foreground italic">{lang === "ar" ? "لا توجد" : "None"}</span>
                               ) : (order.items ?? []).filter((item: any) => item && typeof item === "object").map((item: any, idx: number) => (
-                                <span key={item.id ?? idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                                <span key={item.id || item._id || idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                                   <FlaskConical className="w-3 h-3" />
                                   {item.testName && item.testName !== "__multi__" ? String(item.testName) : String(item.testTypeCode ?? "—")}
                                   {Number(item.quantity) > 1 ? ` ×${item.quantity}` : ""}
@@ -586,7 +583,7 @@ export default function Distribution() {
                                 <span className="text-xs text-muted-foreground italic">{lang === "ar" ? "لا توجد" : "None"}</span>
                               ) : (order.items ?? []).filter((item: any) => item && typeof item === "object").map((item: any, idx: number) => (
                                 <span
-                                  key={item.id ?? idx}
+                                  key={item.id || item._id || idx}
                                   className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border"
                                   style={{
                                     background: item.status === "completed" ? "#f0fdf4" : "#f8fafc",
@@ -660,11 +657,11 @@ export default function Distribution() {
             <DialogTitle>
               {isEditing
                 ? (lang === "ar"
-                  ? `تعديل التوزيع — ${selectedOrder?.orderCode}`
-                  : `Edit Distribution — ${selectedOrder?.orderCode}`)
+                  ? `تعديل التوزيع — ${toText(selectedOrder?.orderCode)}`
+                  : `Edit Distribution — ${toText(selectedOrder?.orderCode)}`)
                 : (lang === "ar"
-                  ? `توزيع الأوردر — ${selectedOrder?.orderCode}`
-                  : `Distribute Order — ${selectedOrder?.orderCode}`)}
+                  ? `توزيع الأوردر — ${toText(selectedOrder?.orderCode)}`
+                  : `Distribute Order — ${toText(selectedOrder?.orderCode)}`)}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleDistribute} className="space-y-4 mt-2">
@@ -682,7 +679,7 @@ export default function Distribution() {
                 <span className="text-muted-foreground">{lang === "ar" ? "الاختبارات:" : "Tests:"}</span>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {(selectedOrder?.items ?? []).filter((item: any) => item && typeof item === "object").map((item: any, idx: number) => (
-                    <span key={item.id ?? idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                    <span key={item.id || item._id || idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                       <FlaskConical className="w-3 h-3" />
                       {item.testName && item.testName !== "__multi__" ? String(item.testName) : String(item.testTypeCode ?? "—")}
                       {Number(item.quantity) > 1 ? ` ×${item.quantity}` : ""}

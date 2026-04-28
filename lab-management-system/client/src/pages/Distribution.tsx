@@ -267,10 +267,10 @@ export default function Distribution() {
   const doneOrders = orders.filter((o: any) => DONE_STATUSES.includes(o.status));
   const allPendingSelected = pendingOrders.length > 0 && pendingOrders.every((o: any) => selectedOrderIds.includes(o.id));
 
-  useEffect(() => {
-    const pendingIdSet = new Set(pendingOrders.map((o: any) => o.id));
-    setSelectedOrderIds((prev) => prev.filter((id) => pendingIdSet.has(id)));
-  }, [orders]);
+ // useEffect(() => {
+ //   const pendingIdSet = new Set(pendingOrders.map((o: any) => o.id));
+ //   setSelectedOrderIds((prev) => prev.filter((id) => pendingIdSet.has(id)));
+//  }, [orders]);
 
   // ─── Handlers ──────────────────────────────────────────────────────────────
   const handleOpenDialog = (order: any) => {

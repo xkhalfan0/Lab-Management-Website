@@ -21,13 +21,8 @@ class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: any) {
-    console.error("[ErrorBoundary] Caught error:", error, "ComponentStack:", errorInfo);
-  }
-
   render() {
     if (this.state.hasError) {
-      console.error("[ErrorBoundary] State error:", this.state.error);
       return (
         <div className="flex items-center justify-center min-h-screen p-8 bg-background">
           <div className="flex flex-col items-center w-full max-w-2xl p-8">

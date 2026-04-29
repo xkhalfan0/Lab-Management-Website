@@ -40,14 +40,11 @@ type BlockTypeKey = keyof typeof BLOCK_SPECS;
 interface BlockRow {
   id: string;
   blockRef: string;
-  dateTested: string;
   lengthMm: string;
   widthMm: string;
-  weightG: string;
   loadKN: string;
   // computed
   grossAreaMm2?: number;
-  unitWeightGcc?: number;
   strengthMpa?: number;
   result?: "pass" | "fail" | "pending";
 }
@@ -56,17 +53,14 @@ function newRow(index: number): BlockRow {
   return {
     id: `row_${Date.now()}_${index}`,
     blockRef: `B${index + 1}`,
-    dateTested: "",
     lengthMm: "",
     widthMm: "",
-    weightG: "",
     loadKN: "",
   };
 }
 
 function computeRow(row: BlockRow, spec: typeof BLOCK_SPECS[BlockTypeKey]): BlockRow {
   const load = parseFloat(row.loadKN);
-  const weight = parseFloat(row.weightG);
   const length = parseFloat(row.lengthMm);
   const width = parseFloat(row.widthMm);
   if (!load) return row;
@@ -76,14 +70,10 @@ function computeRow(row: BlockRow, spec: typeof BLOCK_SPECS[BlockTypeKey]): Bloc
   // Compressive Strength (N/mm²) = Load (kN) × 1000 / Gross Area (mm²)
   // No correction factor for standard dimension blocks (BS EN 772-1).
   const strength = (load * 1000) / grossArea; // N/mm²
-  // Volume for unit weight (approx)
-  const volumeCC = grossArea * 100 / 1000;
-  const unitWeight = weight ? weight / volumeCC : undefined;
 
   return {
     ...row,
     grossAreaMm2: Math.round(grossArea),
-    unitWeightGcc: unitWeight ? parseFloat(unitWeight.toFixed(3)) : undefined,
     strengthMpa: Math.round(strength * 10) / 10,
     result: strength >= spec.requiredStrength ? "pass" : "fail",
   };
@@ -122,6 +112,10 @@ export default function ConcreteBlocks() {
   const [manufacturer, setManufacturer] = useState("");
   const [mtsReference, setMtsReference] = useState("");
   const [batchNo, setBatchNo] = useState("");
+  const [testDate, setTestDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  });
   const [notes, setNotes] = useState("");
   const [rows, setRows] = useState<BlockRow[]>(
     Array.from({ length: 10 }, (_, i) => newRow(i))
@@ -177,6 +171,7 @@ export default function ConcreteBlocks() {
           manufacturer,
           mtsReference,
           batchNo,
+          testDate,
           blocks: computedRows.filter(r => r.loadKN && parseFloat(r.loadKN) > 0),
           avgStrength,
           overallResult,
@@ -187,9 +182,11 @@ export default function ConcreteBlocks() {
           avgStrength: avgStrength.toFixed(2),
           required: spec.requiredStrength,
           count: validRows.length,
+          testDate,
         },
         notes,
         status,
+        testDate,
       });
     } finally {
       setSaving(false);
@@ -274,6 +271,17 @@ export default function ConcreteBlocks() {
                 <Label className="text-xs text-slate-500 mb-1 block">{ar ? "رقم الدفعة / التسليم" : "Batch / Delivery No."}</Label>
                 <Input value={batchNo} onChange={e => setBatchNo(e.target.value)} placeholder={ar ? "رقم الدفعة" : "Batch number"} />
               </div>
+              <div>
+                <Label className="text-xs text-slate-500 mb-1 block">
+                  {ar ? "تاريخ الاختبار" : "Date Tested"} <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  type="date"
+                  value={testDate}
+                  onChange={e => setTestDate(e.target.value)}
+                  className="text-sm"
+                />
+              </div>
               <div className="flex items-end">
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-700 w-full">
                   <Info size={12} className="inline mr-1" />
@@ -310,10 +318,8 @@ export default function ConcreteBlocks() {
                 <tr className="bg-slate-50">
                   {[
                     ar ? "مرجع البلوك" : "Block Ref.",
-                    ar ? "تاريخ الاختبار" : "Date Tested",
                     ar ? "الطول (مم)" : "Length (mm)",
                     ar ? "العرض (مم)" : "Width (mm)",
-                    ar ? "الوزن (جم)" : "Weight (g)",
                     ar ? "الحمل الأقصى (كيلو نيوتن)" : "Max Load (kN)",
                     ar ? "المساحة (مم²)" : "Area (mm²)",
                     ar ? "مقاومة الضغط (نيوتن/مم²)" : "Compressive Strength (N/mm²)",
@@ -333,16 +339,10 @@ export default function ConcreteBlocks() {
                       <Input value={row.blockRef} onChange={e => updateRow(row.id, "blockRef", e.target.value)} className="h-7 text-xs w-14" />
                     </td>
                     <td className="border border-slate-200 px-1 py-1">
-                      <Input type="date" value={row.dateTested} onChange={e => updateRow(row.id, "dateTested", e.target.value)} className="h-7 text-xs w-32" />
-                    </td>
-                    <td className="border border-slate-200 px-1 py-1">
                       <Input value={row.lengthMm} onChange={e => updateRow(row.id, "lengthMm", e.target.value)} className="h-7 text-xs w-16 text-center font-mono" placeholder="400" />
                     </td>
                     <td className="border border-slate-200 px-1 py-1">
-                      <Input value={row.widthMm} onChange={e => updateRow(row.id, "widthMm", e.target.value)} className="h-7 text-xs w-16 text-center font-mono" placeholder="200" />
-                    </td>
-                    <td className="border border-slate-200 px-1 py-1">
-                      <Input value={row.weightG} onChange={e => updateRow(row.id, "weightG", e.target.value)} className="h-7 text-xs w-20 text-center font-mono" placeholder={ar ? "الوزن" : "Weight"} />
+                      <Input value={row.widthMm} onChange={e => updateRow(row.id, "widthMm", e.target.value)} className="h-7 text-xs w-16 text-center font-mono" placeholder="100" />
                     </td>
                     <td className="border border-slate-200 px-1 py-1">
                       <Input value={row.loadKN} onChange={e => updateRow(row.id, "loadKN", e.target.value)} className="h-7 text-xs w-20 text-center font-mono" placeholder={ar ? "الحمل" : "Load"} />
@@ -367,7 +367,7 @@ export default function ConcreteBlocks() {
               {validRows.length > 0 && (
                 <tfoot>
                   <tr className="bg-slate-100 font-semibold">
-                    <td colSpan={8} className="border border-slate-200 px-3 py-2 text-right text-xs text-slate-600">
+                    <td colSpan={6} className="border border-slate-200 px-3 py-2 text-right text-xs text-slate-600">
                       {ar ? "متوسط مقاومة الضغط:" : "Average Compressive Strength:"}
                     </td>
                     <td className="border border-slate-200 px-2 py-2 text-center font-mono text-sm font-bold text-slate-900">

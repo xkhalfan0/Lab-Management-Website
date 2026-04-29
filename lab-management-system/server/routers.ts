@@ -190,6 +190,16 @@ function evaluateConcreteCubeCompliance(
   return avg >= requiredAvg - 1e-9 ? "pass" : "fail";
 }
 
+/** Stored per-route permission: none, read-only, or full. Coerces string "true"/"false" from forms. */
+const permissionValueSchema = z.unknown().transform((val): false | "view" | "edit" => {
+  if (val === true || val === "true") return "edit";
+  if (val === false || val === "false") return false;
+  if (val === "view" || val === "edit") return val;
+  return false;
+});
+
+const permissionsRecordSchema = z.record(z.string(), permissionValueSchema);
+
 // ─── App Router ───────────────────────────────────────────────────────────────
 export const appRouter = router({
   system: systemRouter,
@@ -225,7 +235,7 @@ export const appRouter = router({
           password: z.string().min(6),
           role: z.enum(["admin", "reception", "lab_manager", "technician", "sample_manager", "qc_inspector", "user"]),
           specialty: z.string().optional(),
-          permissions: z.record(z.string(), z.boolean()).optional(),
+          permissions: permissionsRecordSchema.optional(),
         })
       )
       .mutation(async ({ ctx, input }) => {
@@ -240,7 +250,7 @@ export const appRouter = router({
           passwordHash,
           role: input.role,
           specialty: input.specialty,
-          permissions: input.permissions as Record<string, boolean> | undefined,
+          permissions: input.permissions,
         });
         return { success: true, userId: user?.id };
       }),
@@ -283,7 +293,7 @@ export const appRouter = router({
       .input(
         z.object({
           userId: z.number(),
-          permissions: z.record(z.string(), z.union([z.literal("view"), z.literal("edit"), z.literal(false)])),
+          permissions: permissionsRecordSchema,
         })
       )
       .mutation(async ({ ctx, input }) => {

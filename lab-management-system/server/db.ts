@@ -127,7 +127,8 @@ export async function createInternalUser(data: {
   passwordHash: string;
   role: typeof users.$inferSelect.role;
   specialty?: string;
-  permissions?: Record<string, boolean>;
+  /** Route keys → false | "view" | "edit" (JSON in DB) */
+  permissions?: Record<string, false | "view" | "edit">;
 }) {
   const db = await getDb();
   if (!db) throw new Error("DB not available");
@@ -155,7 +156,7 @@ export async function updateInternalUser(id: number, data: {
   passwordHash?: string;
   role?: typeof users.$inferSelect.role;
   specialty?: string | null;
-  permissions?: Record<string, boolean> | null;
+  permissions?: Record<string, false | "view" | "edit"> | null;
   isActive?: boolean;
 }) {
   const db = await getDb();

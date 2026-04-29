@@ -166,6 +166,19 @@ const EMPTY_FORM: UserFormData = {
   role: "user", specialty: "", permissions: { ...ROLE_DEFAULT_PERMISSIONS["user"] }, isActive: true,
 };
 
+/** Normalize permission values before API calls (handles stray string booleans from controls or JSON). */
+function sanitizePermissions(perms: PermMap): PermMap {
+  const out: PermMap = {};
+  for (const [key, v] of Object.entries(perms)) {
+    const raw = v as unknown;
+    if (raw === true || raw === "true") out[key] = "edit";
+    else if (raw === false || raw === "false") out[key] = false;
+    else if (raw === "view" || raw === "edit") out[key] = raw;
+    else out[key] = false;
+  }
+  return out;
+}
+
 // Cycle through: false → "view" → "edit" → false
 // For viewOnly pages: false → "view" → false (skip "edit")
 function cyclePermission(current: PermLevel, viewOnly = false): PermLevel {
@@ -323,13 +336,13 @@ export default function UserManagement() {
       // Update permissions
       await updatePermissions.mutateAsync({
         userId: editingUser.id,
-        permissions: form.permissions as any,
+        permissions: sanitizePermissions(form.permissions),
       });
     } else {
       createUser.mutate({
         name: form.name, username: form.username, password: form.password,
         role: form.role as any, specialty: form.specialty || undefined,
-        permissions: form.permissions as any,
+        permissions: sanitizePermissions(form.permissions),
       });
     }
   };

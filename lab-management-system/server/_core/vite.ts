@@ -48,10 +48,12 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath =
-    process.env.NODE_ENV === "development"
-      ? path.resolve(import.meta.dirname, "../..", "dist")
-      : path.resolve(import.meta.dirname, "..");
+  // Production runs `node dist/index.js`: Vite output (index.html, assets/) lives in the same
+  // `dist/` directory as the bundled server. When running from source (e.g. tsx), resolve project dist.
+  const here = import.meta.dirname;
+  const distPath = fs.existsSync(path.join(here, "index.html"))
+    ? here
+    : path.resolve(here, "../..", "dist");
   if (!fs.existsSync(distPath)) {
     console.error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`

@@ -12,6 +12,7 @@
     "test": "vitest run",
     "db:push": "drizzle-kit generate && drizzle-kit migrate",
     "db:migrate": "drizzle-kit migrate",
+    "db:reset:tests": "tsx server/scripts/reset-test-data.ts",
     "db:seed:contractors": "tsx server/scripts/seed-contractors-projects.ts",
     "db:seed:users": "tsx server/scripts/seed-role-users.ts",
     "db:seed:test-types": "tsx server/scripts/seed-test-types.ts",

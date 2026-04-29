@@ -3,12 +3,17 @@
  * test types, sectors, and sector portal accounts.
  *
  * Run: pnpm db:reset:tests
- * Requires DATABASE_URL in .env
+ * Non-interactive: pnpm db:reset:tests -- --yes
+ *
+ * Uses the same DATABASE_URL as the app (.env). If the UI still shows data after
+ * running this, the script is almost certainly pointed at a different database
+ * than your deployed server (e.g. local .env vs Railway variables).
  */
 import "dotenv/config";
 import * as readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
-import { sql, inArray } from "drizzle-orm";
+import { sql, inArray, count } from "drizzle-orm";
+import type { MySqlTable } from "drizzle-orm/mysql-core";
 import {
   attachments,
   auditLog,
@@ -29,7 +34,23 @@ import {
 } from "../../drizzle/schema";
 import { getDb } from "../db";
 
+const workflowAuditEntities = ["sample", "labOrder"] as const;
+
+function dbHostHint(): string {
+  const u = process.env.DATABASE_URL;
+  if (!u) return "(DATABASE_URL not set)";
+  try {
+    const parsed = new URL(u);
+    return `${parsed.hostname}${parsed.port ? `:${parsed.port}` : ""}/${parsed.pathname.replace(/^\//, "")}`;
+  } catch {
+    return "(could not parse DATABASE_URL)";
+  }
+}
+
 async function confirm(): Promise<boolean> {
+  if (process.argv.includes("--yes")) {
+    return true;
+  }
   const rl = readline.createInterface({ input, output });
   try {
     const answer = await rl.question(
@@ -54,43 +75,88 @@ async function main() {
     process.exit(1);
   }
 
-  const workflowAuditEntities = ["sample", "labOrder"] as const;
+  console.log(`[reset-test-data] Target database: ${dbHostHint()}`);
+
+  const countSamples = () =>
+    db.select({ n: count() }).from(samples).then((r) => Number(r[0]?.n ?? 0));
+  const countOrders = () =>
+    db.select({ n: count() }).from(labOrders).then((r) => Number(r[0]?.n ?? 0));
+
+  let beforeSamples = 0;
+  let beforeOrders = 0;
+  try {
+    beforeSamples = await countSamples();
+    beforeOrders = await countOrders();
+  } catch (e) {
+    console.warn("[reset-test-data] Could not read pre-delete counts:", e);
+  }
+  console.log(
+    `[reset-test-data] Before: samples=${beforeSamples}, lab_orders=${beforeOrders}`
+  );
+
+  const steps: Array<[string, MySqlTable]> = [
+    ["sector_report_reads", sectorReportReads],
+    ["concrete_cubes", concreteCubes],
+    ["reviews", reviews],
+    ["attachments", attachments],
+    ["test_results", testResults],
+    ["specialized_test_results", specializedTestResults],
+    ["concrete_test_groups", concreteTestGroups],
+    ["lab_order_items", labOrderItems],
+    ["lab_orders", labOrders],
+    ["distributions", distributions],
+    ["certificates", certificates],
+    ["sample_history", sampleHistory],
+    ["notifications", notifications],
+    ["clearance_requests", clearanceRequests],
+    ["samples", samples],
+  ];
 
   try {
     await db.transaction(async (tx) => {
-      const steps: Array<[string, () => Promise<unknown>]> = [
-        ["sector_report_reads", () => tx.delete(sectorReportReads).where(sql`1 = 1`)],
-        ["concrete_cubes", () => tx.delete(concreteCubes).where(sql`1 = 1`)],
-        ["reviews", () => tx.delete(reviews).where(sql`1 = 1`)],
-        ["attachments", () => tx.delete(attachments).where(sql`1 = 1`)],
-        ["test_results", () => tx.delete(testResults).where(sql`1 = 1`)],
-        ["specialized_test_results", () => tx.delete(specializedTestResults).where(sql`1 = 1`)],
-        ["concrete_test_groups", () => tx.delete(concreteTestGroups).where(sql`1 = 1`)],
-        ["lab_order_items", () => tx.delete(labOrderItems).where(sql`1 = 1`)],
-        ["lab_orders", () => tx.delete(labOrders).where(sql`1 = 1`)],
-        ["distributions", () => tx.delete(distributions).where(sql`1 = 1`)],
-        ["certificates", () => tx.delete(certificates).where(sql`1 = 1`)],
-        ["sample_history", () => tx.delete(sampleHistory).where(sql`1 = 1`)],
-        ["notifications", () => tx.delete(notifications).where(sql`1 = 1`)],
-        ["clearance_requests", () => tx.delete(clearanceRequests).where(sql`1 = 1`)],
-        [
-          "audit_log (sample / lab order workflow only)",
-          () =>
-            tx.delete(auditLog).where(inArray(auditLog.entity, [...workflowAuditEntities])),
-        ],
-        ["samples", () => tx.delete(samples).where(sql`1 = 1`)],
-      ];
-
-      for (const [label, run] of steps) {
-        console.log(`[reset-test-data] Deleting ${label}…`);
-        await run();
+      await tx.execute(sql`SET FOREIGN_KEY_CHECKS = 0`);
+      try {
+        for (const [label, table] of steps) {
+          console.log(`[reset-test-data] Deleting ${label}…`);
+          await tx.delete(table);
+        }
+        console.log(
+          `[reset-test-data] Deleting audit_log (entity in ${workflowAuditEntities.join(", ")})…`
+        );
+        await tx
+          .delete(auditLog)
+          .where(inArray(auditLog.entity, [...workflowAuditEntities]));
+      } finally {
+        await tx.execute(sql`SET FOREIGN_KEY_CHECKS = 1`);
       }
     });
 
-    console.log("[reset-test-data] Done. Preserved: users, contractors, contracts, test_types, sectors, sector_accounts.");
+    let afterSamples = 0;
+    let afterOrders = 0;
+    try {
+      afterSamples = await countSamples();
+      afterOrders = await countOrders();
+    } catch (e) {
+      console.warn("[reset-test-data] Could not read post-delete counts:", e);
+    }
+    console.log(
+      `[reset-test-data] After: samples=${afterSamples}, lab_orders=${afterOrders}`
+    );
+
+    if (afterSamples > 0 || afterOrders > 0) {
+      console.warn(
+        "[reset-test-data] Warning: samples or lab_orders remain > 0. You may be connected to the wrong database, or another error occurred."
+      );
+    }
+
+    console.log(
+      "[reset-test-data] Done. Preserved: users, contractors, contracts, test_types, sectors, sector_accounts."
+    );
     process.exit(0);
   } catch (err) {
-    console.error("[reset-test-data] Error — transaction rolled back. No partial data should remain from this run.");
+    console.error(
+      "[reset-test-data] Error — transaction rolled back. No changes were committed from this run."
+    );
     console.error(err);
     process.exit(1);
   }

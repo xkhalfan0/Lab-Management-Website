@@ -43,6 +43,23 @@ export default function PrintReceipt() {
     { id: sampleId },
     { enabled: sampleId > 0 }
   );
+  // Fetch order to get total quantity as backup
+  const { data: orders } = trpc.orders.bySample.useQuery(
+    { sampleId },
+    { enabled: sampleId > 0 }
+  );
+
+  // Debug quantity source (temporary)
+  useEffect(() => {
+    if (sample) {
+      console.log("📦 Sample Data:", {
+        sampleCode: sample.sampleCode,
+        quantity: sample.quantity,
+        sampleType: (sample as any).sampleType,
+        rawSample: sample,
+      });
+    }
+  }, [sample]);
 
   const handleClose = () => {
     if (window.opener) window.close();
@@ -80,6 +97,23 @@ export default function PrintReceipt() {
   const sectorLabel = SECTOR_LABELS[(sample as any).sector ?? ""] ?? null;
   const sampleTypeLabel = SAMPLE_TYPE_LABELS[(sample as any).sampleType] ?? (sample as any).sampleType;
   const conditionLabel = CONDITION_LABELS[(sample as any).condition ?? "good"] ?? "جيدة";
+  // Calculate total quantity with multiple fallbacks
+  let totalQuantity = 1;
+  if (sample.quantity !== undefined && sample.quantity !== null && sample.quantity > 0) {
+    totalQuantity = sample.quantity;
+  } else if (orders && orders.length > 0) {
+    const latestOrder = orders[0] as any;
+    if (latestOrder.items && Array.isArray(latestOrder.items)) {
+      const itemsTotal = latestOrder.items.reduce((sum: number, item: any) => {
+        return sum + (Number(item.quantity) || 0);
+      }, 0);
+      if (itemsTotal > 0) {
+        totalQuantity = itemsTotal;
+        console.warn("⚠️ Using order items total because sample.quantity was invalid:", sample.quantity);
+      }
+    }
+  }
+  console.log("📊 Final totalQuantity:", totalQuantity);
 
   return (
     <>
@@ -98,10 +132,10 @@ export default function PrintReceipt() {
       <div className="bg-gray-200 print:bg-white min-h-screen py-6 print:py-0">
         <div
           className="mx-auto bg-white shadow-lg print:shadow-none"
-          style={{ width: "210mm", minHeight: "148mm", padding: "15mm 15mm 20mm 15mm", fontFamily: "Arial, sans-serif", fontSize: "11px", direction: "rtl" }}
+          style={{ width: "210mm", minHeight: "148mm", padding: "8mm 10mm 10mm 10mm", fontFamily: "Arial, sans-serif", fontSize: "10.5px", direction: "rtl" }}
         >
           {/* ═══ رأس المختبر ═══════════════════════════════════════════════ */}
-          <div className="border-t-4 border-gray-900 pt-3 pb-2 mb-0">
+          <div className="border-t-4 border-gray-900 pt-2 pb-1 mb-0">
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
               <div style={{ textAlign: "right", flex: 1 }}>
                 <h1 style={{ fontSize: "17px", fontWeight: 900, color: "#111", lineHeight: 1.3 }}>مختبر الإنشاءات والمواد الهندسية</h1>
@@ -125,13 +159,13 @@ export default function PrintReceipt() {
           </div>
 
           {/* ═══ شريط عنوان الوثيقة ════════════════════════════════════════ */}
-          <div style={{ background: "#1a1a2e", color: "white", textAlign: "center", padding: "10px 0", marginBottom: "16px" }}>
+          <div style={{ background: "#1a1a2e", color: "white", textAlign: "center", padding: "6px 0", marginBottom: "10px" }}>
             <p style={{ fontSize: "15px", fontWeight: 700, letterSpacing: "1px" }}>وصل استلام عينة</p>
             <p style={{ fontSize: "10px", color: "#aaa", marginTop: "2px", letterSpacing: "2px", textTransform: "uppercase" }}>Sample Receipt</p>
           </div>
 
           {/* ═══ بيانات العينة ══════════════════════════════════════════════ */}
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "11px", marginBottom: "16px" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "10.5px", marginBottom: "10px" }}>
             <tbody>
               <tr style={{ borderBottom: "1px solid #e5e7eb" }}>
                 <td style={{ background: "#f3f4f6", fontWeight: 600, color: "#374151", padding: "8px 12px", width: "25%", textAlign: "right" }}>رقم العينة</td>
@@ -155,7 +189,7 @@ export default function PrintReceipt() {
                   {sectorLabel ? `${sectorLabel.ar} / ${sectorLabel.en}` : "—"}
                 </td>
                 <td style={{ background: "#f3f4f6", fontWeight: 600, color: "#374151", padding: "8px 12px", textAlign: "right" }}>الكمية</td>
-                <td style={{ padding: "8px 12px" }}>{(sample as any).quantity ?? 1}</td>
+                <td style={{ padding: "8px 12px" }}>{totalQuantity}</td>
               </tr>
               <tr style={{ borderBottom: "1px solid #e5e7eb" }}>
                 <td style={{ background: "#f3f4f6", fontWeight: 600, color: "#374151", padding: "8px 12px", textAlign: "right" }}>حالة العينة</td>
@@ -173,14 +207,14 @@ export default function PrintReceipt() {
           </table>
 
           {/* ═══ التوقيعات ══════════════════════════════════════════════════ */}
-          <div style={{ marginTop: "40px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "24px" }}>
+          <div style={{ marginTop: "20px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px" }}>
             {[
               { ar: "موظف الاستقبال", en: "Reception Staff" },
               { ar: "مسؤول المختبر", en: "Lab Manager" },
               { ar: "المقاول / المندوب", en: "Contractor / Agent" },
             ].map((sig) => (
               <div key={sig.ar} style={{ textAlign: "center" }}>
-                <div style={{ borderTop: "1px solid #555", paddingTop: "8px", marginTop: "40px" }}>
+                <div style={{ borderTop: "1px solid #555", paddingTop: "6px", marginTop: "24px" }}>
                   <p style={{ fontWeight: 700, fontSize: "11px", color: "#333" }}>{sig.ar}</p>
                   <p style={{ fontSize: "9px", color: "#888", marginTop: "2px" }}>{sig.en}</p>
                 </div>

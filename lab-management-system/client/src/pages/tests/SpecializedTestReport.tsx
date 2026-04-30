@@ -445,13 +445,13 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
     <div className="space-y-4">
       {/* Grade & Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-        {hasCubes && fd.minStrength !== undefined && (
+        {fd.minStrength !== undefined && (
           <div className="bg-amber-50 border border-amber-200 rounded p-2 text-center">
             <p className="text-amber-600 font-semibold">{isAr ? "الحد الأدنى للمقاومة" : "Min. Strength"}</p>
             <p className="font-bold text-amber-800">{fd.minStrength} MPa</p>
           </div>
         )}
-        {hasDensity && fd.maxDensity !== undefined && (
+        {fd.maxDensity !== undefined && (
           <div className="bg-purple-50 border border-purple-200 rounded p-2 text-center">
             <p className="text-purple-600 font-semibold">{isAr ? "الحد الأقصى للكثافة" : "Max. Density"}</p>
             <p className="font-bold text-purple-800">{fd.maxDensity} kg/m³</p>

@@ -230,30 +230,26 @@ export default function ConcreteFoam() {
         <Card>
           <CardHeader><CardTitle className="text-base">{ar ? "إعدادات الفحص" : "Test Settings"}</CardTitle></CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {isStrengthTest && (
-              <div>
-                <Label>{ar ? "أدنى مقاومة مطلوبة (MPa)" : "Min. Required Strength (MPa)"}</Label>
-                <Input
-                  value={minStrength}
-                  onChange={e => setMinStrength(e.target.value)}
-                  type="number"
-                  step="0.5"
-                  placeholder="5.0"
-                />
-              </div>
-            )}
-            {isDensityTest && (
-              <div>
-                <Label>{ar ? "أقصى كثافة جافة (kg/m³)" : "Max. Dry Density (kg/m³)"}</Label>
-                <Input
-                  value={maxDensity}
-                  onChange={e => setMaxDensity(e.target.value)}
-                  type="number"
-                  step="50"
-                  placeholder="1400"
-                />
-              </div>
-            )}
+            <div>
+              <Label>{ar ? "أدنى مقاومة مطلوبة (MPa)" : "Min. Required Strength (MPa)"}</Label>
+              <Input
+                value={minStrength}
+                onChange={e => setMinStrength(e.target.value)}
+                type="number"
+                step="0.5"
+                placeholder="5.0"
+              />
+            </div>
+            <div>
+              <Label>{ar ? "أقصى كثافة جافة (kg/m³)" : "Max. Dry Density (kg/m³)"}</Label>
+              <Input
+                value={maxDensity}
+                onChange={e => setMaxDensity(e.target.value)}
+                type="number"
+                step="50"
+                placeholder="1400"
+              />
+            </div>
           </CardContent>
         </Card>
 

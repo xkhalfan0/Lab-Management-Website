@@ -22,11 +22,6 @@ import { useLocation } from "wouter";
 
 // ─── Sub-type options per test CODE ─────────────────────────────────────────
 const SUBTYPES_BY_CODE: Record<string, { value: string; labelAr: string; labelEn: string }[]> = {
-  CONC_FOAM: [
-    { value: "7_days", labelAr: "7 أيام", labelEn: "7 Days" },
-    { value: "14_days", labelAr: "14 يوم", labelEn: "14 Days" },
-    { value: "28_days", labelAr: "28 يوم", labelEn: "28 Days" },
-  ],
   CONC_FOAM_DENSITY: [
     { value: "7_days", labelAr: "7 أيام", labelEn: "7 Days" },
     { value: "28_days", labelAr: "28 يوم", labelEn: "28 Days" },
@@ -155,7 +150,7 @@ const CATEGORIES = [
 ];
 
 // Tests that use casting date
-const CASTING_DATE_TESTS = ["CONC_CUBE", "CONC_FOAM", "CONC_FOAM_DENSITY", "CONC_BEAM_SMALL", "CONC_BEAM_LARGE"];
+const CASTING_DATE_TESTS = ["CONC_CUBE", "CONC_FOAM_DENSITY", "CONC_BEAM_SMALL", "CONC_BEAM_LARGE"];
 
 // ─── Selected test item ───────────────────────────────────────────────────────
 interface SelectedTest {

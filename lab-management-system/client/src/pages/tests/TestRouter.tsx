@@ -110,7 +110,6 @@ const CODE_TO_COMPONENT: Record<string, React.ComponentType> = {
   "CONC_CORE":              ConcreteCore,
   "CONC_BLOCK":             ConcreteBlocks,
   "CONC_INTERLOCK":         Interlock,
-  "CONC_FOAM":              ConcreteFoam,
   "CONC_FOAM_DENSITY":      ConcreteFoam,
   "CEM_SETTING_TIME":       CementSettingTime,
   "CONC_MORTAR_SAND":       SieveAnalysis,

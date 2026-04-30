@@ -57,37 +57,69 @@ export async function generatePdf(options: PdfOptions): Promise<boolean> {
 
 /**
  * Capture the inner HTML of a DOM element and send it to the PDF generator.
- * Injects the current page's stylesheets for proper rendering.
+ * Inlines computed styles into a clone (matching the live tree) and embeds CSS for Puppeteer.
  */
 export async function generatePdfFromElement(
   element: HTMLElement,
   options: Omit<PdfOptions, "html">
 ): Promise<boolean> {
-  // Collect all stylesheet links from the current page
-  const styleLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+  const clonedElement = element.cloneNode(true) as HTMLElement;
+
+  /** Apply computed styles from the live `original` node to the parallel node in `clone`. */
+  const applyComputedToClone = (original: Element, clone: Element) => {
+    const computedStyle = window.getComputedStyle(original as HTMLElement);
+    const styleString = Array.from(computedStyle).reduce((str, property) => {
+      return `${str}${property}:${computedStyle.getPropertyValue(property)};`;
+    }, "");
+    (clone as HTMLElement).setAttribute("style", styleString);
+
+    const origChildren = original.children;
+    const cloneChildren = clone.children;
+    for (let i = 0; i < origChildren.length; i++) {
+      const c = cloneChildren[i];
+      if (c) applyComputedToClone(origChildren[i], c);
+    }
+  };
+
+  applyComputedToClone(element, clonedElement);
+
+  const inlineStyleTags = Array.from(document.querySelectorAll("style"))
     .map((el) => el.outerHTML)
     .join("\n");
 
-  // Collect inline styles
-  const inlineStyles = Array.from(document.querySelectorAll("style"))
-    .map((el) => el.outerHTML)
-    .join("\n");
+  const externalStyles = await Promise.all(
+    Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(async (link) => {
+      const href = (link as HTMLLinkElement).href;
+      try {
+        const response = await fetch(href);
+        const css = await response.text();
+        return `<style>${css}</style>`;
+      } catch {
+        return "";
+      }
+    })
+  );
 
   const html = `<!DOCTYPE html>
 <html dir="${document.documentElement.dir || "rtl"}" lang="${document.documentElement.lang || "ar"}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  ${styleLinks}
-  ${inlineStyles}
+  ${externalStyles.join("\n")}
+  ${inlineStyleTags}
   <style>
     @page { margin: 10mm; }
     body { margin: 0; padding: 0; background: white; }
     .print\\:hidden { display: none !important; }
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
   </style>
 </head>
 <body>
-  ${element.innerHTML}
+  ${clonedElement.innerHTML}
 </body>
 </html>`;
 

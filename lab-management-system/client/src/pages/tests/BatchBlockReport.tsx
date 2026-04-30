@@ -103,7 +103,7 @@ function renderBlockSection(formData: any, isAr: boolean) {
       {/* Average */}
       <div className="flex justify-end">
         <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded text-xs font-bold border ${overallResult === "pass" ? "bg-green-50 border-green-300 text-green-800" : overallResult === "fail" ? "bg-red-50 border-red-300 text-red-800" : "bg-gray-50 border-gray-300 text-gray-700"}`}>
-          {isAr ? "متوسط المقاومة:" : "Average Strength:"} {fmt(avgStrength, 1)} N/mm²
+          {isAr ? "متوسط مقاومة الضغط:" : "Average Compressive Strength:"} {fmt(avgStrength, 1)} N/mm²
           &nbsp;/&nbsp;
           {isAr ? "المطلوب:" : "Required:"} {required} N/mm²
         </div>

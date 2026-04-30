@@ -96,7 +96,7 @@ function computeCubeRow(row: CubeRow, minStrength: number): CubeRow {
   const strengthNmm2 = (P * 1000) / area;
   const strength = parseFloat((strengthNmm2 * 10.197).toFixed(1));
   const volume = a * b * h * 1e-9; // m³
-  const density = m && h ? Math.round((m / volume) / 5) * 5 : undefined;
+  const density = m && h ? Math.round((m / volume) / 10) * 10 : undefined;
   const result = minStrength > 0 ? (strength >= minStrength ? "pass" : "fail") : "pending";
   return { ...row, area, strength, density, result };
 }
@@ -109,8 +109,8 @@ function computeDensityRow(row: DensityRow, maxDensity: number): DensityRow {
   const dry = parseFloat(row.dryMass);
   if (!l || !w || !h) return { ...row, result: "pending" };
   const volume = l * w * h * 1e-9; // m³
-  const freshDensity = wet ? Math.round(((wet / 1000) / volume) / 5) * 5 : undefined;
-  const dryDensity = dry ? Math.round(((dry / 1000) / volume) / 5) * 5 : undefined;
+  const freshDensity = wet ? Math.round(((wet / 1000) / volume) / 10) * 10 : undefined;
+  const dryDensity = dry ? Math.round(((dry / 1000) / volume) / 10) * 10 : undefined;
   const moistureContent = wet && dry ? parseFloat(((wet - dry) / dry * 100).toFixed(2)) : undefined;
   const result = dryDensity && maxDensity > 0 ? (dryDensity <= maxDensity ? "pass" : "fail") : "pending";
   return { ...row, volume: parseFloat((volume * 1e6).toFixed(2)), freshDensity, dryDensity, moistureContent, result };
@@ -308,13 +308,13 @@ export default function ConcreteFoam() {
                   <tbody>
                     {computedCubes.map((row, i) => (
                       <tr key={row.id} className="border-b last:border-b-0">
-                        <td className="p-2"><Input value={row.cubeNo} onChange={e => updateCube(row.id, "cubeNo", e.target.value)} className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.age} onChange={e => updateCube(row.id, "age", e.target.value)} type="number" className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.sideA} onChange={e => updateCube(row.id, "sideA", e.target.value)} type="number" className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.sideB} onChange={e => updateCube(row.id, "sideB", e.target.value)} type="number" className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.height} onChange={e => updateCube(row.id, "height", e.target.value)} type="number" className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.mass} onChange={e => updateCube(row.id, "mass", e.target.value)} type="number" className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.maxLoad} onChange={e => updateCube(row.id, "maxLoad", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.cubeNo} onChange={e => updateCube(row.id, "cubeNo", e.target.value)} className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.age} onChange={e => updateCube(row.id, "age", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.sideA} onChange={e => updateCube(row.id, "sideA", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.sideB} onChange={e => updateCube(row.id, "sideB", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.height} onChange={e => updateCube(row.id, "height", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.mass} onChange={e => updateCube(row.id, "mass", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.maxLoad} onChange={e => updateCube(row.id, "maxLoad", e.target.value)} type="number" className="min-w-[100px]" /></td>
                         <td className="p-2 font-medium">{row.area?.toFixed(0) || "-"}</td>
                         <td className="p-2 font-medium">{row.strength || "-"}</td>
                         <td className="p-2 font-medium">{row.density || "-"}</td>
@@ -368,12 +368,12 @@ export default function ConcreteFoam() {
                   <tbody>
                     {computedDensity.map((row, i) => (
                       <tr key={row.id} className="border-b last:border-b-0">
-                        <td className="p-2"><Input value={row.specimenNo} onChange={e => updateDensity(row.id, "specimenNo", e.target.value)} className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.length} onChange={e => updateDensity(row.id, "length", e.target.value)} type="number" className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.width} onChange={e => updateDensity(row.id, "width", e.target.value)} type="number" className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.height} onChange={e => updateDensity(row.id, "height", e.target.value)} type="number" className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.wetMass} onChange={e => updateDensity(row.id, "wetMass", e.target.value)} type="number" className="min-w-[80px]" /></td>
-                        <td className="p-2"><Input value={row.dryMass} onChange={e => updateDensity(row.id, "dryMass", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.specimenNo} onChange={e => updateDensity(row.id, "specimenNo", e.target.value)} className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.length} onChange={e => updateDensity(row.id, "length", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.width} onChange={e => updateDensity(row.id, "width", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.height} onChange={e => updateDensity(row.id, "height", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.wetMass} onChange={e => updateDensity(row.id, "wetMass", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.dryMass} onChange={e => updateDensity(row.id, "dryMass", e.target.value)} type="number" className="min-w-[100px]" /></td>
                         <td className="p-2 font-medium">{row.volume || "-"}</td>
                         <td className="p-2 font-medium">{row.freshDensity || "-"}</td>
                         <td className="p-2 font-medium">{row.dryDensity || "-"}</td>

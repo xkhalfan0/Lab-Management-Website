@@ -509,7 +509,7 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
           <table className="w-full text-xs border-collapse">
             <thead>
               <tr className="bg-gray-100">
-                {[isAr ? "رقم" : "No.", isAr ? "الوزن الرطب (كجم)" : "Wet Wt (kg)", isAr ? "الوزن الجاف (كجم)" : "Dry Wt (kg)", isAr ? "الكثافة الطازجة (kg/m³)" : "Fresh Density (kg/m³)", isAr ? "الكثافة الجافة (kg/m³)" : "Dry Density (kg/m³)", isAr ? "الرطوبة (%)" : "Moisture (%)", isAr ? "النتيجة" : "Result"].map(h => (
+                {[isAr ? "رقم" : "No.", isAr ? "الوزن الرطب (كجم)" : "Wet Wt (kg)", isAr ? "الوزن الجاف (كجم)" : "Dry Wt (kg)", isAr ? "الكثافة الطازجة (kg/m³)" : "Fresh Density (kg/m³)", isAr ? "الكثافة الجافة (kg/m³)" : "Dry Density (kg/m³)", isAr ? "النتيجة" : "Result"].map(h => (
                   <th key={h} className="border border-gray-300 px-1.5 py-1 text-center font-semibold">{h}</th>
                 ))}
               </tr>
@@ -522,7 +522,6 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
                   <td className="border border-gray-300 px-1.5 py-1 text-center">{d.dryMass ?? "—"}</td>
                   <td className="border border-gray-300 px-1.5 py-1 text-center">{d.freshDensity ? Number(d.freshDensity).toFixed(0) : "—"}</td>
                   <td className="border border-gray-300 px-1.5 py-1 text-center font-bold">{d.dryDensity ? Number(d.dryDensity).toFixed(0) : "—"}</td>
-                  <td className="border border-gray-300 px-1.5 py-1 text-center">{d.moistureContent ? Number(d.moistureContent).toFixed(1) : "—"}</td>
                   <td className={`border border-gray-300 px-1.5 py-1 text-center font-bold ${d.result === "pass" ? "text-green-700" : d.result === "fail" ? "text-red-600" : "text-gray-500"}`}>
                     {d.result === "pass" ? (isAr ? "مطابق" : "PASS") : d.result === "fail" ? (isAr ? "غير مطابق" : "FAIL") : "—"}
                   </td>

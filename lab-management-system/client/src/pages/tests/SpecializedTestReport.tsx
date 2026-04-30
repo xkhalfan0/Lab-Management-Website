@@ -443,6 +443,25 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
 
   return (
     <div className="space-y-4">
+      {/* Test Type Badge */}
+      <div className="mb-3 flex justify-center">
+        {hasCubes && !hasDensity && (
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 text-white font-semibold text-sm">
+            <span>{isAr ? "اختبار المقاومة" : "Strength Test"}</span>
+          </div>
+        )}
+        {hasDensity && !hasCubes && (
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-500 text-white font-semibold text-sm">
+            <span>{isAr ? "اختبار الكثافة" : "Density Test"}</span>
+          </div>
+        )}
+        {hasCubes && hasDensity && (
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500 text-white font-semibold text-sm">
+            <span>{isAr ? "اختبار المقاومة والكثافة" : "Strength & Density Test"}</span>
+          </div>
+        )}
+      </div>
+
       {/* Grade & Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
         {fd.minStrength !== undefined && (

@@ -217,6 +217,16 @@ export default function ConcreteFoam() {
             <h1 className="text-2xl font-bold flex items-center gap-2">
               <FlaskConical className="h-6 w-6 text-blue-500" />
               {ar ? "فحص الخرسانة الرغوية" : "Foamed Concrete Test"}
+              {isStrengthTest && (
+                <Badge className="bg-blue-500 text-white ml-2">
+                  {ar ? "اختبار المقاومة" : "Strength Test"}
+                </Badge>
+              )}
+              {isDensityTest && (
+                <Badge className="bg-purple-500 text-white ml-2">
+                  {ar ? "اختبار الكثافة" : "Density Test"}
+                </Badge>
+              )}
             </h1>
             <p className="text-muted-foreground text-sm mt-1">BS 1881-116 (Strength) | BS 1881-114 (Density)</p>
           </div>
@@ -239,6 +249,7 @@ export default function ConcreteFoam() {
                 type="number"
                 step="0.5"
                 placeholder="5.0"
+                disabled={submitted}
               />
             </div>
             <div>
@@ -249,6 +260,7 @@ export default function ConcreteFoam() {
                 type="number"
                 step="50"
                 placeholder="1400"
+                disabled={submitted}
               />
             </div>
           </CardContent>
@@ -282,7 +294,12 @@ export default function ConcreteFoam() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="text-base">{ar ? "اختبار مقاومة الضغط" : "Compressive Strength Test"}</CardTitle>
-              <Button variant="outline" size="sm" onClick={() => setCubeRows(prev => [...prev, newCubeRow(prev.length)])}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCubeRows(prev => [...prev, newCubeRow(prev.length)])}
+                disabled={submitted}
+              >
                 <Plus className="mr-2 h-4 w-4" /> {ar ? "إضافة عينة" : "Add Specimen"}
               </Button>
             </CardHeader>
@@ -308,19 +325,24 @@ export default function ConcreteFoam() {
                   <tbody>
                     {computedCubes.map((row, i) => (
                       <tr key={row.id} className="border-b last:border-b-0">
-                        <td className="p-2"><Input value={row.cubeNo} onChange={e => updateCube(row.id, "cubeNo", e.target.value)} className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.age} onChange={e => updateCube(row.id, "age", e.target.value)} type="number" className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.sideA} onChange={e => updateCube(row.id, "sideA", e.target.value)} type="number" className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.sideB} onChange={e => updateCube(row.id, "sideB", e.target.value)} type="number" className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.height} onChange={e => updateCube(row.id, "height", e.target.value)} type="number" className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.mass} onChange={e => updateCube(row.id, "mass", e.target.value)} type="number" className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.maxLoad} onChange={e => updateCube(row.id, "maxLoad", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.cubeNo} onChange={e => updateCube(row.id, "cubeNo", e.target.value)} className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.age} onChange={e => updateCube(row.id, "age", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.sideA} onChange={e => updateCube(row.id, "sideA", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.sideB} onChange={e => updateCube(row.id, "sideB", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.height} onChange={e => updateCube(row.id, "height", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.mass} onChange={e => updateCube(row.id, "mass", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.maxLoad} onChange={e => updateCube(row.id, "maxLoad", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
                         <td className="p-2 font-medium">{row.area?.toFixed(0) || "-"}</td>
                         <td className="p-2 font-medium">{row.strength || "-"}</td>
                         <td className="p-2 font-medium">{row.density || "-"}</td>
                         <td className="p-2"><PassFailBadge result={row.result ?? "pending"} /></td>
                         <td className="p-2">
-                          <Button variant="ghost" size="sm" onClick={() => setCubeRows(prev => prev.filter(r => r.id !== row.id))}>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setCubeRows(prev => prev.filter(r => r.id !== row.id))}
+                            disabled={submitted}
+                          >
                             <Trash2 className="h-4 w-4 text-red-500" />
                           </Button>
                         </td>
@@ -342,7 +364,12 @@ export default function ConcreteFoam() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="text-base">{ar ? "اختبار الكثافة" : "Density Test"}</CardTitle>
-              <Button variant="outline" size="sm" onClick={() => setDensityRows(prev => [...prev, newDensityRow(prev.length)])}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setDensityRows(prev => [...prev, newDensityRow(prev.length)])}
+                disabled={submitted}
+              >
                 <Plus className="mr-2 h-4 w-4" /> {ar ? "إضافة عينة" : "Add Specimen"}
               </Button>
             </CardHeader>
@@ -368,19 +395,24 @@ export default function ConcreteFoam() {
                   <tbody>
                     {computedDensity.map((row, i) => (
                       <tr key={row.id} className="border-b last:border-b-0">
-                        <td className="p-2"><Input value={row.specimenNo} onChange={e => updateDensity(row.id, "specimenNo", e.target.value)} className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.length} onChange={e => updateDensity(row.id, "length", e.target.value)} type="number" className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.width} onChange={e => updateDensity(row.id, "width", e.target.value)} type="number" className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.height} onChange={e => updateDensity(row.id, "height", e.target.value)} type="number" className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.wetMass} onChange={e => updateDensity(row.id, "wetMass", e.target.value)} type="number" className="min-w-[100px]" /></td>
-                        <td className="p-2"><Input value={row.dryMass} onChange={e => updateDensity(row.id, "dryMass", e.target.value)} type="number" className="min-w-[100px]" /></td>
+                        <td className="p-2"><Input value={row.specimenNo} onChange={e => updateDensity(row.id, "specimenNo", e.target.value)} className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.length} onChange={e => updateDensity(row.id, "length", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.width} onChange={e => updateDensity(row.id, "width", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.height} onChange={e => updateDensity(row.id, "height", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.wetMass} onChange={e => updateDensity(row.id, "wetMass", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
+                        <td className="p-2"><Input value={row.dryMass} onChange={e => updateDensity(row.id, "dryMass", e.target.value)} type="number" className="min-w-[100px]" disabled={submitted} /></td>
                         <td className="p-2 font-medium">{row.volume || "-"}</td>
                         <td className="p-2 font-medium">{row.freshDensity || "-"}</td>
                         <td className="p-2 font-medium">{row.dryDensity || "-"}</td>
                         <td className="p-2 font-medium">{row.moistureContent || "-"}</td>
                         <td className="p-2"><PassFailBadge result={row.result ?? "pending"} /></td>
                         <td className="p-2">
-                          <Button variant="ghost" size="sm" onClick={() => setDensityRows(prev => prev.filter(r => r.id !== row.id))}>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setDensityRows(prev => prev.filter(r => r.id !== row.id))}
+                            disabled={submitted}
+                          >
                             <Trash2 className="h-4 w-4 text-red-500" />
                           </Button>
                         </td>
@@ -401,7 +433,13 @@ export default function ConcreteFoam() {
         <Card>
           <CardHeader><CardTitle className="text-base">{ar ? "ملاحظات" : "Notes"}</CardTitle></CardHeader>
           <CardContent>
-            <Textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder={ar ? "ملاحظات إضافية حول الاختبار..." : "Additional notes about the test..."} rows={5} />
+            <Textarea
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              placeholder={ar ? "ملاحظات إضافية حول الاختبار..." : "Additional notes about the test..."}
+              rows={5}
+              disabled={submitted}
+            />
           </CardContent>
         </Card>
 

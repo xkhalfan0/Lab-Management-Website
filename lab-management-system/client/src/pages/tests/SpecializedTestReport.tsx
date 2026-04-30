@@ -460,7 +460,7 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
         {hasCubes && fd.avgStrength !== undefined && (
           <div className="bg-blue-50 border border-blue-200 rounded p-2 text-center">
             <p className="text-blue-600 font-semibold">{isAr ? "متوسط المقاومة" : "Avg. Strength"}</p>
-            <p className="font-bold text-blue-800">{Number(fd.avgStrength).toFixed(2)} N/mm²</p>
+            <p className="font-bold text-blue-800">{Number(fd.avgStrength).toFixed(1)} kg/cm²</p>
           </div>
         )}
         {hasDensity && fd.avgDryDensity !== undefined && (
@@ -478,7 +478,7 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
           <table className="w-full text-xs border-collapse">
             <thead>
               <tr className="bg-gray-100">
-                {[isAr ? "رقم" : "No.", isAr ? "العمر (يوم)" : "Age (days)", isAr ? "الحمل (كن)" : "Load (kN)", isAr ? "المساحة (مم²)" : "Area (mm²)", isAr ? "المقاومة (N/mm²)" : "Strength (N/mm²)", isAr ? "الكثافة (kg/m³)" : "Density (kg/m³)", isAr ? "النتيجة" : "Result"].map(h => (
+                {[isAr ? "رقم" : "No.", isAr ? "العمر (يوم)" : "Age (days)", isAr ? "الحمل (كن)" : "Load (kN)", isAr ? "المساحة (مم²)" : "Area (mm²)", isAr ? "المقاومة (كجم/سم²)" : "Strength (kg/cm²)", isAr ? "الكثافة (kg/m³)" : "Density (kg/m³)", isAr ? "النتيجة" : "Result"].map(h => (
                   <th key={h} className="border border-gray-300 px-1.5 py-1 text-center font-semibold">{h}</th>
                 ))}
               </tr>

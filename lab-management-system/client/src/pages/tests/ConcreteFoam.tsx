@@ -93,9 +93,10 @@ function computeCubeRow(row: CubeRow, minStrength: number): CubeRow {
   const P = parseFloat(row.maxLoad);
   if (!a || !b || !P) return { ...row, result: "pending" };
   const area = a * b;
-  const strength = parseFloat(((P * 1000) / area).toFixed(2));
+  const strengthNmm2 = (P * 1000) / area;
+  const strength = parseFloat((strengthNmm2 * 10.197).toFixed(1));
   const volume = a * b * h * 1e-9; // m³
-  const density = m && h ? parseFloat((m / volume).toFixed(0)) : undefined;
+  const density = m && h ? Math.round((m / volume) / 5) * 5 : undefined;
   const result = minStrength > 0 ? (strength >= minStrength ? "pass" : "fail") : "pending";
   return { ...row, area, strength, density, result };
 }
@@ -108,8 +109,8 @@ function computeDensityRow(row: DensityRow, maxDensity: number): DensityRow {
   const dry = parseFloat(row.dryMass);
   if (!l || !w || !h) return { ...row, result: "pending" };
   const volume = l * w * h * 1e-9; // m³
-  const freshDensity = wet ? parseFloat(((wet / 1000) / volume).toFixed(0)) : undefined;
-  const dryDensity = dry ? parseFloat(((dry / 1000) / volume).toFixed(0)) : undefined;
+  const freshDensity = wet ? Math.round(((wet / 1000) / volume) / 5) * 5 : undefined;
+  const dryDensity = dry ? Math.round(((dry / 1000) / volume) / 5) * 5 : undefined;
   const moistureContent = wet && dry ? parseFloat(((wet - dry) / dry * 100).toFixed(2)) : undefined;
   const result = dryDensity && maxDensity > 0 ? (dryDensity <= maxDensity ? "pass" : "fail") : "pending";
   return { ...row, volume: parseFloat((volume * 1e6).toFixed(2)), freshDensity, dryDensity, moistureContent, result };
@@ -153,7 +154,7 @@ export default function ConcreteFoam() {
 
   const validCubes = computedCubes.filter(r => r.strength !== undefined);
   const avgStrength = validCubes.length > 0
-    ? parseFloat((validCubes.reduce((s, r) => s + (r.strength || 0), 0) / validCubes.length).toFixed(2))
+    ? parseFloat((validCubes.reduce((s, r) => s + (r.strength || 0), 0) / validCubes.length).toFixed(1))
     : undefined;
   const passCount = validCubes.filter(r => r.result === "pass").length;
   const overallStrengthPass = validCubes.length > 0 && passCount === validCubes.length;
@@ -298,7 +299,7 @@ export default function ConcreteFoam() {
                       <th className="p-2 text-left">{ar ? "الكتلة (كجم)" : "Mass (kg)"}</th>
                       <th className="p-2 text-left">{ar ? "الحمل الأقصى (كيلو نيوتن)" : "Max Load (kN)"}</th>
                       <th className="p-2 text-left">{ar ? "المساحة (مم²)" : "Area (mm²)"}</th>
-                      <th className="p-2 text-left">{ar ? "المقاومة (نيوتن/مم²)" : "Strength (N/mm²)"}</th>
+                      <th className="p-2 text-left">{ar ? "المقاومة (كجم/سم²)" : "Strength (kg/cm²)"}</th>
                       <th className="p-2 text-left">{ar ? "الكثافة (كجم/م³)" : "Density (kg/m³)"}</th>
                       <th className="p-2 text-left">{ar ? "النتيجة" : "Result"}</th>
                       <th className="p-2 text-left"></th>
@@ -307,13 +308,13 @@ export default function ConcreteFoam() {
                   <tbody>
                     {computedCubes.map((row, i) => (
                       <tr key={row.id} className="border-b last:border-b-0">
-                        <td className="p-2"><Input value={row.cubeNo} onChange={e => updateCube(row.id, "cubeNo", e.target.value)} /></td>
-                        <td className="p-2"><Input value={row.age} onChange={e => updateCube(row.id, "age", e.target.value)} type="number" /></td>
-                        <td className="p-2"><Input value={row.sideA} onChange={e => updateCube(row.id, "sideA", e.target.value)} type="number" /></td>
-                        <td className="p-2"><Input value={row.sideB} onChange={e => updateCube(row.id, "sideB", e.target.value)} type="number" /></td>
-                        <td className="p-2"><Input value={row.height} onChange={e => updateCube(row.id, "height", e.target.value)} type="number" /></td>
-                        <td className="p-2"><Input value={row.mass} onChange={e => updateCube(row.id, "mass", e.target.value)} type="number" /></td>
-                        <td className="p-2"><Input value={row.maxLoad} onChange={e => updateCube(row.id, "maxLoad", e.target.value)} type="number" /></td>
+                        <td className="p-2"><Input value={row.cubeNo} onChange={e => updateCube(row.id, "cubeNo", e.target.value)} className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.age} onChange={e => updateCube(row.id, "age", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.sideA} onChange={e => updateCube(row.id, "sideA", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.sideB} onChange={e => updateCube(row.id, "sideB", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.height} onChange={e => updateCube(row.id, "height", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.mass} onChange={e => updateCube(row.id, "mass", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.maxLoad} onChange={e => updateCube(row.id, "maxLoad", e.target.value)} type="number" className="min-w-[80px]" /></td>
                         <td className="p-2 font-medium">{row.area?.toFixed(0) || "-"}</td>
                         <td className="p-2 font-medium">{row.strength || "-"}</td>
                         <td className="p-2 font-medium">{row.density || "-"}</td>
@@ -329,7 +330,7 @@ export default function ConcreteFoam() {
                 </table>
               </div>
               <div className="mt-4 flex justify-end items-center gap-4">
-                <div className="font-medium">{ar ? `متوسط المقاومة: ${avgStrength || "-"} نيوتن/مم²` : `Average Strength: ${avgStrength || "-"} N/mm²`}</div>
+                <div className="font-medium">{ar ? `متوسط المقاومة: ${avgStrength || "-"} كجم/سم²` : `Average Strength: ${avgStrength || "-"} kg/cm²`}</div>
                 <div className="font-medium">{ar ? "النتيجة الكلية:" : "Overall Result:"} <PassFailBadge result={overallStrengthPass ? "pass" : "fail"} /></div>
               </div>
             </CardContent>
@@ -367,12 +368,12 @@ export default function ConcreteFoam() {
                   <tbody>
                     {computedDensity.map((row, i) => (
                       <tr key={row.id} className="border-b last:border-b-0">
-                        <td className="p-2"><Input value={row.specimenNo} onChange={e => updateDensity(row.id, "specimenNo", e.target.value)} /></td>
-                        <td className="p-2"><Input value={row.length} onChange={e => updateDensity(row.id, "length", e.target.value)} type="number" /></td>
-                        <td className="p-2"><Input value={row.width} onChange={e => updateDensity(row.id, "width", e.target.value)} type="number" /></td>
-                        <td className="p-2"><Input value={row.height} onChange={e => updateDensity(row.id, "height", e.target.value)} type="number" /></td>
-                        <td className="p-2"><Input value={row.wetMass} onChange={e => updateDensity(row.id, "wetMass", e.target.value)} type="number" /></td>
-                        <td className="p-2"><Input value={row.dryMass} onChange={e => updateDensity(row.id, "dryMass", e.target.value)} type="number" /></td>
+                        <td className="p-2"><Input value={row.specimenNo} onChange={e => updateDensity(row.id, "specimenNo", e.target.value)} className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.length} onChange={e => updateDensity(row.id, "length", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.width} onChange={e => updateDensity(row.id, "width", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.height} onChange={e => updateDensity(row.id, "height", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.wetMass} onChange={e => updateDensity(row.id, "wetMass", e.target.value)} type="number" className="min-w-[80px]" /></td>
+                        <td className="p-2"><Input value={row.dryMass} onChange={e => updateDensity(row.id, "dryMass", e.target.value)} type="number" className="min-w-[80px]" /></td>
                         <td className="p-2 font-medium">{row.volume || "-"}</td>
                         <td className="p-2 font-medium">{row.freshDensity || "-"}</td>
                         <td className="p-2 font-medium">{row.dryDensity || "-"}</td>
@@ -422,8 +423,17 @@ export default function ConcreteFoam() {
             </>
           ) : (
             <Button onClick={handleSubmit} disabled={submitted || saveMut.isPending}>
-              {saveMut.isPending && <span className="i-lucide-loader-2 mr-2 h-4 w-4 animate-spin" />} {ar ? "جاري..." : "Submitting..."}
-              <Send className="mr-2 h-4 w-4" /> {ar ? "إرسال النتائج" : "Submit Results"}
+              {saveMut.isPending ? (
+                <>
+                  <span className="i-lucide-loader-2 mr-2 h-4 w-4 animate-spin" />
+                  {ar ? "جاري الإرسال..." : "Submitting..."}
+                </>
+              ) : (
+                <>
+                  <Send className="mr-2 h-4 w-4" />
+                  {ar ? "إرسال النتائج" : "Submit Results"}
+                </>
+              )}
             </Button>
           )}
         </div>

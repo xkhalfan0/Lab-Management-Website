@@ -445,10 +445,18 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
     <div className="space-y-4">
       {/* Grade & Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-        <div className="bg-gray-50 border rounded p-2 text-center">
-          <p className="text-gray-500 font-semibold">{isAr ? "الدرجة" : "Grade"}</p>
-          <p className="font-bold text-gray-800">{fd.grade || "—"}</p>
-        </div>
+        {hasCubes && fd.minStrength !== undefined && (
+          <div className="bg-amber-50 border border-amber-200 rounded p-2 text-center">
+            <p className="text-amber-600 font-semibold">{isAr ? "الحد الأدنى للمقاومة" : "Min. Strength"}</p>
+            <p className="font-bold text-amber-800">{fd.minStrength} MPa</p>
+          </div>
+        )}
+        {hasDensity && fd.maxDensity !== undefined && (
+          <div className="bg-purple-50 border border-purple-200 rounded p-2 text-center">
+            <p className="text-purple-600 font-semibold">{isAr ? "الحد الأقصى للكثافة" : "Max. Density"}</p>
+            <p className="font-bold text-purple-800">{fd.maxDensity} kg/m³</p>
+          </div>
+        )}
         {hasCubes && fd.avgStrength !== undefined && (
           <div className="bg-blue-50 border border-blue-200 rounded p-2 text-center">
             <p className="text-blue-600 font-semibold">{isAr ? "متوسط المقاومة" : "Avg. Strength"}</p>
@@ -459,12 +467,6 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
           <div className="bg-purple-50 border border-purple-200 rounded p-2 text-center">
             <p className="text-purple-600 font-semibold">{isAr ? "متوسط الكثافة الجافة" : "Avg. Dry Density"}</p>
             <p className="font-bold text-purple-800">{Number(fd.avgDryDensity).toFixed(0)} kg/m³</p>
-          </div>
-        )}
-        {hasCubes && fd.minStrength !== undefined && (
-          <div className="bg-gray-50 border rounded p-2 text-center">
-            <p className="text-gray-500 font-semibold">{isAr ? "الحد الأدنى" : "Min. Strength"}</p>
-            <p className="font-bold text-gray-800">{fd.minStrength} N/mm²</p>
           </div>
         )}
       </div>

@@ -158,8 +158,8 @@ function renderConcreteBlocks(fd: any, isAr: boolean) {
     return (Math.round(n * 10) / 10).toFixed(1);
   };
   const headers = isAr
-    ? ["المرجع", "التاريخ", "الطول", "العرض", "الحمل (كن)", "المساحة", "مقاومة الضغط", "النتيجة"]
-    : ["Block Ref", "Date Tested", "L (mm)", "W (mm)", "Load (kN)", "Gross Area (mm²)", "Compressive Strength (N/mm²)", "Result"];
+    ? ["المرجع", "الطول", "العرض", "الحمل", "المساحة", "المقاومة", "النتيجة"]
+    : ["Block Ref", "L (mm)", "W (mm)", "Load (kN)", "Gross Area (mm²)", "Strength (N/mm²)", "Result"];
   return (
     <div className="text-xs space-y-3">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -199,33 +199,32 @@ function renderConcreteBlocks(fd: any, isAr: boolean) {
         )}
       </div>
       {blocks.length > 0 && (
-        <table className="w-full text-xs border-collapse">
+        <table className="w-full text-[8px] border-collapse">
           <thead>
-            <tr className="bg-gray-100">
-              {headers.map(h => <th key={h} className="border border-gray-300 px-1 py-1 font-semibold text-center">{h}</th>)}
+            <tr className="bg-gray-800 text-white">
+              {headers.map(h => <th key={h} className="border border-gray-400 px-1 py-0.5 font-semibold text-center">{h}</th>)}
             </tr>
           </thead>
           <tbody>
             {blocks.map((b: any, i: number) => (
               <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                <td className="border border-gray-300 px-1 py-1 text-center font-mono">{b.blockRef ?? i + 1}</td>
-                <td className="border border-gray-300 px-1 py-1 text-center">{b.dateTested || fd.testDate || "—"}</td>
-                <td className="border border-gray-300 px-1 py-1 text-center">{b.lengthMm ?? "—"}</td>
-                <td className="border border-gray-300 px-1 py-1 text-center">{b.widthMm ?? "—"}</td>
-                <td className="border border-gray-300 px-1 py-1 text-center">{b.loadKN != null ? fmt(b.loadKN, 1) : "—"}</td>
-                <td className="border border-gray-300 px-1 py-1 text-center">{b.grossAreaMm2 ?? "—"}</td>
-                <td className="border border-gray-300 px-1 py-1 text-center font-bold">{fmtS(b.strengthMpa)}</td>
-                <td className={`border border-gray-300 px-1 py-1 text-center font-bold ${b.result === "pass" ? "text-green-700" : "text-red-600"}`}>
-                  {b.result === "pass" ? (isAr ? "مطابق" : "PASS") : b.result === "fail" ? (isAr ? "راسب" : "FAIL") : "—"}
+                <td className="border border-gray-300 px-1 py-0.5 text-center font-mono text-[8px]">{b.blockRef ?? i + 1}</td>
+                <td className="border border-gray-300 px-1 py-0.5 text-center text-[8px]">{b.lengthMm ?? "—"}</td>
+                <td className="border border-gray-300 px-1 py-0.5 text-center text-[8px]">{b.widthMm ?? "—"}</td>
+                <td className="border border-gray-300 px-1 py-0.5 text-center text-[8px]">{b.loadKN != null ? fmt(b.loadKN, 1) : "—"}</td>
+                <td className="border border-gray-300 px-1 py-0.5 text-center text-[8px]">{b.grossAreaMm2 ?? "—"}</td>
+                <td className="border border-gray-300 px-1 py-0.5 text-center font-bold text-[8px]">{fmtS(b.strengthMpa)}</td>
+                <td className={`border border-gray-300 px-1 py-0.5 text-center font-bold text-[8px] ${b.result === "pass" ? "text-green-700 bg-green-50" : b.result === "fail" ? "text-red-600 bg-red-50" : "text-gray-500"}`}>
+                  {b.result === "pass" ? (isAr ? "مطابق" : "PASS") : b.result === "fail" ? (isAr ? "غير مطابق" : "FAIL") : "—"}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-      <div className="flex flex-wrap gap-3 justify-end text-xs">
+      <div className="flex flex-wrap gap-2 justify-end text-[8px] mt-1">
         <span className="font-semibold">
-          {isAr ? "متوسط مقاومة الضغط:" : "Average Compressive Strength:"} {fmtS(avgCompressiveStrength)} N/mm²
+          {isAr ? "متوسط:" : "Average:"} {fmtS(avgCompressiveStrength)} N/mm²
           {" "}/ {isAr ? "المطلوب:" : "Required:"} {fmtS(spec.requiredStrength)} N/mm²
         </span>
         <span className={`font-bold px-2 py-1 rounded border ${fd.overallResult === "pass" ? "bg-green-50 border-green-200 text-green-800" : "bg-red-50 border-red-200 text-red-800"}`}>
@@ -1220,24 +1219,24 @@ export default function SpecializedTestReport() {
         <div
           ref={printRef}
           className="mx-auto bg-white shadow-lg print:shadow-none"
-          style={{ width: "210mm", minHeight: "297mm", padding: "15mm 15mm 20mm 15mm", fontFamily: "Arial, sans-serif", fontSize: "10px" }}
+          style={{ width: "210mm", minHeight: "297mm", padding: "10mm 12mm 10mm 12mm", fontFamily: "Arial, sans-serif", fontSize: "9px" }}
         >
           {/* Header */}
-          <div className="mb-5">
-            <div className="border-t-4 border-gray-900 pt-3 flex justify-between items-center">
+          <div className="mb-3">
+            <div className="border-t-4 border-gray-900 pt-2 pb-1 flex justify-between items-center">
               <div>
-                <h1 className="text-[16px] font-extrabold text-gray-900 leading-snug">
+                <h1 className="text-[13px] font-extrabold text-gray-900 leading-tight">
                   {isAr ? "مختبر الإنشاءات والمواد الهندسية" : "Construction Materials & Engineering Laboratory"}
                 </h1>
-                <p className="text-[11px] text-gray-500 mt-0.5">
+                <p className="text-[8px] text-gray-500 mt-0.5">
                   {isAr ? "Construction Materials & Engineering Laboratory" : "مختبر الإنشاءات والمواد الهندسية"}
                 </p>
               </div>
-              <div className="flex flex-col items-center px-4 border-x border-gray-300">
-                <div className="w-11 h-11 rounded-full border-2 border-gray-800 flex items-center justify-center text-lg font-black">م</div>
-                <span className="text-[9px] text-gray-400 mt-0.5 tracking-widest">LAB</span>
+              <div className="flex flex-col items-center px-3 border-x border-gray-300">
+                <div className="w-9 h-9 rounded-full border-2 border-gray-800 flex items-center justify-center text-base font-black">م</div>
+                <span className="text-[7px] text-gray-400 mt-0.5 tracking-widest">LAB</span>
               </div>
-              <div className="text-[11px] text-gray-600 space-y-0.5">
+              <div className="text-[8px] text-gray-600 space-y-0.5">
                 <div className="flex gap-1">
                   <span className="text-gray-500">{isAr ? ":رقم الوثيقة" : "Doc No.:"}</span>
                   <span className="font-mono font-bold text-gray-800">{result.contractNo ?? `RPT-${String(distId).padStart(6, "0")}`}</span>
@@ -1249,18 +1248,18 @@ export default function SpecializedTestReport() {
               </div>
             </div>
             {/* Document title bar */}
-            <div className="bg-gray-900 text-white text-center py-2 mt-3 mb-4">
-              <p className="text-[14px] font-bold">
+            <div className="bg-gray-900 text-white text-center py-1.5 mt-2 mb-2">
+              <p className="text-[11px] font-bold">
                 {isAr ? "تقرير نتيجة الفحص" : "Laboratory Test Report"}
               </p>
-              <p className="text-[10px] text-gray-300 mt-0.5 tracking-wider uppercase">
+              <p className="text-[7px] text-gray-300 mt-0.5 tracking-wider uppercase">
                 {isAr ? "Laboratory Test Report" : "تقرير نتيجة الفحص"}
               </p>
             </div>
             {/* Pass/Fail badge */}
-            <div className={`flex ${isAr ? "justify-start" : "justify-end"}`}>
-              <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold ${isPassed ? "bg-green-100 text-green-800 border border-green-300" : "bg-red-100 text-red-800 border border-red-300"}`}>
-                {isPassed ? <CheckCircle size={14} /> : <XCircle size={14} />}
+            <div className={`flex ${isAr ? "justify-start" : "justify-end"} mb-2`}>
+              <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[9px] font-bold ${isPassed ? "bg-green-100 text-green-800 border border-green-300" : "bg-red-100 text-red-800 border border-red-300"}`}>
+                {isPassed ? <CheckCircle size={12} /> : <XCircle size={12} />}
                 {isPassed
                   ? (isAr ? "مطابق — PASS" : "PASS — مطابق")
                   : (isAr ? "غير مطابق — FAIL" : "FAIL — غير مطابق")}
@@ -1269,24 +1268,24 @@ export default function SpecializedTestReport() {
           </div>
 
           {/* Sample Info */}
-          <div className="border border-gray-200 rounded mb-5">
+          <div className="border border-gray-200 rounded mb-3">
             {/* Reference numbers bar */}
-            <div className="bg-gray-50 border-b border-gray-200 px-4 py-2 grid grid-cols-3 gap-4 text-xs">
+            <div className="bg-gray-50 border-b border-gray-200 px-3 py-1.5 grid grid-cols-3 gap-3 text-[8px]">
               <div className="flex flex-col items-center">
-                <span className="text-gray-400 text-[10px] uppercase tracking-wide">{isAr ? "رقم العينة" : "Sample No."}</span>
-                <span className="font-mono font-bold text-gray-900 text-sm">{(dist as any)?.sampleCode ?? "—"}</span>
+                <span className="text-gray-400 text-[7px] uppercase tracking-wide">{isAr ? "رقم العينة" : "Sample No."}</span>
+                <span className="font-mono font-bold text-gray-900 text-[9px]">{(dist as any)?.sampleCode ?? "—"}</span>
               </div>
               <div className="flex flex-col items-center border-x border-gray-200">
-                <span className="text-gray-400 text-[10px] uppercase tracking-wide">{isAr ? "رقم التوزيع" : "Distribution No."}</span>
-                <span className="font-mono font-bold text-blue-700 text-sm">{(dist as any)?.distributionCode ?? `DIST-${String(distId).padStart(6,'0')}`}</span>
+                <span className="text-gray-400 text-[7px] uppercase tracking-wide">{isAr ? "رقم التوزيع" : "Distribution No."}</span>
+                <span className="font-mono font-bold text-blue-700 text-[9px]">{(dist as any)?.distributionCode ?? `DIST-${String(distId).padStart(6,'0')}`}</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-gray-400 text-[10px] uppercase tracking-wide">{isAr ? "تاريخ الاستلام" : "Received Date"}</span>
-                <span className="font-semibold text-gray-900">{fmtDate((dist as any)?.receivedAt, lang)}</span>
+                <span className="text-gray-400 text-[7px] uppercase tracking-wide">{isAr ? "تاريخ الاستلام" : "Received Date"}</span>
+                <span className="font-semibold text-gray-900 text-[8px]">{fmtDate((dist as any)?.receivedAt, lang)}</span>
               </div>
             </div>
             {/* Details grid */}
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2 p-4 text-xs">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-1 p-3 text-[8px]">
               <div className="space-y-2">
                 <InfoRow label={isAr ? "نوع الفحص" : "Test Type"} value={testNameDisplay} />
                 <InfoRow label={isAr ? "المعيار" : "Standard"} value={(dist as any)?.standardRef ?? "—"} />
@@ -1305,15 +1304,15 @@ export default function SpecializedTestReport() {
 
           {/* Summary Values */}
           {summaryValues && Object.keys(summaryValues).length > 0 && (
-            <div className="mb-5">
-              <h3 className="text-xs font-bold text-gray-700 uppercase border-b border-gray-300 pb-1 mb-3">
+            <div className="mb-2">
+              <h3 className="text-[9px] font-bold text-gray-700 uppercase border-b border-gray-300 pb-0.5 mb-1.5">
                 {isAr ? "ملخص النتائج" : "Summary Results"}
               </h3>
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-5 gap-2">
                 {Object.entries(summaryValues).map(([k, v]) => (
-                  <div key={k} className="bg-gray-50 border border-gray-200 rounded p-2 text-center">
-                    <p className="text-gray-500 text-xs mb-0.5 capitalize">{k.replace(/_/g, " ")}</p>
-                    <p className="font-bold text-gray-900 text-sm">{String(v)}</p>
+                  <div key={k} className="bg-gray-50 border border-gray-200 rounded p-1.5 text-center">
+                    <p className="text-gray-500 text-[7px] mb-0.5 capitalize">{k.replace(/_/g, " ")}</p>
+                    <p className="font-bold text-gray-900 text-[8px]">{String(v)}</p>
                   </div>
                 ))}
               </div>
@@ -1343,8 +1342,8 @@ export default function SpecializedTestReport() {
           )}
 
           {/* Signatures */}
-          <div className="mt-8 pt-4 border-t border-gray-300">
-            <div className="grid grid-cols-3 gap-6 text-xs">
+          <div className="mt-4 pt-2 border-t border-gray-300">
+            <div className="grid grid-cols-3 gap-4 text-[8px]">
               <SignatureBox label={isAr ? "الفاحص" : "Tested By"} name={result.testedBy} />
               <SignatureBox
                 label={isAr ? "المراجع" : "Reviewed By"}
@@ -1384,7 +1383,7 @@ export default function SpecializedTestReport() {
           }
 
           /* Preserve backgrounds */
-          .bg-gray-50, .bg-gray-100, .bg-blue-50, .bg-green-50, .bg-red-50,
+          .bg-gray-50, .bg-gray-100, .bg-gray-800, .bg-blue-50, .bg-green-50, .bg-red-50,
           .bg-amber-50, .bg-slate-50, .bg-gray-900 {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -1398,7 +1397,7 @@ export default function SpecializedTestReport() {
           }
 
           /* Preserve borders */
-          .border, .border-gray-200, .border-gray-300, .border-blue-200,
+          .border, .border-gray-200, .border-gray-300, .border-gray-400, .border-blue-200,
           .border-green-200, .border-red-200, .border-amber-200 {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
@@ -1421,8 +1420,8 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 function SignatureBox({ label, name, date }: { label: string; name?: string | null; date?: string }) {
   return (
     <div className="text-center">
-      <div className="border-b border-gray-400 mb-1 h-10 flex items-end justify-center pb-1">
-        {name && <span className="text-gray-700 text-xs font-semibold">{name}</span>}
+      <div className="border-b border-gray-400 mb-0.5 h-6 flex items-end justify-center pb-0.5">
+        {name && <span className="text-gray-700 text-[8px] font-semibold">{name}</span>}
       </div>
       <p className="text-gray-500">{label}</p>
       {date && <p className="text-gray-400 text-[9px] mt-0.5">{date}</p>}

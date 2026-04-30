@@ -352,6 +352,34 @@ export default function BatchBlockReport() {
           .print\\:bg-white { background: white !important; }
           .print\\:shadow-none { box-shadow: none !important; }
           .print\\:py-0 { padding-top: 0 !important; padding-bottom: 0 !important; }
+
+          /* Force colors and backgrounds in print */
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+
+          /* Preserve backgrounds */
+          .bg-gray-50, .bg-gray-100, .bg-blue-50, .bg-green-50, .bg-red-50,
+          .bg-amber-50, .bg-slate-50, .bg-gray-900 {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          /* Preserve text colors */
+          .text-green-700, .text-green-800, .text-red-600, .text-red-800,
+          .text-blue-700, .text-blue-800, .text-amber-600, .text-amber-800 {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+
+          /* Preserve borders */
+          .border, .border-gray-200, .border-gray-300, .border-blue-200,
+          .border-green-200, .border-red-200, .border-amber-200 {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
         }
       `}</style>
     </>

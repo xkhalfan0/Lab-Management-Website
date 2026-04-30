@@ -1225,10 +1225,10 @@ export default function SpecializedTestReport() {
           <div className="mb-4">
             <div className="border-t-4 border-gray-900 pt-2.5 pb-1.5 flex justify-between items-center">
               <div>
-                <h1 className="text-[14px] font-extrabold text-gray-900 leading-tight">
+                <h1 className="text-[13px] font-extrabold text-gray-900 leading-tight" style={{ whiteSpace: "nowrap" }}>
                   {isAr ? "مختبر الإنشاءات والمواد الهندسية" : "Construction Materials & Engineering Laboratory"}
                 </h1>
-                <p className="text-[9px] text-gray-500 mt-0.5">
+                <p className="text-[8px] text-gray-500 mt-0.5" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                   {isAr ? "Construction Materials & Engineering Laboratory" : "مختبر الإنشاءات والمواد الهندسية"}
                 </p>
               </div>
@@ -1236,14 +1236,14 @@ export default function SpecializedTestReport() {
                 <div className="w-9 h-9 rounded-full border-2 border-gray-800 flex items-center justify-center text-base font-black">م</div>
                 <span className="text-[7px] text-gray-400 mt-0.5 tracking-widest">LAB</span>
               </div>
-              <div className="text-[9px] text-gray-600 space-y-0.5">
-                <div className="flex gap-1">
-                  <span className="text-gray-500">{isAr ? ":رقم الوثيقة" : "Doc No.:"}</span>
+              <div className="text-[8px] text-gray-600 space-y-0.5 text-right">
+                <div className="flex gap-1 justify-end" style={{ whiteSpace: "nowrap" }}>
                   <span className="font-mono font-bold text-gray-800">{result.contractNo ?? `RPT-${String(distId).padStart(6, "0")}`}</span>
+                  <span className="text-gray-500">{isAr ? ":رقم الوثيقة" : "Doc No.:"}</span>
                 </div>
-                <div className="flex gap-1">
-                  <span className="text-gray-500">{isAr ? ":التاريخ" : "Date:"}</span>
+                <div className="flex gap-1 justify-end" style={{ whiteSpace: "nowrap" }}>
                   <span>{new Date().toLocaleDateString(isAr ? "ar-AE" : "en-GB")}</span>
+                  <span className="text-gray-500">{isAr ? ":التاريخ" : "Date:"}</span>
                 </div>
               </div>
             </div>
@@ -1252,13 +1252,13 @@ export default function SpecializedTestReport() {
               <p className="text-[12px] font-bold">
                 {isAr ? "تقرير نتيجة الفحص" : "Laboratory Test Report"}
               </p>
-              <p className="text-[8px] text-gray-300 mt-0.5 tracking-wider uppercase">
+              <p className="text-[7px] text-gray-300 mt-0.5 tracking-wider uppercase" style={{ whiteSpace: "nowrap" }}>
                 {isAr ? "Laboratory Test Report" : "تقرير نتيجة الفحص"}
               </p>
             </div>
             {/* Pass/Fail badge */}
             <div className={`flex ${isAr ? "justify-start" : "justify-end"} mb-2`}>
-              <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[9px] font-bold ${isPassed ? "bg-green-100 text-green-800 border border-green-300" : "bg-red-100 text-red-800 border border-red-300"}`}>
+              <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[8px] font-bold ${isPassed ? "bg-green-100 text-green-800 border border-green-300" : "bg-red-100 text-red-800 border border-red-300"}`} style={{ whiteSpace: "nowrap" }}>
                 {isPassed ? <CheckCircle size={12} /> : <XCircle size={12} />}
                 {isPassed
                   ? (isAr ? "مطابق — PASS" : "PASS — مطابق")
@@ -1270,18 +1270,18 @@ export default function SpecializedTestReport() {
           {/* Sample Info */}
           <div className="border border-gray-200 rounded mb-4">
             {/* Reference numbers bar */}
-            <div className="bg-gray-50 border-b border-gray-200 px-4 py-2 grid grid-cols-3 gap-4 text-[9px]">
-              <div className="flex flex-col items-center">
-                <span className="text-gray-400 text-[8px] uppercase tracking-wide">{isAr ? "رقم العينة" : "Sample No."}</span>
-                <span className="font-mono font-bold text-gray-900 text-[10px]">{(dist as any)?.sampleCode ?? "—"}</span>
+            <div className="bg-gray-50 border-b border-gray-200 px-3 py-2 grid grid-cols-3 gap-2 text-[9px]">
+              <div className="flex flex-col items-center min-w-0">
+                <span className="text-gray-400 text-[7px] uppercase tracking-wide" style={{ whiteSpace: "nowrap" }}>{isAr ? "رقم العينة" : "Sample No."}</span>
+                <span className="font-mono font-bold text-gray-900 text-[8px]" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "100%" }}>{(dist as any)?.sampleCode ?? "—"}</span>
               </div>
-              <div className="flex flex-col items-center border-x border-gray-200">
-                <span className="text-gray-400 text-[8px] uppercase tracking-wide">{isAr ? "رقم التوزيع" : "Distribution No."}</span>
-                <span className="font-mono font-bold text-blue-700 text-[10px]">{(dist as any)?.distributionCode ?? `DIST-${String(distId).padStart(6,'0')}`}</span>
+              <div className="flex flex-col items-center border-x border-gray-200 min-w-0">
+                <span className="text-gray-400 text-[7px] uppercase tracking-wide" style={{ whiteSpace: "nowrap" }}>{isAr ? "رقم التوزيع" : "Distribution No."}</span>
+                <span className="font-mono font-bold text-blue-700 text-[8px]" style={{ whiteSpace: "nowrap" }}>{(dist as any)?.distributionCode ?? `DIST-${String(distId).padStart(6,'0')}`}</span>
               </div>
-              <div className="flex flex-col items-center">
-                <span className="text-gray-400 text-[8px] uppercase tracking-wide">{isAr ? "تاريخ الاستلام" : "Received Date"}</span>
-                <span className="font-semibold text-gray-900 text-[9px]">{fmtDate((dist as any)?.receivedAt, lang)}</span>
+              <div className="flex flex-col items-center min-w-0">
+                <span className="text-gray-400 text-[7px] uppercase tracking-wide" style={{ whiteSpace: "nowrap" }}>{isAr ? "تاريخ الاستلام" : "Received Date"}</span>
+                <span className="font-semibold text-gray-900 text-[8px]" style={{ whiteSpace: "nowrap" }}>{fmtDate((dist as any)?.receivedAt, lang)}</span>
               </div>
             </div>
             {/* Details grid */}

@@ -29,6 +29,13 @@ export function registerPdfRoutes(app: Router) {
 
       const page = await browser.newPage();
 
+      // A4 width (210mm ≈ 794px at 96 DPI) so layout matches print; avoids spurious wrapping
+      await page.setViewport({
+        width: 794,
+        height: 1123,
+        deviceScaleFactor: 2,
+      });
+
       // Set content and wait for fonts/images to load
       await page.setContent(html, { waitUntil: "networkidle0" });
 

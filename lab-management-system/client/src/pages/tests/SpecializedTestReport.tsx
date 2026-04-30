@@ -449,19 +449,19 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
           <p className="text-gray-500 font-semibold">{isAr ? "الدرجة" : "Grade"}</p>
           <p className="font-bold text-gray-800">{fd.grade || "—"}</p>
         </div>
-        {fd.avgStrength !== undefined && (
+        {hasCubes && fd.avgStrength !== undefined && (
           <div className="bg-blue-50 border border-blue-200 rounded p-2 text-center">
             <p className="text-blue-600 font-semibold">{isAr ? "متوسط المقاومة" : "Avg. Strength"}</p>
             <p className="font-bold text-blue-800">{Number(fd.avgStrength).toFixed(2)} N/mm²</p>
           </div>
         )}
-        {fd.avgDryDensity !== undefined && (
+        {hasDensity && fd.avgDryDensity !== undefined && (
           <div className="bg-purple-50 border border-purple-200 rounded p-2 text-center">
             <p className="text-purple-600 font-semibold">{isAr ? "متوسط الكثافة الجافة" : "Avg. Dry Density"}</p>
             <p className="font-bold text-purple-800">{Number(fd.avgDryDensity).toFixed(0)} kg/m³</p>
           </div>
         )}
-        {fd.minStrength !== undefined && (
+        {hasCubes && fd.minStrength !== undefined && (
           <div className="bg-gray-50 border rounded p-2 text-center">
             <p className="text-gray-500 font-semibold">{isAr ? "الحد الأدنى" : "Min. Strength"}</p>
             <p className="font-bold text-gray-800">{fd.minStrength} N/mm²</p>
@@ -469,7 +469,7 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
         )}
       </div>
 
-      {/* Cubes Table */}
+      {/* Cubes Table - Only show if cubes exist */}
       {hasCubes && (
         <>
           <p className="text-xs font-semibold text-gray-600">{isAr ? "نتائج المكعبات" : "Cube Results"}</p>
@@ -500,14 +500,14 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
         </>
       )}
 
-      {/* Density Specimens Table */}
+      {/* Density Specimens Table - Only show if density specimens exist */}
       {hasDensity && (
         <>
           <p className="text-xs font-semibold text-gray-600">{isAr ? "عينات الكثافة" : "Density Specimens"}</p>
           <table className="w-full text-xs border-collapse">
             <thead>
               <tr className="bg-gray-100">
-                {[isAr ? "رقم" : "No.", isAr ? "الوزن الرطب (غ)" : "Wet Wt (g)", isAr ? "الوزن الجاف (غ)" : "Dry Wt (g)", isAr ? "الكثافة الطازجة (kg/m³)" : "Fresh Density (kg/m³)", isAr ? "الكثافة الجافة (kg/m³)" : "Dry Density (kg/m³)", isAr ? "الرطوبة (%)" : "Moisture (%)", isAr ? "النتيجة" : "Result"].map(h => (
+                {[isAr ? "رقم" : "No.", isAr ? "الوزن الرطب (كجم)" : "Wet Wt (kg)", isAr ? "الوزن الجاف (كجم)" : "Dry Wt (kg)", isAr ? "الكثافة الطازجة (kg/m³)" : "Fresh Density (kg/m³)", isAr ? "الكثافة الجافة (kg/m³)" : "Dry Density (kg/m³)", isAr ? "الرطوبة (%)" : "Moisture (%)", isAr ? "النتيجة" : "Result"].map(h => (
                   <th key={h} className="border border-gray-300 px-1.5 py-1 text-center font-semibold">{h}</th>
                 ))}
               </tr>
@@ -516,8 +516,8 @@ function renderConcreteFoam(fd: any, isAr: boolean) {
               {densitySpecimens.map((d: any, i: number) => (
                 <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   <td className="border border-gray-300 px-1.5 py-1 text-center">{i + 1}</td>
-                  <td className="border border-gray-300 px-1.5 py-1 text-center">{d.wetWeight ?? "—"}</td>
-                  <td className="border border-gray-300 px-1.5 py-1 text-center">{d.dryWeight ?? "—"}</td>
+                  <td className="border border-gray-300 px-1.5 py-1 text-center">{d.wetMass ?? "—"}</td>
+                  <td className="border border-gray-300 px-1.5 py-1 text-center">{d.dryMass ?? "—"}</td>
                   <td className="border border-gray-300 px-1.5 py-1 text-center">{d.freshDensity ? Number(d.freshDensity).toFixed(0) : "—"}</td>
                   <td className="border border-gray-300 px-1.5 py-1 text-center font-bold">{d.dryDensity ? Number(d.dryDensity).toFixed(0) : "—"}</td>
                   <td className="border border-gray-300 px-1.5 py-1 text-center">{d.moistureContent ? Number(d.moistureContent).toFixed(1) : "—"}</td>

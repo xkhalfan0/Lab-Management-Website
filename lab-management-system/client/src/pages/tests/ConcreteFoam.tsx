@@ -118,8 +118,8 @@ function computeDensityRow(row: DensityRow, maxDensity: number): DensityRow {
   const dry = parseFloat(row.dryMass);
   if (!l || !w || !h) return { ...row, result: "pending" };
   const volume = l * w * h * 1e-9; // m³
-  const freshDensity = wet ? parseFloat((wet / volume).toFixed(0)) : undefined;
-  const dryDensity = dry ? parseFloat((dry / volume).toFixed(0)) : undefined;
+  const freshDensity = wet ? parseFloat(((wet / 1000) / volume).toFixed(0)) : undefined;
+  const dryDensity = dry ? parseFloat(((dry / 1000) / volume).toFixed(0)) : undefined;
   const moistureContent = wet && dry ? parseFloat(((wet - dry) / dry * 100).toFixed(2)) : undefined;
   const result = dryDensity && maxDensity > 0 ? (dryDensity <= maxDensity ? "pass" : "fail") : "pending";
   return { ...row, volume: parseFloat((volume * 1e6).toFixed(2)), freshDensity, dryDensity, moistureContent, result };
@@ -373,8 +373,8 @@ export default function ConcreteFoam() {
                       <th className="p-2 text-left">{ar ? "الطول (مم)" : "Length (mm)"}</th>
                       <th className="p-2 text-left">{ar ? "العرض (مم)" : "Width (mm)"}</th>
                       <th className="p-2 text-left">{ar ? "الارتفاع (مم)" : "Height (mm)"}</th>
-                      <th className="p-2 text-left">{ar ? "الكتلة الرطبة (كجم)" : "Wet Mass (kg)"}</th>
-                      <th className="p-2 text-left">{ar ? "الكتلة الجافة (كجم)" : "Dry Mass (kg)"}</th>
+                      <th className="p-2 text-left">{ar ? "الكتلة الرطبة (غرام)" : "Wet Mass (g)"}</th>
+                      <th className="p-2 text-left">{ar ? "الكتلة الجافة (غرام)" : "Dry Mass (g)"}</th>
                       <th className="p-2 text-left">{ar ? "الحجم (سم³)" : "Volume (cm³)"}</th>
                       <th className="p-2 text-left">{ar ? "الكثافة الطازجة (كجم/م³)" : "Fresh Density (kg/m³)"}</th>
                       <th className="p-2 text-left">{ar ? "الكثافة الجافة (كجم/م³)" : "Dry Density (kg/m³)"}</th>
